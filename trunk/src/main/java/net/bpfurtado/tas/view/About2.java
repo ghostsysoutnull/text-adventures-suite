@@ -59,7 +59,7 @@ public class About2 extends JDialog
     
     private static final long serialVersionUID = 6274009586799124340L;
 
-    private static final String PROJECT_URL_STR = "http://sourceforge.net/projects/ljcolligo";
+    private static final String PROJECT_URL_STR = "http://code.google.com/p/text-adventures-suite";
 
     private static final Font URL_SELECTED_FONT = new Font("Tahoma", Font.PLAIN, 11);
     private static final Font URL_REGULAR_FONT = new Font("Tahoma", Font.PLAIN, 11);
@@ -92,9 +92,9 @@ public class About2 extends JDialog
         widgets();
         getRootPane().setDefaultButton(closeBt);
 
-        setTitle("About - LJ Colligo");
+        setTitle("About - Text Adventures Suite");
         setResizable(true);
-        setBounds(100, 100, 520, 257);
+        setBounds(100, 100, 579, 292);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setModal(true);
         
@@ -117,6 +117,12 @@ public class About2 extends JDialog
         JLabel aboutImageLb = new JLabel();
 
         envVarsBt = new JButton();
+        envVarsBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println(About2.this.getBounds());
+            }
+        });
         envVarsBt.setMnemonic('e');
         JLabel blogLb = new JLabel();
         JLabel appBlogLb = new JLabel();
@@ -135,13 +141,13 @@ public class About2 extends JDialog
             }
         });
 
-        appTitleLb.setText("A Livejournal Backup Tool");
+        appTitleLb.setText("Text Adventures Suite");
 
         appDescLb.setFont(FONT);
-        appDescLb.setText("<html>LJ Colligo is a way to download all your LiveJournal blog entries and comments to your local machine.");
+        appDescLb.setText("<html>Text Adventures Suite Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.");
 
         versionLabel.setText("Product Version:");
-        appVersionLabel.setText("0.4");
+        appVersionLabel.setText("0.9");
         appVersionLabel.setFont(FONT);
 
         authorLb.setText("Author");
