@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Text Adventure Suite" default="deploy-web-only-main-jar" basedir=".">
+
+	<property file="${user.home}/build.properties" />
+	<property file="build.properties" />
+
+	<property name="web" value="web" />
+	<property name="download.dir" value="${web}/download" />
+
+	<property name="jar.name" value="${download.dir}/TextAdventuresSuite.jar" />
+	<property name="web-start.remote-folder" value="/bpfurtado.net/tas/download" />
+
+	<target name="all" depends="dist-all, deploy, site">
+	</target>
+
+	<target name="deploy-web-only-main-jar" depends="dist">
+		<ftp server="${dreamhost.ftp.host}" 
+			 userid="${dreamhost.ftp.user}" 
+			 password="${dreamhost.ftp.password}" 
+			 remotedir="${web-start.remote-folder}" 
+			 binary="yes" 
+			 verbose="yes">
+			
+			<fileset dir="${download.dir}">
+				<filename name="TextAdventuresSuite.jar" />
+			</fileset>
+		</ftp>
+	</target>
+
+	<target name="deploy">
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="yes" verbose="yes">
+			<fileset dir="${web}">
+				<exclude name="**/_svn/**" />
+			</fileset>
+		</ftp>
+	</target>
+
+	<target name="site">
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="**/index.html" />
+			</fileset>
+		</ftp>
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="**/*.css" />
+			</fileset>
+		</ftp>
+		<!--
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="**/*.jpg" />
+			</fileset>
+		</ftp>
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="**/*.png" />
+			</fileset>
+		</ftp>
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="img/**/*"/>
+			</fileset>
+		</ftp>
+
+		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
+			<fileset dir="${web}" excludes="**/_svn">
+				<filename name="**/*.jnlp" />
+			</fileset>
+		</ftp>
+		-->
+	</target>
+
+	<target name="dist-all" depends="jar, sign-deps">
+	</target>
+
+	<target name="dist" depends="jar">
+		<!-- <signjar jar="${jar.name}" alias="bpfurtado" storepass="${keystore.password}" /> -->
+	</target>
+
+	<target name="jar">
+		<delete file="${jar.name}">
+		</delete>
+		<jar destfile="${jar.name}">
+			<fileset dir="bin" />
+			<manifest>
+				<attribute name="Main-Class" value="net.bpfurtado.adventure.view.OpenningFrame" />
+			</manifest>
+		</jar>
+		<signjar jar="${jar.name}" alias="vikao" storepass="${keystore.password}" />
+	</target>
+
+	<target name="sign-deps">
+		<!--
+		<signjar jar="${download.dir}/TextAdventuresSuite.jar" alias="vikao" storepass="${keystore.password}" />
+        <signjar jar="${download.dir}/lib/bsh-2.0b4.jar" alias="vikao" storepass="${keystore.password}" />
+        <signjar jar="${download.dir}/lib/commons-validator-1.3.1.jar" alias="vikao" storepass="${keystore.password}" />
+        <signjar jar="${download.dir}/lib/dom4j-1.6.1.jar" alias="vikao" storepass="${keystore.password}" />
+        <signjar jar="${download.dir}/lib/jaxen-1.1-beta-9.jar" alias="vikao" storepass="${keystore.password}" />
+        <signjar jar="${download.dir}/lib/jaxen-1.1.1.jar" alias="vikao" storepass="${keystore.password}" />
+        -->
+        <signjar jar="${download.dir}/lib/log4j-1.2.15.jar" alias="vikao" storepass="${keystore.password}" />   
+	</target>
+</project>
