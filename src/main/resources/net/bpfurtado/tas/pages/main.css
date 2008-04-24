@@ -1,0 +1,60 @@
+body {
+    font-family: arial, verdana, sans-serif;
+    padding-left: 17px;
+    padding-right: 17px;
+}
+
+h1 {
+    text-align: center;
+    border: thick solid;
+    -moz-border-radius-topleft: 16px;
+    -moz-border-radius-topright: 16px;
+    -moz-border-radius-bottomright: 16px;
+    -moz-border-radius-bottomleft: 16px;
+    background: #dedddd;
+}
+
+h2 {
+    letter-spacing: 2px
+}
+
+img {
+    border: 0px solid; vertical-align: top; float: right; margin: 0px 3px
+}
+
+div.footer {
+    text-align: center;
+    border: thick solid #9999ff;
+    -moz-border-radius-topleft: 16px;
+    -moz-border-radius-topright: 16px;
+    -moz-border-radius-bottomright: 16px;
+    -moz-border-radius-bottomleft: 16px;
+    width: 360px;
+    height: 100px;
+    right:5px;
+    float: right;
+}
+
+div.footer > div {
+    margin: 5px;
+}
+
+div.download {                     
+    color: #006633;
+    background: #83d5a4;
+    padding: 5px 5px 5px 5px;
+    border: thick solid #67b37a;
+    font-size: large;
+    font-family: arial, verdana, sans-serif;
+    text-align: center;
+    width: 100px;
+    -moz-border-radius-topleft: 16px;
+    -moz-border-radius-topright: 16px;
+    -moz-border-radius-bottomright: 16px;
+    -moz-border-radius-bottomleft: 16px;
+}
+
+div.download:hover {
+    background: #67b37a;
+    border: thick solid #83d5a4;
+}
