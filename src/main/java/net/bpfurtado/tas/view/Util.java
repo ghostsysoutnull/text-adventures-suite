@@ -177,5 +177,12 @@ public class Util
         menuBar.add(menu);
         return menu;
     }
+    
+    public static void centerPosition(Window window, Window w, int width, int height)
+    {
+        int x = window.getX() + (window.getWidth() - width) / 2;
+        int y = window.getY() + (window.getHeight() - height) / 2;
 
+        w.setBounds(x, y, width, height);
+    }
 }
