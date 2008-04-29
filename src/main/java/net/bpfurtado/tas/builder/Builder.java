@@ -103,7 +103,8 @@ import org.apache.log4j.Logger;
  */
 public class Builder extends JFrame implements AdventureOpenner, ScenesSource, AdventureNeedsSavingController
 {
-    private static final ImageIcon PLAY_IMAGE = Util.getImage("control_play_blue.png");
+    private static final String CONF_OPEN_LAST_ADVENTURE_ON_START = "openLastAdventureOnStart";
+	private static final ImageIcon PLAY_IMAGE = Util.getImage("control_play_blue.png");
     private static final ImageIcon PLAY_CURRENT_IMAGE = Util.getImage("control_fastforward_blue.png");
 
     private static final Logger logger = Logger.getLogger(Builder.class);
@@ -172,9 +173,16 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
     }
 
     private void openLastAdventure()
-    {
-        if (!Conf.builder().is("openLastAdventureOnStart"))
-            return;
+	{
+		boolean openLastAdventureOnStart = true;
+		try {
+			openLastAdventureOnStart = Conf.builder().is(CONF_OPEN_LAST_ADVENTURE_ON_START, false);
+			if (!openLastAdventureOnStart) {
+				return;
+			}
+		} catch (AdventureException e) {
+			Conf.builder().set(CONF_OPEN_LAST_ADVENTURE_ON_START, openLastAdventureOnStart);
+		}
 
         File advFile = new File(Conf.builder().get("lastAdventure"));
         if (advFile.exists()) {
@@ -682,8 +690,8 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         titlePn.add(titleLb);
 
         sceneNameTF = new JTextField(/* 38 */);
-//        sceneNameTF.setMinimumSize(new Dimension(200, 20));
-//        sceneNameTF.setMaximumSize(new Dimension(800, 20));
+        sceneNameTF.setMinimumSize(new Dimension(200, 20));
+        sceneNameTF.setMaximumSize(new Dimension(800, 20));
         //111
         titlePn.add(sceneNameTF);
 
