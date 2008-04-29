@@ -82,7 +82,7 @@ public class Conf
 	{
 		String value = p.getProperty(key);
 		if (value == null) {
-			throw new AdventureException("Configuration item [" + key + "] does not exist!");
+			throw new ConfigurationItemNotFoundException("Configuration item [" + key + "] does not exist!");
 		}
 		return new Boolean(value);
 	}
@@ -125,5 +125,10 @@ public class Conf
 	public void set(String key, String value)
 	{
 		p.setProperty(key, value);
+	}
+	
+	public void set(String key, Boolean value)
+	{
+		p.setProperty(key, value.toString());
 	}
 }
