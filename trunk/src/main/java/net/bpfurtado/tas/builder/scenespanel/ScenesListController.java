@@ -216,7 +216,7 @@ public class ScenesListController
 				{
 					public int compare(Scene o1, Scene o2)
 					{
-						return new Integer(o1.getId()).compareTo(o2.getId());
+						return Integer.valueOf(o1.getId()).compareTo(o2.getId());
 					}
 				};
 			}

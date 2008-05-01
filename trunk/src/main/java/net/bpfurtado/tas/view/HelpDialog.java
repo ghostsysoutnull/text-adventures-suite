@@ -20,13 +20,12 @@
  */
 package net.bpfurtado.tas.view;
 
+import static net.bpfurtado.commons.io.FileUtils.linesFromClasspath;
+
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -34,8 +33,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-
-import net.bpfurtado.tas.AdventureException;
 
 import org.apache.log4j.Logger;
 
@@ -45,13 +42,13 @@ public class HelpDialog extends JFrame
     private static final long serialVersionUID = 124896221854096052L;
 
     private String title;
-    private String fileInClassPath;
+    private String classpathHelpFile;
     private JEditorPane editorPane;
 
     public HelpDialog(String title, String fileInClassPath) throws HeadlessException
     {
         this.title = title;
-        this.fileInClassPath = fileInClassPath;
+        this.classpathHelpFile = fileInClassPath;
         initView();
     }
 
@@ -69,17 +66,13 @@ public class HelpDialog extends JFrame
 
     private void widgets()
     {
-        logger.debug("help file = " + fileInClassPath);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(HelpDialog.class.getResourceAsStream(fileInClassPath)));
+        logger.debug("help file = " + classpathHelpFile);
+        
         StringBuilder text = new StringBuilder();
-        try {
-            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-                text.append(line);
-            }
-        } catch (IOException e1) {
-            throw new AdventureException(e1.getMessage(), e1);
+        for (String line : linesFromClasspath(classpathHelpFile)) {
+            text.append(line);
         }
-
+        
         editorPane = new JEditorPane("text/html", text.toString());
         editorPane.setEditable(false);
         add(new JScrollPane(editorPane));

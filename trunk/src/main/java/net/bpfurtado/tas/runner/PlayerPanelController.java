@@ -157,15 +157,15 @@ public class PlayerPanelController //implements PlayerStatsViewer
 
 class ItemMouseListener extends MouseAdapter
 {
-    JLabel name;
+    private JLabel name;
 //    Item item;
-    Game g;
+    private Game game;
 
     ItemMouseListener(JLabel name, /*Item item,*/ Game g)
     {
         this.name = name;
 //        this.item = item;
-        this.g = g;
+        this.game = g;
     }
 
     public void mouseClicked(MouseEvent e)

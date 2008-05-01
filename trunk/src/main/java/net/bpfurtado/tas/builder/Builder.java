@@ -78,7 +78,7 @@ import net.bpfurtado.tas.builder.scenespanel.ChooseSceneDialog;
 import net.bpfurtado.tas.builder.scenespanel.ScenesList;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory;
 import net.bpfurtado.tas.builder.scenespanel.ScenesSource;
-import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.Result;
+import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.ScenesListControllerResult;
 import net.bpfurtado.tas.builder.scenetype.SceneTypesWidgets;
 import net.bpfurtado.tas.builder.skilltest.SkillTestPanelManager;
 import net.bpfurtado.tas.model.Adventure;
@@ -255,7 +255,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
     {
         mainPanel = new JPanel(new BorderLayout());
 
-        Result factory = ScenesListControllerFactory.create(this, true);
+        ScenesListControllerResult factory = ScenesListControllerFactory.create(this, true);
         scenesList = factory.getScenesList();
         JPanel scenesListPanel = factory.getPanel();
 
@@ -944,7 +944,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         markAsDirty();
     }
 
-    class PathView
+    static class PathView
     {
         JLabel orderLb;
         JTextField textField;

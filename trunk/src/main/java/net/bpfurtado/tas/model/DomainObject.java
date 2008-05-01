@@ -22,6 +22,9 @@
 
 package net.bpfurtado.tas.model;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * @author Bruno Patini Furtado
  */
@@ -45,18 +48,23 @@ public class DomainObject implements IDomainObject
     }
 
     @Override
-    public boolean equals(Object obj)
+    public int hashCode()
     {
-        if(obj instanceof DomainObject) {
-            DomainObject other = (DomainObject) obj;
-            return id == other.id;
-        }
-        return false;
+        return new HashCodeBuilder(131, 133).append(id).toHashCode();
     }
 
     @Override
-    public int hashCode()
+    public boolean equals(Object obj)
     {
-        return new Integer(id).hashCode();
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) {
+          return false;
+        }
+        DomainObject other = (DomainObject) obj;
+        return new EqualsBuilder()
+                      .appendSuper(super.equals(obj))
+                      .append(id, other.id)
+                      .isEquals();
     }
 }

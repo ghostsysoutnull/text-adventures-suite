@@ -37,7 +37,7 @@ public class Depth implements IDepth
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(Depth.class);
 
-    private int level = 0;
+    private Integer level = 0;
 
     private Collection<PathDepth> pathDepths;
 
@@ -97,9 +97,15 @@ public class Depth implements IDepth
     {
         if (obj instanceof Depth) {
             Depth other = (Depth) obj;
-            return level == other.level;
+            return level.equals(other.level);
         }
         return false;
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return level.hashCode() * 57;
     }
 
     @Override

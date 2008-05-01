@@ -25,15 +25,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.bpfurtado.tas.runner.PostCodeExecutionAction;
 import net.bpfurtado.tas.runner.CodeExecutionAnalyser;
+import net.bpfurtado.tas.runner.PostCodeExecutionAction;
 
 /**
  * @author Bruno Patini Furtado
  */
 public class GameImpl implements Game
 {
-	private static final int NO_SCENE_TO_GO = -1;
+    private static final long serialVersionUID = -724652209259353975L;
+
+    private static final int NO_SCENE_TO_GO = -1;
 
 	private Adventure adventure;
 	private Player player;
@@ -93,8 +95,6 @@ public class GameImpl implements Game
 		}
 		*/
 	}
-
-	Collection<Integer> pathsToHideByOrder = new LinkedList<Integer>();
 
 	public void execPostCodeActions()
 	{

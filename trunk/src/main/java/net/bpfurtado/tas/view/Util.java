@@ -49,7 +49,7 @@ public class Util
 {
 	private static Logger logger = Logger.getLogger(Util.class);
 	
-	public static Color oceanColor = new Color(184, 207, 229);
+	public static final Color oceanColor = new Color(184, 207, 229);
 
 	public static void showComponent(JComponent component)
 	{

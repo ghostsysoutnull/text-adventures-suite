@@ -194,7 +194,9 @@ public class RecentAdventuresMenuController implements OpenAdventureListener
         recentFilesFileName += "/.adventure-tools/" + adventureOpenner.getApplicationName();
         File recentFilesDir = new File(recentFilesFileName);
         if (!recentFilesDir.exists()) {
-            recentFilesDir.mkdirs();
+            if (!recentFilesDir.mkdirs()) {
+                throw new AdventureException("Could not create dirs [" + recentFilesDir + "]");
+            }
         }
         return recentFilesDir;
     }
