@@ -92,7 +92,7 @@ public class ScenesFilter implements ScenesListControllerListener
 	void scenesListMouseClicked()
 	{
 		if (displayAddNewAndDeleteButtons) {
-			Scene selectedScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).scene;
+			Scene selectedScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).getScene();
 			scenesSource.switchTo(selectedScene, list.getSelectedIndex());
 		}
 	}
@@ -130,8 +130,8 @@ public class ScenesFilter implements ScenesListControllerListener
 			for (IPath p : s.getPaths()) {
 				rankRule(filter, sceneRank, p.getText(), 1);
 			}
-			if (sceneRank.rank > 0) {
-				sceneRank.scene = s;
+			if (sceneRank.getRank() > 0) {
+				sceneRank.setScene(s);
 				ranked.add(sceneRank);
 			}
 		}
@@ -148,7 +148,7 @@ public class ScenesFilter implements ScenesListControllerListener
 	private void rankRule(String filter, SceneRank sceneRank, String name, int rankPoints)
 	{
 		if (name.trim().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-			sceneRank.rank += rankPoints;
+			sceneRank.setRank(sceneRank.getRank() + rankPoints);
 		}
 	}
 
@@ -162,33 +162,7 @@ public class ScenesFilter implements ScenesListControllerListener
 	}
 }
 
-class SceneRank implements Comparable<SceneRank>
-{
-	int rank;
 
-	Scene scene;
-
-	SceneRank(Scene s, int rank)
-	{
-		this.rank = rank;
-		this.scene = s;
-	}
-
-	public SceneRank()
-	{
-	}
-
-	public int compareTo(SceneRank o)
-	{
-		return new Integer(o.rank).compareTo(rank);
-	}
-
-	@Override
-	public String toString()
-	{
-		return scene.getName() + " (" + rank + ")";
-	}
-}
 
 class FilteredScenesListCellRenderer extends JLabel implements ListCellRenderer
 {
@@ -208,17 +182,16 @@ class FilteredScenesListCellRenderer extends JLabel implements ListCellRenderer
     {
         SceneRank sceneRank = (SceneRank) value;
 
-		setText(" [" + sceneRank.scene.getId() + "] " + sceneRank.scene.getName() + " (" + sceneRank.rank + ")");
+		setText(" [" + sceneRank.getScene().getId() + "] " + sceneRank.getScene().getName() + " (" + sceneRank.getRank() + ")");
 
         Color orphanSceneColor = new Color(133, 213, 157);
 
-        if (sceneRank.scene.isOrphan()) {
+        if (sceneRank.getScene().isOrphan()) {
 			setBackground(isSelected ? Util.oceanColor : orphanSceneColor);
-            setForeground(isSelected ? Color.black : Color.black);
         } else {
             setBackground(isSelected ? Util.oceanColor : Color.white);
-            setForeground(isSelected ? Color.black : Color.black);
         }
+        setForeground(Color.black);
         return this;
     }
 }

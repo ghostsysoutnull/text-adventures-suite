@@ -36,7 +36,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import net.bpfurtado.tas.builder.Builder;
-import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.Result;
+import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.ScenesListControllerResult;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Scene;
 
@@ -73,7 +73,7 @@ public class ChooseSceneDialog extends JDialog
 
 	private void widgets(Builder builder)
 	{
-		Result result = ScenesListControllerFactory.create(builder, false);
+		ScenesListControllerResult result = ScenesListControllerFactory.create(builder, false);
 		add(result.getPanel());
 
 		ScenesList scenesList = result.getScenesList();
@@ -134,7 +134,7 @@ public class ChooseSceneDialog extends JDialog
     	try {
 			choosenScene = (Scene) list.getModel().getElementAt(list.getSelectedIndex());
 		} catch (ClassCastException cce) {
-			choosenScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).scene;
+			choosenScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).getScene();
 		}
 		logger.debug("Selected scene: " + choosenScene.getName());
 		closeDialog();

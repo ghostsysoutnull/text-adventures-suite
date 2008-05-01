@@ -72,11 +72,10 @@ public class SceneCellRenderer extends JLabel implements ListCellRenderer
 			setForeground(Color.black);
 		} else if (scene.isOrphan()) {
 			setBackground(isSelected ? Util.oceanColor : orphanSceneColor);
-            setForeground(isSelected ? Color.black : Color.black);
         } else {
             setBackground(isSelected ? Util.oceanColor : Color.white);
-            setForeground(isSelected ? Color.black : Color.black);
         }
+        setForeground(Color.black);
         return this;
     }
 }

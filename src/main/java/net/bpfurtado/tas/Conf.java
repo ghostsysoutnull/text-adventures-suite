@@ -80,11 +80,11 @@ public class Conf
 
 	public boolean is(String key)
 	{
-		String value = p.getProperty(key);
-		if (value == null) {
+		String boolStr = p.getProperty(key);
+		if (boolStr == null) {
 			throw new ConfigurationItemNotFoundException("Configuration item [" + key + "] does not exist!");
 		}
-		return new Boolean(value);
+		return Boolean.valueOf(boolStr);
 	}
 	
 	public boolean is(String key, boolean defaultValue)
@@ -98,7 +98,7 @@ public class Conf
 	
 	public void set(String key, int i)
 	{
-		p.setProperty(key, new Integer(i).toString());
+		p.setProperty(key, Integer.valueOf(i).toString());
 	}
 
 	public void save()

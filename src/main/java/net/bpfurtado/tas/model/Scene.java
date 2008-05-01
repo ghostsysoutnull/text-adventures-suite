@@ -228,21 +228,18 @@ public class Scene extends TextObject implements Comparable<Scene>
 
     public int compareTo(Scene obj)
     {
-        if (obj instanceof Scene) {
-            Scene other = (Scene) obj;
-            if (this.name == null || other.name == null) {
-                return 0;
-            }
-            if (Util.hasOnlyDigits(this.name) && Util.hasOnlyDigits(other.name)) {
-                try {
-                    return new Integer(this.name).compareTo(new Integer(other.name));
-                } catch (NumberFormatException nfe) {
-                    return new BigInteger(this.name).compareTo(new BigInteger(other.name));
-                }
-            }
-            return this.name.compareTo(other.name);
+        Scene other = (Scene) obj;
+        if (this.name == null || other.name == null) {
+            return 0;
         }
-        return 0;
+        if (Util.hasOnlyDigits(this.name) && Util.hasOnlyDigits(other.name)) {
+            try {
+                return new Integer(this.name).compareTo(new Integer(other.name));
+            } catch (NumberFormatException nfe) {
+                return new BigInteger(this.name).compareTo(new BigInteger(other.name));
+            }
+        }
+        return this.name.compareTo(other.name);
     }
 
     public boolean isEnd()
@@ -263,7 +260,7 @@ public class Scene extends TextObject implements Comparable<Scene>
         Collections.sort(sortedPaths, new Comparator<IPath>() {
             public int compare(IPath p1, IPath p2)
             {
-                return new Integer(p1.getOrder()).compareTo(p2.getOrder());
+                return Integer.valueOf(p1.getOrder()).compareTo(p2.getOrder());
             }
         });
         return sortedPaths;
@@ -354,10 +351,6 @@ public class Scene extends TextObject implements Comparable<Scene>
     @Override
     public void setText(String text)
     {
-        if(getId()==3) {
-            int a=0;
-            a++;
-        }
         if (getText() == null && originalText == null) {
             originalText = text;
         }

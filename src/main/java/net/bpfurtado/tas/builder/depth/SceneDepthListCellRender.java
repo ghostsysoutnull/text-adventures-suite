@@ -44,7 +44,7 @@ public class SceneDepthListCellRender extends JLabel implements ListCellRenderer
         setText(DepthScenesViewController.renderToList((Scene) value));
 
         setBackground(isSelected ? Util.oceanColor : Color.white);
-        setForeground(isSelected ? Color.black : Color.black);
+        setForeground(Color.black);
 
         return this;
     }

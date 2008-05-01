@@ -74,7 +74,7 @@ public class TextComponentForPasteMouseListener extends MouseAdapter
 			menuItem.setEnabled(false);
 			menuItem.setText("Select some text...");
 		} else {
-			ho.setText(new String(selectedText));
+			ho.setText(new String(selectedText)); //don't remember why I used 'new String' here
 			if (selectedText.length() > 40) {
 				selectedText = selectedText.substring(0, 40);
 			}	

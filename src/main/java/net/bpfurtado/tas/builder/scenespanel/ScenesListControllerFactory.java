@@ -29,7 +29,7 @@ public class ScenesListControllerFactory
 {
 	private static final ScenesListControllerFactory INSTANCE = new ScenesListControllerFactory();
 
-	public static Result create(Builder builder, boolean showButtons)
+	public static ScenesListControllerResult create(Builder builder, boolean showButtons)
 	{
 		ScenesList scenesList = new ScenesList(builder, showButtons);
 
@@ -38,7 +38,7 @@ public class ScenesListControllerFactory
 		ScenesFilter scenesFilter = new ScenesFilter(builder, showButtons);
 		scenesListController.add(scenesFilter);
 
-		return INSTANCE.new Result(scenesListController.getPanel(), scenesList, scenesFilter);
+		return INSTANCE.new ScenesListControllerResult(scenesListController.getPanel(), scenesList, scenesFilter);
 	}
 	
 	private ScenesListControllerFactory()
@@ -46,13 +46,13 @@ public class ScenesListControllerFactory
 		
 	}
 
-	public class Result
+	public class ScenesListControllerResult
 	{
 		public JPanel panel;
 		public ScenesList scenesList;
 		public ScenesFilter scenesFilter;
 
-		public Result(JPanel panel, ScenesList scenesList, ScenesFilter scenesFilter)
+		public ScenesListControllerResult(JPanel panel, ScenesList scenesList, ScenesFilter scenesFilter)
 		{
 			this.panel = panel;
 			this.scenesList = scenesList;

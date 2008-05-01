@@ -464,7 +464,7 @@ class FighterCellRenderer extends JLabel implements ListCellRenderer
 		setText(f.getName() + ", sk[" + f.getCombatSkillLevel() + "] st[" + f.getStamina() + "] dm[" + f.getDamage() + "]");
 
 		setBackground(isSelected ? Util.oceanColor : Color.white);
-		setForeground(isSelected ? Color.black : Color.black);
+		setForeground(Color.black);
 		
 		return this;
 	}

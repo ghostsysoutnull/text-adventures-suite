@@ -133,7 +133,7 @@ public class XMLAdventureReader
         if (id == 0) {
             s = adventure.getStart();
         } else {
-            s = adventure.createScene(id, new Boolean(n.valueOf("@isEnd")).booleanValue());
+            s = adventure.createScene(id, Boolean.valueOf(n.valueOf("@isEnd")));
         }
         s.setName(n.valueOf("@name"));
         s.setTags(n.valueOf("@tags"));
