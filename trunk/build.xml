@@ -10,7 +10,7 @@
 	<property name="jar.name" value="${download.dir}/TextAdventuresSuite.jar" />
 	<property name="web-start.remote-folder" value="/bpfurtado.net/tas/download" />
 
-	<target name="all" depends="dist-all, deploy, site">
+	<target name="all" depends="dist-all, deploy">
 	</target>
 
 	<target name="deploy-web-only-main-jar" depends="dist">
@@ -33,42 +33,6 @@
 				<exclude name="**/_svn/**" />
 			</fileset>
 		</ftp>
-	</target>
-
-	<target name="site">
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="**/index.html" />
-			</fileset>
-		</ftp>
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="**/*.css" />
-			</fileset>
-		</ftp>
-		<!--
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="**/*.jpg" />
-			</fileset>
-		</ftp>
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="**/*.png" />
-			</fileset>
-		</ftp>
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="img/**/*"/>
-			</fileset>
-		</ftp>
-
-		<ftp server="${dreamhost.ftp.host}" userid="${dreamhost.ftp.user}" password="${dreamhost.ftp.password}" remotedir="${web-start.remote-folder}" binary="no" verbose="yes">
-			<fileset dir="${web}" excludes="**/_svn">
-				<filename name="**/*.jnlp" />
-			</fileset>
-		</ftp>
-		-->
 	</target>
 
 	<target name="dist-all" depends="jar, sign-deps">
