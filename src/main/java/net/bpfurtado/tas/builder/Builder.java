@@ -580,7 +580,6 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         return panel;
     }
 
-    ///111
     protected void splitSceneAction()
     {
         String newText = sceneTA.getSelectedText();

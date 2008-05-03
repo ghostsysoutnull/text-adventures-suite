@@ -14,5 +14,6 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="lib" path="lib/bpfurtado-commons-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/forms-1.1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
