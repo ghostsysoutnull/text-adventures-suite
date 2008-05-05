@@ -1,0 +1,12 @@
+Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on 
+Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.
+
+It has been more than a pleasure to me to create one step at a time this software. 
+It\'s free and open source (GPLv2): http://code.google.com/p/text-adventures-suite 
+
+More about me on my Software Development Blog.
+http://bpfurtado.livejournal.com
+
+Special thanks to my wife Andrea for being so important in my life.
+
+Visit: http://bpfurtado.net/tas
