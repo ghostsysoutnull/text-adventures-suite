@@ -45,9 +45,9 @@ import javax.swing.SwingUtilities;
 
 public class AboutFrame extends JDialog
 {
-	private static final long serialVersionUID = 2750603196471841891L;
+    private static final long serialVersionUID = 2750603196471841891L;
 
-	private static final Font TITLE_FONT = new java.awt.Font("Tahoma", 1, 16);
+    private static final Font TITLE_FONT = new java.awt.Font("Tahoma", 1, 16);
 
     private static void addHeight(JPanel panel, int height)
     {
@@ -55,54 +55,54 @@ public class AboutFrame extends JDialog
     }
 
     public AboutFrame(JFrame invokerFrame)
-	{
-		initView(invokerFrame);
-	}
+    {
+        initView(invokerFrame);
+    }
 
-	private void initView(JFrame invokerFrame)
-	{
-		widgets();
+    private void initView(JFrame invokerFrame)
+    {
+        widgets();
 
-		setTitle("About - Text Adventures Suite");
-		Util.centerPosition(invokerFrame, this, 516, 339);
-		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setDefaultLookAndFeelDecorated(true);
-		setResizable(false);
+        setTitle("About - Text Adventures Suite");
+        Util.centerPosition(invokerFrame, this, 516, 339);
 
-		setVisible(true);
-	}
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultLookAndFeelDecorated(true);
+        setResizable(false);
 
-	private void widgets()
-	{
-		JPanel mainPn = new JPanel();
-		mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
+        setVisible(true);
+    }
 
-		addHeight(mainPn, 10);
+    private void widgets()
+    {
+        JPanel mainPn = new JPanel();
+        mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
 
-		JLabel title = new JLabel("Text Adventures Suite");
-		title.setFont(TITLE_FONT);
-		title.setAlignmentX(CENTER_ALIGNMENT);
-		mainPn.add(title);
+        addHeight(mainPn, 10);
 
-		addHeight(mainPn, 10);
-		mainPn.add(createTabsPanel());
-		addHeight(mainPn, 5);
-		mainPn.add(createCloseBt());
-		addHeight(mainPn, 5);
+        JLabel title = new JLabel("Text Adventures Suite");
+        title.setFont(TITLE_FONT);
+        title.setAlignmentX(CENTER_ALIGNMENT);
+        mainPn.add(title);
+
+        addHeight(mainPn, 10);
+        mainPn.add(createTabsPanel());
+        addHeight(mainPn, 5);
+        mainPn.add(createCloseBt());
+        addHeight(mainPn, 5);
 
         mainPn.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), DisposeAction.ACTION_NAME);
         mainPn.getActionMap().put(DisposeAction.ACTION_NAME, new DisposeAction(this));
-        
+
         add(mainPn);
     }
 
     private JTabbedPane createTabsPanel()
     {
         JTabbedPane tabs = new JTabbedPane();
-		tabs.addTab("About", createAboutPanel());
-		tabs.addTab("System Properties", createSystemPropertiesPanel());
-		tabs.addTab("Environment Variables", createEnvironmentVariablesPanel());
+        tabs.addTab("About", createAboutPanel());
+        tabs.addTab("System Properties", createSystemPropertiesPanel());
+        tabs.addTab("Environment Variables", createEnvironmentVariablesPanel());
         return tabs;
     }
 
@@ -120,7 +120,7 @@ public class AboutFrame extends JDialog
     {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
-        
+
         JTextArea ta = new JTextArea(text);
         ta.setEditable(false);
         p.add(new JScrollPane(ta));
@@ -150,13 +150,12 @@ public class AboutFrame extends JDialog
     private JButton createCloseBt()
     {
         JButton closeBt = new JButton("Close");
-		closeBt.setMnemonic('C');
-		closeBt.setAlignmentX(CENTER_ALIGNMENT);
-		closeBt.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				dispose();
+        closeBt.setMnemonic('C');
+        closeBt.setAlignmentX(CENTER_ALIGNMENT);
+        closeBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                dispose();
             }
         });
         getRootPane().setDefaultButton(closeBt);
@@ -166,32 +165,31 @@ public class AboutFrame extends JDialog
     private JPanel createAboutPanel()
     {
         return createTAPanel(
-				"Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on \n" + 
-				"Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.\n" + 
-				"\n" + 
-				"It has been more than a pleasure to me to create one step at a time this software. \n" + 
-				"It\'s free and open source (GPLv2): http://code.google.com/p/text-adventures-suite \n" + 
-				"\n" + 
-				"More about me on my Software Development Blog.\n" + 
-				"http://bpfurtado.livejournal.com\n" +
-				"\n" + 
-				"Special thanks to my wife Andrea for being so important in my life.\n" +
-				"\n" + 
-				"Visit: http://bpfurtado.net/tas");
+                "Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on \n" + 
+                "Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.\n" + 
+                "\n" + 
+                "It has been more than a pleasure to me to create one step at a time this software. \n" + 
+                "It\'s free and open source (GPLv2): http://code.google.com/p/text-adventures-suite \n" + 
+                "\n" + 
+                "More about me on my Software Development Blog.\n" + 
+                "http://bpfurtado.livejournal.com\n" +
+                "\n" + 
+                "Special thanks to my wife Andrea for being so important in my life.\n" +
+                "\n" + 
+                "Visit: http://bpfurtado.net/tas");
     }
-
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				JFrame frame = new JFrame();
-				frame.setBounds(235, 260, 970, 615);
-				frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-				frame.setVisible(true);
-				new AboutFrame(frame);
-			}
-		});
-	}
+    
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                JFrame frame = new JFrame();
+                frame.setBounds(235, 260, 970, 615);
+                frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+                frame.setVisible(true);
+                new AboutFrame(frame);
+            }
+        });
+    }
 }
