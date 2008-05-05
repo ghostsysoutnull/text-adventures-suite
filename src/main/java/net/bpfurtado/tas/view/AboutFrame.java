@@ -24,7 +24,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -34,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 public class AboutFrame extends JDialog
@@ -64,16 +68,16 @@ public class AboutFrame extends JDialog
 
 	private void widgets()
 	{
-		JPanel p = new JPanel();
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
-		p.add(Box.createRigidArea(new Dimension(0, 10)));
+		JPanel mainPn = new JPanel();
+		mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
+		mainPn.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		JLabel title = new JLabel("Text Adventures Suite");
 		title.setFont(TITLE_FONT);
 		title.setAlignmentX(CENTER_ALIGNMENT);
-		p.add(title);
+		mainPn.add(title);
 
-		p.add(Box.createRigidArea(new Dimension(0, 10)));
+		mainPn.add(Box.createRigidArea(new Dimension(0, 10)));
 
 		JTextArea ta = new JTextArea(
 				"Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on \n" + 
@@ -88,10 +92,11 @@ public class AboutFrame extends JDialog
 				"\n" + 
 				"Visit: http://bpfurtado.net/tas");
 
+		ta.setEditable(false);
 		ta.setWrapStyleWord(true);
-		p.add(new JScrollPane(ta));
+		mainPn.add(new JScrollPane(ta));
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
+		mainPn.add(Box.createRigidArea(new Dimension(0, 5)));
 
 		JButton closeBt = new JButton("Close");
 		closeBt.setMnemonic('C');
@@ -101,15 +106,18 @@ public class AboutFrame extends JDialog
 			public void actionPerformed(ActionEvent e)
 			{
 				dispose();
-			}
-		});
+            }
+        });
+        getRootPane().setDefaultButton(closeBt);
+        mainPn.add(closeBt);
 
-		p.add(closeBt);
+        mainPn.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
-
-		add(p);
-	}
+        mainPn.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), DisposeAction.ACTION_NAME);
+        mainPn.getActionMap().put(DisposeAction.ACTION_NAME, new DisposeAction(this));
+        
+        add(mainPn);
+    }
 
 	public static void main(String[] args)
 	{
