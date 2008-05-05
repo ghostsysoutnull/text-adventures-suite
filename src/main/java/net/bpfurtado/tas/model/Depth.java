@@ -25,8 +25,6 @@ package net.bpfurtado.tas.model;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.bpfurtado.tas.AdventureException;
-
 import org.apache.log4j.Logger;
 
 /**

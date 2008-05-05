@@ -29,8 +29,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.log4j.Logger;
 
-import sun.security.action.GetIntegerAction;
-
 /**
  * @author Bruno Patini Furtado
  */
