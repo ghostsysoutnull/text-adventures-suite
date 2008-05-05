@@ -152,7 +152,6 @@ public class AboutFrame extends JDialog
 			public void actionPerformed(ActionEvent e)
 			{
 				dispose();
-				System.out.println(".actionPerformed() +" + getBounds());
             }
         });
         getRootPane().setDefaultButton(closeBt);
@@ -161,10 +160,7 @@ public class AboutFrame extends JDialog
 
     private JPanel createAboutPanel()
     {
-        JPanel aboutPn = new JPanel();
-        aboutPn.setLayout(new BoxLayout(aboutPn, BoxLayout.LINE_AXIS));
-        
-		JTextArea ta = new JTextArea(
+        return createTAPanel(
 				"Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on \n" + 
 				"Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.\n" + 
 				"\n" + 
@@ -177,10 +173,6 @@ public class AboutFrame extends JDialog
 				"Special thanks to my wife Andrea for being so important in my life.\n" +
 				"\n" + 
 				"Visit: http://bpfurtado.net/tas");
-		ta.setEditable(false);
-		ta.setWrapStyleWord(true);
-		aboutPn.add(new JScrollPane(ta));
-        return aboutPn;
     }
 
 	public static void main(String[] args)
@@ -198,4 +190,3 @@ public class AboutFrame extends JDialog
 		});
 	}
 }
-
