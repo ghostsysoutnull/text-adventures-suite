@@ -49,7 +49,12 @@ public class AboutFrame extends JDialog
 
 	private static final Font TITLE_FONT = new java.awt.Font("Tahoma", 1, 16);
 
-	public AboutFrame(JFrame invokerFrame)
+    private static void addHeight(JPanel panel, int height)
+    {
+        panel.add(Box.createRigidArea(new Dimension(0, height)));
+    }
+
+    public AboutFrame(JFrame invokerFrame)
 	{
 		initView(invokerFrame);
 	}
@@ -73,18 +78,18 @@ public class AboutFrame extends JDialog
 		JPanel mainPn = new JPanel();
 		mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
 
-		mainPn.add(Box.createRigidArea(new Dimension(0, 10)));
+		addHeight(mainPn, 10);
 
 		JLabel title = new JLabel("Text Adventures Suite");
 		title.setFont(TITLE_FONT);
 		title.setAlignmentX(CENTER_ALIGNMENT);
 		mainPn.add(title);
 
-		mainPn.add(Box.createRigidArea(new Dimension(0, 10)));
+		addHeight(mainPn, 10);
 		mainPn.add(createTabsPanel());
-		mainPn.add(Box.createRigidArea(new Dimension(0, 5)));
+		addHeight(mainPn, 5);
 		mainPn.add(createCloseBt());
-        mainPn.add(Box.createRigidArea(new Dimension(0, 5)));
+		addHeight(mainPn, 5);
 
         mainPn.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), DisposeAction.ACTION_NAME);
         mainPn.getActionMap().put(DisposeAction.ACTION_NAME, new DisposeAction(this));
