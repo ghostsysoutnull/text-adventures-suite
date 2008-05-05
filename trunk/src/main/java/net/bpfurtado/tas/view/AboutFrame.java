@@ -43,6 +43,8 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import net.bpfurtado.commons.io.FileUtils;
+
 public class AboutFrame extends JDialog
 {
     private static final long serialVersionUID = 2750603196471841891L;
@@ -64,12 +66,11 @@ public class AboutFrame extends JDialog
         widgets();
 
         setTitle("About - Text Adventures Suite");
-        Util.centerPosition(invokerFrame, this, 516, 339);
+        Util.centerPosition(invokerFrame, this, 518, 359);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultLookAndFeelDecorated(true);
         setResizable(false);
-
         setVisible(true);
     }
 
@@ -164,19 +165,7 @@ public class AboutFrame extends JDialog
 
     private JPanel createAboutPanel()
     {
-        return createTAPanel(
-                "Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on \n" + 
-                "Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.\n" + 
-                "\n" + 
-                "It has been more than a pleasure to me to create one step at a time this software. \n" + 
-                "It\'s free and open source (GPLv2): http://code.google.com/p/text-adventures-suite \n" + 
-                "\n" + 
-                "More about me on my Software Development Blog.\n" + 
-                "http://bpfurtado.livejournal.com\n" +
-                "\n" + 
-                "Special thanks to my wife Andrea for being so important in my life.\n" +
-                "\n" + 
-                "Visit: http://bpfurtado.net/tas");
+        return createTAPanel(FileUtils.allLinesFromClasspath("/net/bpfurtado/tas/view/about.txt"));
     }
     
     public static void main(String[] args)
