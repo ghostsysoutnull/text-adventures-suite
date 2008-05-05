@@ -23,7 +23,7 @@ Page custom StartMenuGroupSelect "" ": Start Menu Folder"
 Page instfiles
 
 # Installer attributes
-OutFile ..\web\download\TextAdventuresSuite_Setup.exe
+OutFile ..\..\..\target\TextAdventuresSuite_Setup.exe
 InstallDir "$PROGRAMFILES\Text Adventures Suite"
 CRCCheck on
 XPStyle on
@@ -32,11 +32,11 @@ ShowInstDetails show
 AutoCloseWindow false
 VIProductVersion 1.0.0.0
 VIAddVersionKey ProductName "Text Adventures Suite"
-VIAddVersionKey ProductVersion "${VERSION}"
-VIAddVersionKey CompanyName "${COMPANY}"
-VIAddVersionKey CompanyWebsite "${URL}"
+VIAddVersionKey ProductVersion "1.0"
+VIAddVersionKey CompanyName "Forgotten Ages"
+VIAddVersionKey CompanyWebsite "http://bpfurtado.net/tas/"
 VIAddVersionKey FileVersion ""
-VIAddVersionKey FileDescription ""
+VIAddVersionKey FileDescription "TAS Installer"
 VIAddVersionKey LegalCopyright ""
 InstallDirRegKey HKLM "${REGKEY}" Path
 UninstallIcon "${NSISDIR}\Contrib\Graphics\Icons\classic-uninstall.ico"
@@ -46,13 +46,16 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ..\web\download\text-adventures-suite.jnlp
-    File ..\web\download\TextAdventuresSuite.jar
+    File text-adventures-suite.jnlp
+    File ..\..\..\target\TextAdventuresSuite.jar
     SetOutPath $INSTDIR\lib
-    File /r ..\web\download\lib\*
-
+    File /r ..\..\..\lib\*
+    
+    Call GetJRE
+    Pop $R0
+    
     SetOutPath $SMPROGRAMS\$StartMenuGroup
-    CreateShortCut "$SMPROGRAMS\$StartMenuGroup\Text Adventures Suite.lnk" "$INSTDIR\text-adventures-suite.jnlp" "" "$PROGRAMFILES\Java\jdk1.6.0\bin\java.exe"
+    CreateShortCut "$SMPROGRAMS\$StartMenuGroup\Text Adventures Suite.lnk" "$INSTDIR\text-adventures-suite.jnlp" "" "$R0"
     CreateShortCut "$SMPROGRAMS\$StartMenuGroup\Text Adventures Suite Web site.lnk" "http://bpfurtado.net/tas" "" "C:\ARQUIV~1\MOZILL~1\FIREFOX.EXE"
     
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
@@ -134,3 +137,36 @@ Function un.onInit
     !insertmacro SELECT_UNSECTION Main ${UNSEC0000}
 FunctionEnd
 
+Function GetJRE
+;
+;  Find JRE (javaw.exe)
+;  1 - in .\jre directory (JRE Installed with application)
+;  2 - in JAVA_HOME environment variable
+;  3 - in the registry
+;  4 - assume javaw.exe in current dir or PATH
+ 
+  Push $R0
+  Push $R1
+ 
+  ClearErrors
+  StrCpy $R0 "$EXEDIR\jre\bin\javaw.exe"
+  IfFileExists $R0 JreFound
+  StrCpy $R0 ""
+ 
+  ClearErrors
+  ReadEnvStr $R0 "JAVA_HOME"
+  StrCpy $R0 "$R0\bin\javaw.exe"
+  IfErrors 0 JreFound
+ 
+  ClearErrors
+  ReadRegStr $R1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
+  ReadRegStr $R0 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$R1" "JavaHome"
+  StrCpy $R0 "$R0\bin\javaw.exe"
+ 
+  IfErrors 0 JreFound
+  StrCpy $R0 "javaw.exe"
+ 
+ JreFound:
+  Pop $R1
+  Exch $R0
+FunctionEnd
