@@ -39,30 +39,45 @@ import javax.swing.JTextArea;
 
 public class CodePanelBuilder
 {
-    public static JTextArea createCodePanel(JPanel codePn, final IBuilder builder, Toolkit toolkit)
+    private static void trimCodeAction(final JTextArea codeTA)
     {
+        StringBuilder b = new StringBuilder();
+        StringTokenizer stk = new StringTokenizer(codeTA.getText(), "\n");
+        while (stk.hasMoreTokens()) {
+            b.append(stk.nextToken().trim());
+            b.append("\n");
+        }
+        codeTA.setText(b.toString());
+    }
+
+    JTextArea textArea;
+    JPanel panel;
+
+    public CodePanelBuilder(final IBuilder builder, Toolkit toolkit)
+    {
+        panel = new JPanel();
         ScrollTextArea codeSTA = BuilderSwingUtils.createTextAreaWidgets(builder, toolkit);
-        final JTextArea codeTA = codeSTA.textArea;
-        codeTA.setFont(new java.awt.Font("Courier New", 0, 14));
-    
-        codePn.setLayout(new BoxLayout(codePn, BoxLayout.PAGE_AXIS));
-        codePn.add(codeSTA.scrollPane);
-    
+        textArea = codeSTA.textArea;
+        textArea.setFont(new java.awt.Font("Courier New", 0, 14));
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.add(codeSTA.scrollPane);
+
         JPanel buttonsPn = new JPanel();
         buttonsPn.setLayout(new BoxLayout(buttonsPn, BoxLayout.LINE_AXIS));
-    
+
         JButton trimSpacesBt = new JButton("Trim Spaces");
         trimSpacesBt.setMnemonic('t');
         trimSpacesBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                trimCodeAction(codeTA);
+                trimCodeAction(textArea);
             }
         });
         buttonsPn.add(trimSpacesBt);
-    
+
         addWidth(buttonsPn);
-    
+
         JButton codeHelpBt = new JButton("Help and Code snippets");
         codeHelpBt.setMnemonic('H');
         codeHelpBt.setAlignmentX(JComponent.RIGHT_ALIGNMENT);
@@ -73,21 +88,9 @@ public class CodePanelBuilder
             }
         });
         buttonsPn.add(codeHelpBt);
-        
-        codePn.add(Box.createRigidArea(new Dimension(0, 5)));
-        codePn.add(buttonsPn);
-        codePn.add(Box.createRigidArea(new Dimension(0, 5)));
-        return codeTA;
-    }
 
-    private static void trimCodeAction(final JTextArea codeTA)
-    {
-        StringBuilder b = new StringBuilder();
-        StringTokenizer stk = new StringTokenizer(codeTA.getText(), "\n");
-        while (stk.hasMoreTokens()) {
-            b.append(stk.nextToken().trim());
-            b.append("\n");
-        }
-        codeTA.setText(b.toString());
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(buttonsPn);
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 }

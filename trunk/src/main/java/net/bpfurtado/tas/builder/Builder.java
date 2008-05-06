@@ -91,6 +91,7 @@ import net.bpfurtado.tas.view.RecentAdventuresMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
+import static net.bpfurtado.tas.view.Util.*;
 
 import org.apache.log4j.Logger;
 
@@ -560,16 +561,17 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         sceneTabs = new JTabbedPane();
         sceneTabs.addTab("Text", Util.getImage("script.gif"), sceneSTA.scrollPane);
 
-        JPanel codePn = new JPanel();
-        codeTA = CodePanelBuilder.createCodePanel(codePn, this, getToolkit());
-        sceneTabs.addTab("Actions", Util.getImage("code.gif"), codePn);
+        CodePanelBuilder panelBuilder = new CodePanelBuilder(this, getToolkit());
+        codeTA = panelBuilder.textArea;
+        sceneTabs.addTab("Actions", Util.getImage("code.gif"), panelBuilder.panel);
 
-        JPanel assertionsPn = new JPanel();
-        assertionsTA = CodePanelBuilder.createCodePanel(assertionsPn, this, getToolkit());
-        sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), assertionsPn);
+        panelBuilder = new CodePanelBuilder(this, getToolkit());
+        assertionsTA = panelBuilder.textArea;
+        sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), panelBuilder.panel);
+        
         panel.add(sceneTabs);
 
-        panel.add(Box.createRigidArea(new Dimension(0, 4)));
+        addHeight(panel, 4);
 
         mainPathsPane = createPathsPane();
         panel.add(mainPathsPane);
