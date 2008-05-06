@@ -19,6 +19,7 @@
 package net.bpfurtado.tas.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -34,6 +35,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
@@ -184,5 +186,10 @@ public class Util
         int y = window.getY() + (window.getHeight() - height) / 2;
 
         w.setBounds(x, y, width, height);
+    }
+
+    public static void addWidth(JPanel panel)
+    {
+        panel.add(Box.createRigidArea(new Dimension(10, 0)));
     }
 }
