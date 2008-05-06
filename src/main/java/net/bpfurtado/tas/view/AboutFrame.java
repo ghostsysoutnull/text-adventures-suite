@@ -21,7 +21,6 @@
 package net.bpfurtado.tas.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +29,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -45,16 +43,13 @@ import javax.swing.SwingUtilities;
 
 import net.bpfurtado.commons.io.FileUtils;
 
+import static net.bpfurtado.tas.view.Util.*;
+
 public class AboutFrame extends JDialog
 {
     private static final long serialVersionUID = 2750603196471841891L;
 
     private static final Font TITLE_FONT = new java.awt.Font("Tahoma", 1, 16);
-
-    private static void addHeight(JPanel panel, int height)
-    {
-        panel.add(Box.createRigidArea(new Dimension(0, height)));
-    }
 
     public AboutFrame(JFrame invokerFrame)
     {
@@ -79,7 +74,7 @@ public class AboutFrame extends JDialog
         JPanel mainPn = new JPanel();
         mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
 
-        addHeight(mainPn, 10);
+        Util.addHeight(mainPn, 10);
 
         JLabel title = new JLabel("Text Adventures Suite");
         title.setFont(TITLE_FONT);

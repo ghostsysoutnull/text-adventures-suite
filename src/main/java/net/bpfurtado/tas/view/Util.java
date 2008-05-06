@@ -192,4 +192,9 @@ public class Util
     {
         panel.add(Box.createRigidArea(new Dimension(10, 0)));
     }
+
+    public static void addHeight(JPanel panel, int height)
+    {
+        panel.add(Box.createRigidArea(new Dimension(0, height)));
+    }
 }
