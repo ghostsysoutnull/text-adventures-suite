@@ -40,17 +40,25 @@ The following code would go well on some Scene Action code:
         </pre>
     </li>
     <li>
-        <strong>Add</strong> 2 attributes:
+        <strong>Add</strong> attributes:
         <pre>
         player.addAttribute("long-sword");<br></br>
         player.addAttribute("apples", 3);
+        player.addAttribute("potion", "red");
         </pre>
     </li>
     <li>
-        Add and <strong>Remove</strong> attributes:
+        <strong>Remove</strong> attributes:
         <pre>
         player.addAttribute("iron shield");<br></br>
         player.removeAttribute("horse");
+        </pre>
+    </li>
+    <li>
+        <strong>Add Skills</strong> to be tested:
+        <pre>
+        player.addSkill("light-saber fight", 9);<br></br>
+        player.addSkill("climb walls", 8);
         </pre>
     </li>
     <li>
@@ -74,6 +82,10 @@ The following code would go well on some Scene Action code:
         <pre>
         ammo = player.getIntValue("gun ammo");<br></br>
         player.addAttribute("gun ammo", ammo + 6);
+        </pre>
+        Or
+        <pre>
+        player.incIntValue("coins", 30);
         </pre>
         Or
         <pre>
