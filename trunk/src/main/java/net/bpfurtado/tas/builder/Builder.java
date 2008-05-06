@@ -30,8 +30,6 @@ import java.awt.GridBagLayout;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -40,7 +38,6 @@ import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -67,7 +64,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.JTextComponent;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.AdventureOpenner;
@@ -95,14 +91,13 @@ import net.bpfurtado.tas.view.RecentAdventuresMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
-import static net.bpfurtado.tas.view.Util.addWidth;
 
 import org.apache.log4j.Logger;
 
 /**
  * @author Bruno Patini Furtado
  */
-public class Builder extends JFrame implements AdventureOpenner, ScenesSource, AdventureNeedsSavingController
+public class Builder extends JFrame implements AdventureOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder
 {
     private static final String CONF_OPEN_LAST_ADVENTURE_ON_START = "openLastAdventureOnStart";
 	private static final ImageIcon PLAY_IMAGE = Util.getImage("control_play_blue.png");
@@ -313,7 +308,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         adventureNameTF.setMinimumSize(new Dimension(160, 23));
         adventureNameTF.setMaximumSize(new Dimension(600, 23));
 
-        addTextEventHandlers(adventureNameTF);
+        BuilderSwingUtils.addTextEventHandlers(adventureNameTF, this);
         centerPn.add(adventureNameTF);
 
         adventureNameTF.getDocument().addDocumentListener(new DocumentListener() {
@@ -534,7 +529,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
 
         panel.setBorder(BorderFactory.createTitledBorder("Scene"));
 
-        ScrollTextArea sceneSTA = createTextAreaWidgets();
+        ScrollTextArea sceneSTA = BuilderSwingUtils.createTextAreaWidgets(this, getToolkit());
         sceneTA = sceneSTA.textArea;
 
         JPopupMenu popupMenu = sceneSTA.popup;
@@ -566,11 +561,11 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         sceneTabs.addTab("Text", Util.getImage("script.gif"), sceneSTA.scrollPane);
 
         JPanel codePn = new JPanel();
-        codeTA = createCodePanel(codePn);
+        codeTA = CodePanelBuilder.createCodePanel(codePn, this, getToolkit());
         sceneTabs.addTab("Actions", Util.getImage("code.gif"), codePn);
 
         JPanel assertionsPn = new JPanel();
-        assertionsTA = createCodePanel(assertionsPn);
+        assertionsTA = CodePanelBuilder.createCodePanel(assertionsPn, this, getToolkit());
         sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), assertionsPn);
         panel.add(sceneTabs);
 
@@ -589,61 +584,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         switchTo(newScene);
     }
 
-    private ScrollTextArea createTextAreaWidgets()
-    {
-        ScrollTextArea sta = TextAreaWidgetFactory.create(FONT, getToolkit());
-        addTextEventHandlers(sta.textArea);
-        return sta;
-    }
-
-    private JTextArea createCodePanel(JPanel codePn)
-    {
-        ScrollTextArea codeSTA = createTextAreaWidgets();
-        final JTextArea codeTA = codeSTA.textArea;
-        codeTA.setFont(new java.awt.Font("Courier New", 0, 14));
-
-        codePn.setLayout(new BoxLayout(codePn, BoxLayout.PAGE_AXIS));
-        codePn.add(codeSTA.scrollPane);
-
-        JPanel buttonsPn = new JPanel();
-        buttonsPn.setLayout(new BoxLayout(buttonsPn, BoxLayout.LINE_AXIS));
-
-        JButton trimSpacesBt = new JButton("Trim Spaces");
-        trimSpacesBt.setMnemonic('t');
-        trimSpacesBt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                StringBuilder b = new StringBuilder();
-                StringTokenizer stk = new StringTokenizer(codeTA.getText(), "\n");
-                while (stk.hasMoreTokens()) {
-                    b.append(stk.nextToken().trim());
-                    b.append("\n");
-                }
-                codeTA.setText(b.toString());
-            }
-        });
-        buttonsPn.add(trimSpacesBt);
-
-        addWidth(buttonsPn);
-
-        JButton codeHelpBt = new JButton("Help and Code snippets");
-        codeHelpBt.setMnemonic('H');
-        codeHelpBt.setAlignmentX(RIGHT_ALIGNMENT);
-        codeHelpBt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                showSceneCodeHelpDialog();
-            }
-        });
-        buttonsPn.add(codeHelpBt);
-        
-        codePn.add(Box.createRigidArea(new Dimension(0, 5)));
-        codePn.add(buttonsPn);
-        codePn.add(Box.createRigidArea(new Dimension(0, 5)));
-        return codeTA;
-    }
-
-    private void showSceneCodeHelpDialog()
+    public void showSceneCodeHelpDialog()
     {
         HelpDialog helpDialog = new HelpDialog("Scene Code programming", "/net/bpfurtado/tas/builder/codeHelp.html");
 
@@ -725,10 +666,9 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         tagsLb.setMaximumSize(new Dimension(36, 20));
         tagsPn.add(tagsLb);
 
-        tagsTF = new JTextField(/* 33 */);
-        //111
-//        tagsTF.setMinimumSize(new Dimension(200, 20));
-//        tagsTF.setMaximumSize(new Dimension(800, 20));
+        tagsTF = new JTextField(/* 33 */); //111
+        //tagsTF.setMinimumSize(new Dimension(200, 20));
+        //tagsTF.setMaximumSize(new Dimension(800, 20));
         tagsPn.add(tagsTF);
 
         Util.addWidth(tagsPn);
@@ -751,28 +691,8 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
             }
         });
 
-        addTextEventHandlers(sceneNameTF);
-        addTextEventHandlers(tagsTF);
-    }
-
-    private void addTextEventHandlers(JTextComponent textComponent)
-    {
-        textComponent.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e)
-            {
-                if (e.getKeyChar() != 19) {
-                    markAsDirty();
-                }
-            }
-        });
-        textComponent.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                saveActualScene();
-            }
-        });
+        BuilderSwingUtils.addTextEventHandlers(sceneNameTF, this);
+        BuilderSwingUtils.addTextEventHandlers(tagsTF, this);
     }
 
     private JPanel createPathsPane()
@@ -850,7 +770,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         c.gridy = pathViews.size();
         c.ipady = 5;
         pathText.setFont(FONT);
-        addTextEventHandlers(pathText);
+        BuilderSwingUtils.addTextEventHandlers(pathText, this);
         pathsPane.add(pathText, c);
 
         JButton sceneBt = null;
@@ -925,7 +845,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         pathText.requestFocusInWindow();
     }
 
-    protected void saveActualScene()
+    public void saveActualScene()
     {
         save(currentScene);
     }
