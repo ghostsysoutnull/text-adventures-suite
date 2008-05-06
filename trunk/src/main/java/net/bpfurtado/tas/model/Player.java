@@ -30,6 +30,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.model.combat.Fighter;
 
 /**
@@ -118,11 +119,11 @@ public class Player extends Fighter
 		Integer increasedValue = null;
 		Object value = recoverValue(name);
 		try {
-			increasedValue = new Integer((String) value) + amount;
+			increasedValue = Integer.parseInt((String) value) + amount;
 		} catch (ClassCastException cce) {
 			increasedValue = ((Integer) value) + amount;
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new AdventureException(e);
 		}
 		attributes.put(name, increasedValue);
 	}
