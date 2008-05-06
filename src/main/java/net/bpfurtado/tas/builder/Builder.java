@@ -23,7 +23,6 @@
 package net.bpfurtado.tas.builder;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,6 +40,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -95,6 +95,7 @@ import net.bpfurtado.tas.view.RecentAdventuresMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
+import static net.bpfurtado.tas.view.Util.addWidth;
 
 import org.apache.log4j.Logger;
 
@@ -598,15 +599,32 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
     private JTextArea createCodePanel(JPanel codePn)
     {
         ScrollTextArea codeSTA = createTextAreaWidgets();
-        JTextArea codeTA = codeSTA.textArea;
+        final JTextArea codeTA = codeSTA.textArea;
         codeTA.setFont(new java.awt.Font("Courier New", 0, 14));
 
         codePn.setLayout(new BoxLayout(codePn, BoxLayout.PAGE_AXIS));
         codePn.add(codeSTA.scrollPane);
 
         JPanel buttonsPn = new JPanel();
-        buttonsPn.setBackground(Color.blue);
         buttonsPn.setLayout(new BoxLayout(buttonsPn, BoxLayout.LINE_AXIS));
+
+        JButton trimSpacesBt = new JButton("Trim Spaces");
+        trimSpacesBt.setMnemonic('t');
+        trimSpacesBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                StringBuilder b = new StringBuilder();
+                StringTokenizer stk = new StringTokenizer(codeTA.getText(), "\n");
+                while (stk.hasMoreTokens()) {
+                    b.append(stk.nextToken().trim());
+                    b.append("\n");
+                }
+                codeTA.setText(b.toString());
+            }
+        });
+        buttonsPn.add(trimSpacesBt);
+
+        addWidth(buttonsPn);
 
         JButton codeHelpBt = new JButton("Help and Code snippets");
         codeHelpBt.setMnemonic('H');
@@ -618,7 +636,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
             }
         });
         buttonsPn.add(codeHelpBt);
-
+        
         codePn.add(Box.createRigidArea(new Dimension(0, 5)));
         codePn.add(buttonsPn);
         codePn.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -713,7 +731,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
 //        tagsTF.setMaximumSize(new Dimension(800, 20));
         tagsPn.add(tagsTF);
 
-        tagsPn.add(Box.createRigidArea(new Dimension(10, 0)));
+        Util.addWidth(tagsPn);
 
         this.sceneTypesWidgets = new SceneTypesWidgets(tagsPn, this); // 222
 
