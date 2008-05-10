@@ -49,8 +49,8 @@ public class SkillTestFrame extends JDialog
 	
 	private static final long serialVersionUID = -2131899249629843236L;
 
-	private static final Font FONT = new java.awt.Font("Tahoma", 0, 14);
-	private static final Font FONT_BOLD = new java.awt.Font("Tahoma", 1, 14);
+	private static final Font FONT = new Font("Tahoma", 0, 14);
+	private static final Font FONT_BOLD = new Font("Tahoma", 1, 14);
 	
 	private static final String NEXT_NEED_TO_BE_PREFIX = "Next need to be less than or equal to: [";
 	

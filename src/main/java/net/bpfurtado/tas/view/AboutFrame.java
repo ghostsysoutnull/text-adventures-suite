@@ -49,7 +49,7 @@ public class AboutFrame extends JDialog
 {
     private static final long serialVersionUID = 2750603196471841891L;
 
-    private static final Font TITLE_FONT = new java.awt.Font("Tahoma", 1, 16);
+    private static final Font TITLE_FONT = new Font("Tahoma", 1, 16);
 
     public AboutFrame(JFrame invokerFrame)
     {

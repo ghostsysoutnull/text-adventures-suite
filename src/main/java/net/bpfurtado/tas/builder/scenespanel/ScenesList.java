@@ -23,6 +23,7 @@
 package net.bpfurtado.tas.builder.scenespanel;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -214,7 +215,7 @@ public class ScenesList implements ScenesListControllerListener
     private JList widgetScenesList()
     {
         JList scenesList = new JList();
-        scenesList.setFont(new java.awt.Font("Courier new", 0, 10));
+        scenesList.setFont(new Font("Courier New", 0, 10));
         
         scenesList.addMouseListener(new MouseAdapter()
         {

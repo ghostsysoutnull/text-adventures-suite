@@ -49,116 +49,112 @@ import org.apache.log4j.Logger;
  */
 public class Util
 {
-	private static Logger logger = Logger.getLogger(Util.class);
-	
-	public static final Color oceanColor = new Color(184, 207, 229);
+    private static Logger logger = Logger.getLogger(Util.class);
 
-	public static void showComponent(JComponent component)
-	{
-		component.setVisible(false);
-		component.setVisible(true);
-	}
+    public static final Color oceanColor = new Color(184, 207, 229);
 
-	public static final int SAVE_DIALOG_OPT_SAVE = 0;
-	public static final int SAVE_DIALOG_OPT_CANCEL = 2;
+    public static void showComponent(JComponent component)
+    {
+        component.setVisible(false);
+        component.setVisible(true);
+    }
 
-	public static int showSaveDialog(JFrame parent, String message)
-	{
-		Object[] saveDialogOptions = new Object[] { "Save", "Discard Changes", "Cancel" };
-		return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions, saveDialogOptions[0]);
-	}
+    public static final int SAVE_DIALOG_OPT_SAVE = 0;
+    public static final int SAVE_DIALOG_OPT_CANCEL = 2;
 
-	public static ImageIcon getImage(String imageName)
-	{
-		try {
-			return new ImageIcon(Util.class.getResource("/net/bpfurtado/tas/images/" + imageName));
-		} catch (NullPointerException npe) {
-			throw new AdventureException(imageName + " could no be loaded", npe);
-		}
-	}
+    public static int showSaveDialog(JFrame parent, String message)
+    {
+        Object[] saveDialogOptions = new Object[] { "Save", "Discard Changes", "Cancel" };
+        return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions, saveDialogOptions[0]);
+    }
 
-	public static JFileChooser createFileChooser(String initDir)
-	{
-		JFileChooser fileChooser = new JFileChooser(new File(initDir));
-		fileChooser.setFileFilter(new FileFilter()
-		{
-			@Override
-			public boolean accept(File f)
-			{
-				return f.getName().endsWith(".adv.xml") || f.isDirectory();
-			}
+    public static ImageIcon getImage(String imageName)
+    {
+        try {
+            return new ImageIcon(Util.class.getResource("/net/bpfurtado/tas/images/" + imageName));
+        } catch (NullPointerException npe) {
+            throw new AdventureException(imageName + " could no be loaded", npe);
+        }
+    }
 
-			@Override
-			public String getDescription()
-			{
-				return "Text Adventures Suite - Project";
-			}
-		});
-		return fileChooser;
-	}
+    public static JFileChooser createFileChooser(String initDir)
+    {
+        JFileChooser fileChooser = new JFileChooser(new File(initDir));
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f)
+            {
+                return f.getName().endsWith(".adv.xml") || f.isDirectory();
+            }
 
-	private static JMenu createHelpMenu(final JFrame frame)
-	{
-		JMenu help = new JMenu("Help");
-		help.setMnemonic('h');
-	
-	    JMenuItem welcomeMnIt = new JMenuItem("Welcome", Util.getImage("world.png"));
-	    welcomeMnIt.setMnemonic('w');
-	    welcomeMnIt.addActionListener(new ActionListener()
-	    {
-	        public void actionPerformed(ActionEvent e)
-	        {
-	            OpenningFrame.open(frame);
-	        }
-	    });
-	    help.add(welcomeMnIt);
-	    help.add(new JSeparator());
-	
-	    JMenuItem aboutMnIt = new JMenuItem("About", Util.getImage("controller.png"));
-	    aboutMnIt.setMnemonic('a');
-	    aboutMnIt.addActionListener(new ActionListener()
-	    {
-	        public void actionPerformed(ActionEvent e)
-	        {
-	            new AboutFrame(frame);
-	        }
-	    });
-	    help.add(aboutMnIt);
-	    
-	    
-		return help;
-	}
+            @Override
+            public String getDescription()
+            {
+                return "Text Adventures Suite - Project";
+            }
+        });
+        return fileChooser;
+    }
 
-	public static void addHelpMenu(JMenuBar menuBar, JFrame frame)
-	{
-		menuBar.add(Box.createHorizontalGlue());
-	    JMenu help = createHelpMenu(frame);
-	    menuBar.add(help);
-	}
-	
-	public static void centerPosition(JFrame invokerFrame, Window w, int width, int height)
-	{
-		int x = invokerFrame.getX() + (invokerFrame.getWidth() - width) / 2;
-		int y = invokerFrame.getY() + (invokerFrame.getHeight() - height) / 2;
-		
-		w.setBounds(x, y, width, height);
-	}
-	
-	public static void terminateProcessIfAlone()
-	{
-		logger.debug("START");
-		for (Frame f : Frame.getFrames()) {
-			logger.debug("name=" + f.getTitle());
-			logger.debug("\tactive=" + f.isActive());
-			logger.debug("\tvalid=" + f.isValid());
-			logger.debug("\tisDisplayable=" + f.isDisplayable());
-			if (f.isDisplayable()) {
-				logger.debug("CAN'T EXIT");
-				return;
-			}
-		}
-		System.exit(0);
-	}
+    private static JMenu createHelpMenu(final JFrame frame)
+    {
+        JMenu help = new JMenu("Help");
+        help.setMnemonic('h');
+
+        JMenuItem welcomeMnIt = new JMenuItem("Welcome", Util.getImage("world.png"));
+        welcomeMnIt.setMnemonic('w');
+        welcomeMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                OpenningFrame.open(frame);
+            }
+        });
+        help.add(welcomeMnIt);
+        help.add(new JSeparator());
+
+        JMenuItem aboutMnIt = new JMenuItem("About", Util.getImage("controller.png"));
+        aboutMnIt.setMnemonic('a');
+        aboutMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                new AboutFrame(frame);
+            }
+        });
+        help.add(aboutMnIt);
+
+        return help;
+    }
+
+    public static void addHelpMenu(JMenuBar menuBar, JFrame frame)
+    {
+        menuBar.add(Box.createHorizontalGlue());
+        JMenu help = createHelpMenu(frame);
+        menuBar.add(help);
+    }
+
+    public static void centerPosition(JFrame invokerFrame, Window w, int width, int height)
+    {
+        int x = invokerFrame.getX() + (invokerFrame.getWidth() - width) / 2;
+        int y = invokerFrame.getY() + (invokerFrame.getHeight() - height) / 2;
+
+        w.setBounds(x, y, width, height);
+    }
+
+    public static void terminateProcessIfAlone()
+    {
+        logger.debug("START");
+        for (Frame f : Frame.getFrames()) {
+            logger.debug("name=" + f.getTitle());
+            logger.debug("\tactive=" + f.isActive());
+            logger.debug("\tvalid=" + f.isValid());
+            logger.debug("\tisDisplayable=" + f.isDisplayable());
+            if (f.isDisplayable()) {
+                logger.debug("CAN'T EXIT");
+                return;
+            }
+        }
+        System.exit(0);
+    }
 
     public static JMenuItem menuItem(String text, char mnemonic, int key, String imageName, JMenu adventureMenu, ActionListener action)
     {
@@ -167,7 +163,7 @@ public class Util
         it.setMnemonic(mnemonic);
         it.addActionListener(action);
         adventureMenu.add(it);
-    
+
         return it;
     }
 
@@ -175,11 +171,11 @@ public class Util
     {
         JMenu menu = new JMenu(text);
         menu.setMnemonic(mnemonic);
-    
+
         menuBar.add(menu);
         return menu;
     }
-    
+
     public static void centerPosition(Window window, Window w, int width, int height)
     {
         int x = window.getX() + (window.getWidth() - width) / 2;

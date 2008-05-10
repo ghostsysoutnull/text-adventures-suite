@@ -43,7 +43,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -98,17 +97,14 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class Builder extends JFrame implements AdventureOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder
+public class Builder extends JFrame 
+    implements AdventureOpenner, ScenesSource, 
+               AdventureNeedsSavingController, IBuilder
 {
-    private static final String CONF_OPEN_LAST_ADVENTURE_ON_START = "openLastAdventureOnStart";
-	private static final ImageIcon PLAY_IMAGE = Util.getImage("control_play_blue.png");
-    private static final ImageIcon PLAY_CURRENT_IMAGE = Util.getImage("control_fastforward_blue.png");
-
     private static final Logger logger = Logger.getLogger(Builder.class);
-
     private static final long serialVersionUID = -3424967248011145801L;
 
-    public static final Font FONT = new java.awt.Font("Tahoma", 0, 14);
+    public static final Font FONT = new Font("Tahoma", 0, 14);
 
     private static final String TAB_TITLE_COMBAT = "Combat";
     private static final String TAB_TITLE_SKILL_TEST = "Skill Test";
@@ -172,13 +168,14 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
     private void openLastAdventure()
 	{
 		boolean openLastAdventureOnStart = true;
+		String confKey = "openLastAdventureOnStart";
 		try {
-			openLastAdventureOnStart = Conf.builder().is(CONF_OPEN_LAST_ADVENTURE_ON_START, false);
+            openLastAdventureOnStart = Conf.builder().is(confKey, false);
 			if (!openLastAdventureOnStart) {
 				return;
 			}
 		} catch (AdventureException e) {
-			Conf.builder().set(CONF_OPEN_LAST_ADVENTURE_ON_START, openLastAdventureOnStart);
+			Conf.builder().set(confKey, openLastAdventureOnStart);
 		}
 
         File advFile = new File(Conf.builder().get("lastAdventure"));
@@ -215,12 +212,6 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
 
     private void initView()
     {
-//        try {
-//            UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-//        } catch (Exception e) {
-//            throw new AdventureException(e);
-//        }
-        
         menu();
         widgets();
 
@@ -230,7 +221,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         int w = conf.getInt("bounds.w", 970);
         int h = conf.getInt("bounds.h", 615);
 
-        setBounds(x, y, w, h); // setBounds(235, 260, 806, 430);
+        setBounds(x, y, w, h);
         updateTitle();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -329,10 +320,9 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
             }
         });
 
-//        centerPn.add(Box.createRigidArea(new Dimension(3, 0)));
         centerPn.add(Box.createHorizontalGlue());
 
-        this.playFromCurrentBt = new JButton(PLAY_CURRENT_IMAGE);
+        this.playFromCurrentBt = new JButton(Util.getImage("control_fastforward_blue.png"));
         playFromCurrentBt.setToolTipText("Play from current scene");
         playFromCurrentBt.setEnabled(false);
         playFromCurrentBt.addActionListener(new ActionListener() {
@@ -344,7 +334,7 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         centerPn.add(playFromCurrentBt);
         centerPn.add(Box.createRigidArea(new Dimension(3, 0)));
 
-        playBt = new JButton(PLAY_IMAGE);
+        playBt = new JButton(Util.getImage("control_play_blue.png"));
         playBt.setToolTipText("Saves the adventure and plays it from the Start Scene");
         playBt.setMnemonic('P');
         playBt.setEnabled(false);
@@ -354,7 +344,6 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
                 playAdventureAction();
             }
         });
-//        centerPn.add(Box.createHorizontalGlue());
         centerPn.add(Box.createRigidArea(new Dimension(3, 0)));
         centerPn.add(playBt);
         centerPn.add(Box.createRigidArea(new Dimension(3, 0)));

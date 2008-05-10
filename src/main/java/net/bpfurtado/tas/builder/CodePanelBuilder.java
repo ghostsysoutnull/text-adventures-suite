@@ -25,6 +25,7 @@ package net.bpfurtado.tas.builder;
 import static net.bpfurtado.tas.view.Util.addWidth;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +56,7 @@ public class CodePanelBuilder
         panel = new JPanel();
         ScrollTextArea codeSTA = BuilderSwingUtils.createTextAreaWidgets(builder, toolkit);
         textArea = codeSTA.textArea;
-        getTextArea().setFont(new java.awt.Font("Courier New", 0, 14));
+        getTextArea().setFont(new Font("Courier New", 0, 14));
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.add(codeSTA.scrollPane);
