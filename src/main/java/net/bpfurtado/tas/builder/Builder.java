@@ -562,12 +562,12 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
         sceneTabs.addTab("Text", Util.getImage("script.gif"), sceneSTA.scrollPane);
 
         CodePanelBuilder panelBuilder = new CodePanelBuilder(this, getToolkit());
-        codeTA = panelBuilder.textArea;
-        sceneTabs.addTab("Actions", Util.getImage("code.gif"), panelBuilder.panel);
+        codeTA = panelBuilder.getTextArea();
+        sceneTabs.addTab("Actions", Util.getImage("code.gif"), panelBuilder.getPanel());
 
         panelBuilder = new CodePanelBuilder(this, getToolkit());
-        assertionsTA = panelBuilder.textArea;
-        sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), panelBuilder.panel);
+        assertionsTA = panelBuilder.getTextArea();
+        sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), panelBuilder.getPanel());
         
         panel.add(sceneTabs);
 

@@ -28,7 +28,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.StringTokenizer;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,28 +36,26 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import net.bpfurtado.bsh.indenter.Indenter;
+import net.bpfurtado.tas.view.Util;
+
 public class CodePanelBuilder
 {
-    private static void trimCodeAction(final JTextArea codeTA)
+    private static void indentCodeAction(final JTextArea codeTA)
     {
-        StringBuilder b = new StringBuilder();
-        StringTokenizer stk = new StringTokenizer(codeTA.getText(), "\n");
-        while (stk.hasMoreTokens()) {
-            b.append(stk.nextToken().trim());
-            b.append("\n");
-        }
-        codeTA.setText(b.toString());
+        String indentedCode = new Indenter().indent(codeTA.getText());
+        codeTA.setText(indentedCode);
     }
 
-    JTextArea textArea;
-    JPanel panel;
+    private JTextArea textArea;
+    private JPanel panel;
 
     public CodePanelBuilder(final IBuilder builder, Toolkit toolkit)
     {
         panel = new JPanel();
         ScrollTextArea codeSTA = BuilderSwingUtils.createTextAreaWidgets(builder, toolkit);
         textArea = codeSTA.textArea;
-        textArea.setFont(new java.awt.Font("Courier New", 0, 14));
+        getTextArea().setFont(new java.awt.Font("Courier New", 0, 14));
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.add(codeSTA.scrollPane);
@@ -66,19 +63,18 @@ public class CodePanelBuilder
         JPanel buttonsPn = new JPanel();
         buttonsPn.setLayout(new BoxLayout(buttonsPn, BoxLayout.LINE_AXIS));
 
-        JButton trimSpacesBt = new JButton("Trim Spaces");
-        trimSpacesBt.setMnemonic('t');
-        trimSpacesBt.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e)
-            {
-                trimCodeAction(textArea);
-            }
-        });
-        buttonsPn.add(trimSpacesBt);
-
+        addIndentBt(buttonsPn);
         addWidth(buttonsPn);
+        addHelpBt(builder, buttonsPn);
 
-        JButton codeHelpBt = new JButton("Help and Code snippets");
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        panel.add(buttonsPn);
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+    }
+
+    private void addHelpBt(final IBuilder builder, JPanel buttonsPn)
+    {
+        JButton codeHelpBt = new JButton("Help and Code snippets", Util.getImage("help.png"));
         codeHelpBt.setMnemonic('H');
         codeHelpBt.setAlignmentX(JComponent.RIGHT_ALIGNMENT);
         codeHelpBt.addActionListener(new ActionListener() {
@@ -88,9 +84,28 @@ public class CodePanelBuilder
             }
         });
         buttonsPn.add(codeHelpBt);
+    }
 
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
-        panel.add(buttonsPn);
-        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+    private void addIndentBt(JPanel buttonsPn)
+    {
+        JButton trimSpacesBt = new JButton("Indent", Util.getImage("indent-icon.png"));
+        trimSpacesBt.setMnemonic('i');
+        trimSpacesBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                indentCodeAction(getTextArea());
+            }
+        });
+        buttonsPn.add(trimSpacesBt);
+    }
+
+    public JTextArea getTextArea()
+    {
+        return textArea;
+    }
+
+    public JPanel getPanel()
+    {
+        return panel;
     }
 }
