@@ -1125,7 +1125,13 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
             if (fileChooser.showSaveDialog(Builder.this) == JFileChooser.APPROVE_OPTION) {
                 saveFile = fileChooser.getSelectedFile();
                 if (saveFile.exists()) {
-                    int answer = JOptionPane.showConfirmDialog(Builder.this, "This file already exists!\n" + "Do you want to overwrite it?", "File already exists", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int answer = JOptionPane.showConfirmDialog(
+                                    Builder.this, 
+                                    "This file already exists!\n" + 
+                                    "Do you want to overwrite it?", 
+                                    "File already exists", 
+                                    JOptionPane.YES_NO_OPTION, 
+                                    JOptionPane.QUESTION_MESSAGE);
                     if (answer == JOptionPane.NO_OPTION) {
                         return;
                     }
@@ -1156,7 +1162,13 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
     private void createNewAdventure()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Builder.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(
+                            Builder.this, 
+                            "Close current adventure?", 
+                            "Warning", 
+                            JOptionPane.YES_NO_OPTION, 
+                            JOptionPane.QUESTION_MESSAGE);
+            
             if (answer == JOptionPane.NO_OPTION)
                 return;
         }
@@ -1238,13 +1250,26 @@ public class Builder extends JFrame implements AdventureOpenner, ScenesSource, A
             String secMsg = null;
 
             if (type.exactPathsNumberPermited() == 0) {
-                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths will be deleted\n" + "Are you sure?";
+                msg = "A " + type + 
+                    " Scene cannot have any paths.\n" + 
+                    "If you confirm all current paths will be deleted\n" + 
+                    "Are you sure?";
                 secMsg = "This action will delete this scene paths";
             } else {
-                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths but " + type.exactPathsNumberPermited() + " " + "will be deleted\n" + "Are you sure?";
+                msg = "A " + type + 
+                    " Scene cannot have any paths.\n" + 
+                    "If you confirm all current paths but " + 
+                    type.exactPathsNumberPermited() + 
+                    " " + "will be deleted\n" + 
+                    "Are you sure?";
                 secMsg = "Only " + type.exactPathsNumberPermited() + " paths will remain!";
             }
-            int answer = JOptionPane.showConfirmDialog(Builder.this, msg, secMsg, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(
+                            Builder.this, 
+                            msg, 
+                            secMsg, 
+                            JOptionPane.YES_NO_OPTION, 
+                            JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.YES_OPTION) {
                 changeType = true;
