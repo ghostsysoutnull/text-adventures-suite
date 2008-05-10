@@ -47,7 +47,7 @@ public class OpenningFrame extends JFrame
 
 	private static final long serialVersionUID = 7784790918999921301L;
 
-	private static final Font FONT = new java.awt.Font("Verdana", 1, 14);
+	private static final Font FONT = new Font("Verdana", 1, 14);
 
     private static final int HEIGHT = 285;
 	private static final int WIDTH = 585;

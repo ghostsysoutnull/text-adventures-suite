@@ -57,7 +57,7 @@ public class PlayerPanelController //implements PlayerStatsViewer
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(PlayerPanelController.class);
 
-	static final Font DEFAULT_FONT = new java.awt.Font("Arial Bold", 1, 14);
+	static final Font DEFAULT_FONT = new Font("Arial Bold", 1, 14);
 
     private Game game;
     private JPanel panel;
