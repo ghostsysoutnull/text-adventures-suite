@@ -133,15 +133,15 @@ public class OpenningFrame extends JFrame
     {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
-        JButton builderBt = new JButton("Builder");
+        JButton builderBt = new JButton("Create an Adventure");
         builderBt.setFont(FONT);
-        builderBt.setMnemonic('b');
+        builderBt.setMnemonic('c');
         p.add(builderBt);
         p.add(Box.createRigidArea(new Dimension(15, 0)));
 
-        JButton runnerBt = new JButton("Runner");
+        JButton runnerBt = new JButton("Play an Adventure");
         runnerBt.setFont(FONT);
-        runnerBt.setMnemonic('r');
+        runnerBt.setMnemonic('p');
         p.add(runnerBt);
         p.setAlignmentX(CENTER_ALIGNMENT);
 
