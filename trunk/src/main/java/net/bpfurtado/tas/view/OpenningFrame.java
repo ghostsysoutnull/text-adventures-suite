@@ -2,20 +2,20 @@
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
  *
  * This file is part of the Text Adventures Suite.
- * 
+ *
  * Text Adventures Suite is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Text Adventures Suite is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
 package net.bpfurtado.tas.view;
@@ -42,15 +42,15 @@ import org.apache.log4j.Logger;
 
 public class OpenningFrame extends JFrame
 {
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(OpenningFrame.class);
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(OpenningFrame.class);
 
-	private static final long serialVersionUID = 7784790918999921301L;
+    private static final long serialVersionUID = 7784790918999921301L;
 
-	private static final Font FONT = new Font("Verdana", 1, 14);
+    private static final Font FONT = new Font("Verdana", 1, 14);
 
     private static final int HEIGHT = 285;
-	private static final int WIDTH = 585;
+    private static final int WIDTH = 585;
 
     private static OpenningFrame INSTANCE = new OpenningFrame();
 
@@ -61,7 +61,7 @@ public class OpenningFrame extends JFrame
 
     public static void open(JFrame invoker)
     {
-    	Util.centerPosition(invoker, INSTANCE, WIDTH, HEIGHT);
+        Util.centerPosition(invoker, INSTANCE, WIDTH, HEIGHT);
         INSTANCE.setVisible(true);
     }
 
@@ -81,20 +81,20 @@ public class OpenningFrame extends JFrame
 
         addWindowListener(new WindowAdapter()
         {
-        	@Override
-			public void windowClosed(WindowEvent e)
-			{
-				logger.debug("CLOSED");
-				exitApplication();
-				logger.debug("END CLOSED");
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent e)
-			{
-				logger.debug("CLOSING");
-				//exitApplication();
-			}
+            @Override
+            public void windowClosed(WindowEvent e)
+            {
+                logger.debug("CLOSED");
+                exitApplication();
+                logger.debug("END CLOSED");
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                logger.debug("CLOSING");
+                //exitApplication();
+            }
         });
 
         setBounds(235, 260, WIDTH, HEIGHT);
@@ -105,13 +105,13 @@ public class OpenningFrame extends JFrame
     }
 
     protected void exitApplication()
-	{
-		dispose();
+    {
+        dispose();
 
-		Util.terminateProcessIfAlone();
-	}
+        Util.terminateProcessIfAlone();
+    }
 
-	private void widgets()
+    private void widgets()
     {
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
