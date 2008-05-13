@@ -69,7 +69,15 @@ public class Util
     public static int showSaveDialog(JFrame parent, String message)
     {
         Object[] saveDialogOptions = new Object[] { "Save", "Discard Changes", "Cancel" };
-        return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions, saveDialogOptions[0]);
+        return JOptionPane.showOptionDialog(
+                        parent,
+                        "You have an unsaved adventure!\n" + message,
+                        "Warning",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        saveDialogOptions,
+                        saveDialogOptions[0]);
     }
 
     public static ImageIcon getImage(String imageName)
