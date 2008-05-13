@@ -20,6 +20,7 @@ package net.bpfurtado.tas.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -27,7 +28,9 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -41,6 +44,7 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 
 import net.bpfurtado.tas.AdventureException;
+import net.bpfurtado.tas.Conf;
 
 import org.apache.log4j.Logger;
 
@@ -184,13 +188,53 @@ public class Util
         w.setBounds(x, y, width, height);
     }
 
-    public static void addWidth(JPanel panel)
+    public static void addWidth(JPanel panel, int width)
     {
-        panel.add(Box.createRigidArea(new Dimension(10, 0)));
+        panel.add(Box.createRigidArea(new Dimension(width, 0)));
     }
 
     public static void addHeight(JPanel panel, int height)
     {
         panel.add(Box.createRigidArea(new Dimension(0, height)));
+    }
+
+    public static void persistLastPos(Conf conf, JFrame frame)
+    {
+        conf.set("bounds.x", frame.getX());
+        conf.set("bounds.y", frame.getY());
+        conf.set("bounds.w", frame.getWidth());
+        conf.set("bounds.h", frame.getHeight());
+        conf.save();
+    }
+
+    public static void exitApplication(JFrame frame)
+    {
+        frame.setVisible(false);
+        persistLastPos(Conf.runner(), frame);
+        frame.dispose();
+        terminateProcessIfAlone();
+    }
+
+    public static JPanel createPageBoxPanel()
+    {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+        return p;
+    }
+
+    public static JPanel createLineBoxPanel()
+    {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
+        return p;
+    }
+
+    public static JButton button(JPanel panel, String text, char mnemonic, Font font)
+    {
+        JButton builderBt = new JButton(text);
+        builderBt.setFont(font);
+        builderBt.setMnemonic(mnemonic);
+        panel.add(builderBt);
+        return builderBt;
     }
 }
