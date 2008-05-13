@@ -167,7 +167,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
 		fightBt = new JButton("Next Round");
 		fightBt.setMinimumSize(new Dimension(100, 30));
 		fightBt.setMnemonic('n');
-		buttonsPn.add(fightBt);
 		fightBt.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -175,6 +174,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 				nextRoundButtonAction();
 			}
 		});
+        buttonsPn.add(fightBt);
 		space(buttonsPn);
 
 		tilDeathBt = new JButton("Fight until death!");

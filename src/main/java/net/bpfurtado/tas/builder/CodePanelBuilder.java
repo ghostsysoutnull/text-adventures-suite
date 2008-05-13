@@ -65,7 +65,7 @@ public class CodePanelBuilder
         buttonsPn.setLayout(new BoxLayout(buttonsPn, BoxLayout.LINE_AXIS));
 
         addIndentBt(buttonsPn);
-        addWidth(buttonsPn);
+        addWidth(buttonsPn, 10);
         addHelpBt(builder, buttonsPn);
 
         panel.add(Box.createRigidArea(new Dimension(0, 5)));

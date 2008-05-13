@@ -1,24 +1,24 @@
-/**                                                                           
- * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 04/10/2005 11:14:38                                                          
- *                                                                            
- * This file is part of the Text Adventures Suite.                            
- *                                                                            
- * Text Adventures Suite is free software: you can redistribute it and/or modify          
- * it under the terms of the GNU General Public License as published by       
- * the Free Software Foundation, either version 3 of the License, or          
- * (at your option) any later version.                                        
- *                                                                            
- * Text Adventures Suite is distributed in the hope that it will be useful,               
- * but WITHOUT ANY WARRANTY; without even the implied warranty of             
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              
- * GNU General Public License for more details.                               
- *                                                                            
- * You should have received a copy of the GNU General Public License          
- * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
- *                                                                            
- * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+/**
+ * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]
+ * Created on 04/10/2005 11:14:38
+ *
+ * This file is part of the Text Adventures Suite.
+ *
+ * Text Adventures Suite is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Text Adventures Suite is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Project page: http://code.google.com/p/text-adventures-suite/
+ */
 
 package net.bpfurtado.tas.builder;
 
@@ -97,8 +97,8 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class Builder extends JFrame 
-    implements AdventureOpenner, ScenesSource, 
+public class Builder extends JFrame
+    implements AdventureOpenner, ScenesSource,
                AdventureNeedsSavingController, IBuilder
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
@@ -166,17 +166,17 @@ public class Builder extends JFrame
     }
 
     private void openLastAdventure()
-	{
-		boolean openLastAdventureOnStart = true;
-		String confKey = "openLastAdventureOnStart";
-		try {
+    {
+        boolean openLastAdventureOnStart = true;
+        String confKey = "openLastAdventureOnStart";
+        try {
             openLastAdventureOnStart = Conf.builder().is(confKey, false);
-			if (!openLastAdventureOnStart) {
-				return;
-			}
-		} catch (AdventureException e) {
-			Conf.builder().set(confKey, openLastAdventureOnStart);
-		}
+            if (!openLastAdventureOnStart) {
+                return;
+            }
+        } catch (AdventureException e) {
+            Conf.builder().set(confKey, openLastAdventureOnStart);
+        }
 
         File advFile = new File(Conf.builder().get("lastAdventure"));
         if (advFile.exists()) {
@@ -533,7 +533,7 @@ public class Builder extends JFrame
             }
         });
         popupMenu.add(createPathMnIt);
-        
+
         final JMenuItem splitSceneMnIt = new JMenuItem("Split Scene from here");
         splitSceneMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
@@ -542,7 +542,7 @@ public class Builder extends JFrame
             }
         });
         popupMenu.add(splitSceneMnIt);
-        
+
         sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, createPathMnIt, splitSceneMnIt, sceneTA));
 
         panel.add(headerFieldsPanelWidgets());
@@ -557,7 +557,7 @@ public class Builder extends JFrame
         panelBuilder = new CodePanelBuilder(this, getToolkit());
         assertionsTA = panelBuilder.getTextArea();
         sceneTabs.addTab("Assertions", Util.getImage("code_people.gif"), panelBuilder.getPanel());
-        
+
         panel.add(sceneTabs);
 
         addHeight(panel, 4);
@@ -571,7 +571,7 @@ public class Builder extends JFrame
     {
         String newText = sceneTA.getSelectedText();
         Scene newScene = adventure.split(currentScene, newText);
-        sceneTA.setText(currentScene.getText()); //It'll be saved with the TA text in the switchTo method invocation bellow. 
+        sceneTA.setText(currentScene.getText()); //It'll be saved with the TA text in the switchTo method invocation bellow.
         switchTo(newScene);
     }
 
@@ -662,7 +662,7 @@ public class Builder extends JFrame
         //tagsTF.setMaximumSize(new Dimension(800, 20));
         tagsPn.add(tagsTF);
 
-        Util.addWidth(tagsPn);
+        Util.addWidth(tagsPn, 10);
 
         this.sceneTypesWidgets = new SceneTypesWidgets(tagsPn, this); // 222
 
@@ -989,12 +989,7 @@ public class Builder extends JFrame
                 saveAdventureMenuAction(false);
         }
 
-        Conf conf = Conf.builder();
-        conf.set("bounds.x", getX());
-        conf.set("bounds.y", getY());
-        conf.set("bounds.w", getWidth());
-        conf.set("bounds.h", getHeight());
-        conf.save();
+        Util.persistLastPos(Conf.builder(), this);
 
         dispose();
 
@@ -1115,11 +1110,11 @@ public class Builder extends JFrame
                 saveFile = fileChooser.getSelectedFile();
                 if (saveFile.exists()) {
                     int answer = JOptionPane.showConfirmDialog(
-                                    Builder.this, 
-                                    "This file already exists!\n" + 
-                                    "Do you want to overwrite it?", 
-                                    "File already exists", 
-                                    JOptionPane.YES_NO_OPTION, 
+                                    Builder.this,
+                                    "This file already exists!\n" +
+                                    "Do you want to overwrite it?",
+                                    "File already exists",
+                                    JOptionPane.YES_NO_OPTION,
                                     JOptionPane.QUESTION_MESSAGE);
                     if (answer == JOptionPane.NO_OPTION) {
                         return;
@@ -1152,12 +1147,12 @@ public class Builder extends JFrame
     {
         if (adventure != null) {
             int answer = JOptionPane.showConfirmDialog(
-                            Builder.this, 
-                            "Close current adventure?", 
-                            "Warning", 
-                            JOptionPane.YES_NO_OPTION, 
+                            Builder.this,
+                            "Close current adventure?",
+                            "Warning",
+                            JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE);
-            
+
             if (answer == JOptionPane.NO_OPTION)
                 return;
         }
@@ -1239,25 +1234,25 @@ public class Builder extends JFrame
             String secMsg = null;
 
             if (type.exactPathsNumberPermited() == 0) {
-                msg = "A " + type + 
-                    " Scene cannot have any paths.\n" + 
-                    "If you confirm all current paths will be deleted\n" + 
+                msg = "A " + type +
+                    " Scene cannot have any paths.\n" +
+                    "If you confirm all current paths will be deleted\n" +
                     "Are you sure?";
                 secMsg = "This action will delete this scene paths";
             } else {
-                msg = "A " + type + 
-                    " Scene cannot have any paths.\n" + 
-                    "If you confirm all current paths but " + 
-                    type.exactPathsNumberPermited() + 
-                    " " + "will be deleted\n" + 
+                msg = "A " + type +
+                    " Scene cannot have any paths.\n" +
+                    "If you confirm all current paths but " +
+                    type.exactPathsNumberPermited() +
+                    " " + "will be deleted\n" +
                     "Are you sure?";
                 secMsg = "Only " + type.exactPathsNumberPermited() + " paths will remain!";
             }
             int answer = JOptionPane.showConfirmDialog(
-                            Builder.this, 
-                            msg, 
-                            secMsg, 
-                            JOptionPane.YES_NO_OPTION, 
+                            Builder.this,
+                            msg,
+                            secMsg,
+                            JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.YES_OPTION) {

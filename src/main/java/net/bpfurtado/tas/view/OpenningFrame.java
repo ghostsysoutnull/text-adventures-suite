@@ -20,6 +20,10 @@
  */
 package net.bpfurtado.tas.view;
 
+import static net.bpfurtado.tas.view.Util.addHeight;
+import static net.bpfurtado.tas.view.Util.addWidth;
+import static net.bpfurtado.tas.view.Util.button;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -27,8 +31,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -47,8 +49,6 @@ public class OpenningFrame extends JFrame
 
     private static final long serialVersionUID = 7784790918999921301L;
 
-    private static final Font FONT = new Font("Verdana", 1, 14);
-
     private static final int HEIGHT = 285;
     private static final int WIDTH = 585;
 
@@ -66,7 +66,7 @@ public class OpenningFrame extends JFrame
     }
 
     /**
-     * TODO: FIX this: Kept still public not to break the jnlp main class conf.
+     * TODO: FIX this: Kept still public (besides being a Singleton) not to break the jnlp main class conf.
      */
     public OpenningFrame()
     {
@@ -84,16 +84,7 @@ public class OpenningFrame extends JFrame
             @Override
             public void windowClosed(WindowEvent e)
             {
-                logger.debug("CLOSED");
-                exitApplication();
-                logger.debug("END CLOSED");
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                logger.debug("CLOSING");
-                //exitApplication();
+                Util.exitApplication(OpenningFrame.this);
             }
         });
 
@@ -104,49 +95,33 @@ public class OpenningFrame extends JFrame
         setVisible(true);
     }
 
-    protected void exitApplication()
-    {
-        dispose();
-
-        Util.terminateProcessIfAlone();
-    }
-
     private void widgets()
     {
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+        JPanel mainPn = Util.createPageBoxPanel();
 
-        JLabel image = new JLabel(Util.getImage("openningFrame05_titled.png"));
-        image.setPreferredSize(new Dimension(580, 200));
-        image.setAlignmentX(CENTER_ALIGNMENT);
-        p.add(image);
+        JLabel openningImage = new JLabel(Util.getImage("openningFrame05_titled.png"));
+        openningImage.setPreferredSize(new Dimension(580, 200));
+        openningImage.setAlignmentX(CENTER_ALIGNMENT);
+        mainPn.add(openningImage);
 
-        JPanel bs = createButtonsPn();
+        addHeight(mainPn, 13);
+        mainPn.add(createButtonsPn());
 
-        p.add(Box.createRigidArea(new Dimension(0, 13)));
-        p.add(bs);
-
-        add(p);
+        add(mainPn);
     }
 
     private JPanel createButtonsPn()
     {
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.LINE_AXIS));
-        JButton builderBt = new JButton("Create an Adventure");
-        builderBt.setFont(FONT);
-        builderBt.setMnemonic('c');
-        p.add(builderBt);
-        p.add(Box.createRigidArea(new Dimension(15, 0)));
+        Font font = new Font("Verdana", 1, 14);
 
-        JButton runnerBt = new JButton("Play an Adventure");
-        runnerBt.setFont(FONT);
-        runnerBt.setMnemonic('p');
-        p.add(runnerBt);
+        JPanel p = Util.createLineBoxPanel();
         p.setAlignmentX(CENTER_ALIGNMENT);
 
-        events(builderBt, runnerBt);
+        JButton builderBt = button(p, "Create an Adventure", 'c', font);
+        addWidth(p, 15);
+        JButton runnerBt = button(p, "Play an Adventure", 'p', font);
 
+        events(builderBt, runnerBt);
         return p;
     }
 
