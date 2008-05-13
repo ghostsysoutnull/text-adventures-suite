@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.runner.Runner;
 
@@ -77,6 +78,8 @@ public class OpenningFrame extends JFrame
     {
         widgets();
 
+        Util.setBoundsFrom(Conf.oppening(), this);
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         addWindowListener(new WindowAdapter()
@@ -84,11 +87,10 @@ public class OpenningFrame extends JFrame
             @Override
             public void windowClosed(WindowEvent e)
             {
-                Util.exitApplication(OpenningFrame.this);
+                Util.exitApplication(OpenningFrame.this, Conf.oppening());
             }
         });
 
-        setBounds(235, 260, WIDTH, HEIGHT);
         setTitle("Choose your path! - Text Adventures Suite");
         setDefaultLookAndFeelDecorated(false);
         setResizable(false);

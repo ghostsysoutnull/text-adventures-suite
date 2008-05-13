@@ -131,7 +131,7 @@ public class Runner extends JFrame
 
     private void openLastAdventure()
     {
-        if(!Conf.runner().is("openLastAdventureOnStart")) return;
+        if(!Conf.runner().is("openLastAdventureOnStart", false)) return;
 
         File advFile = new File(Conf.runner().get("lastAdventure"));
         if (advFile.exists()) {
@@ -154,13 +154,7 @@ public class Runner extends JFrame
 
         createMainPanel();
 
-        Conf conf = Conf.runner();
-        int x = conf.getInt("bounds.x", 235);
-        int y = conf.getInt("bounds.y", 260);
-        int w = conf.getInt("bounds.w", 665);
-        int h = conf.getInt("bounds.h", 400);
-
-        setBounds(x, y, w, h); //setBounds(235, 260, 806, 430);
+        Util.setBoundsFrom(Conf.runner(), this);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter()
@@ -597,6 +591,6 @@ public class Runner extends JFrame
 
     private void exitApplication()
     {
-        Util.exitApplication(this);
+        Util.exitApplication(this, Conf.runner());
     }
 }
