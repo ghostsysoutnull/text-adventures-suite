@@ -50,9 +50,6 @@ public class OpenningFrame extends JFrame
 
     private static final long serialVersionUID = 7784790918999921301L;
 
-    private static final int HEIGHT = 285;
-    private static final int WIDTH = 585;
-
     private static OpenningFrame INSTANCE = new OpenningFrame();
 
     public static void open()
@@ -62,7 +59,7 @@ public class OpenningFrame extends JFrame
 
     public static void open(JFrame invoker)
     {
-        Util.centerPosition(invoker, INSTANCE, WIDTH, HEIGHT);
+        Util.centerPosition(invoker, INSTANCE, 585, 285);
         INSTANCE.setVisible(true);
     }
 
