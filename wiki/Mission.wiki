@@ -7,6 +7,6 @@ You can create your text adventures with a graph of connected scenes, you can ha
 
 Feel free to try it and if you please, gimme any kind of [mailto:tas@bpfurtado.net feedback].
 
-[The Official site http://bpfurtado.net/tas]
+Visit the [http://bpfurtado.net/tas The Official site].
 
 More about me on my Software Development [http://bpfurtado.livejournal.com Blog].
