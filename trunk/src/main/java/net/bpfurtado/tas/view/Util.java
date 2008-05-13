@@ -215,10 +215,10 @@ public class Util
         conf.save();
     }
 
-    public static void exitApplication(JFrame frame)
+    public static void exitApplication(JFrame frame, Conf conf)
     {
         frame.setVisible(false);
-        persistLastPos(Conf.runner(), frame);
+        persistLastPos(conf, frame);
         frame.dispose();
         terminateProcessIfAlone();
     }
@@ -244,5 +244,15 @@ public class Util
         builderBt.setMnemonic(mnemonic);
         panel.add(builderBt);
         return builderBt;
+    }
+
+    public static void setBoundsFrom(Conf conf, JFrame frame)
+    {
+        int x = conf.getInt("bounds.x", 235); //FIXME remove these defaults
+        int y = conf.getInt("bounds.y", 260);
+        int w = conf.getInt("bounds.w", 665);
+        int h = conf.getInt("bounds.h", 400);
+
+        frame.setBounds(x, y, w, h);
     }
 }

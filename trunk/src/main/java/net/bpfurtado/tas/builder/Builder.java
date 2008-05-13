@@ -215,13 +215,8 @@ public class Builder extends JFrame
         menu();
         widgets();
 
-        Conf conf = Conf.builder();
-        int x = conf.getInt("bounds.x", 235);
-        int y = conf.getInt("bounds.y", 260);
-        int w = conf.getInt("bounds.w", 970);
-        int h = conf.getInt("bounds.h", 615);
+        Util.setBoundsFrom(Conf.builder(), this);
 
-        setBounds(x, y, w, h);
         updateTitle();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -989,11 +984,7 @@ public class Builder extends JFrame
                 saveAdventureMenuAction(false);
         }
 
-        Util.persistLastPos(Conf.builder(), this);
-
-        dispose();
-
-        Util.terminateProcessIfAlone();
+        Util.exitApplication(this, Conf.builder());
     }
 
     private void openAdventureMenuAction()
