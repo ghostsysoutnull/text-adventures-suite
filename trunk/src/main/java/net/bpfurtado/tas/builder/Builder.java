@@ -22,6 +22,9 @@
 
 package net.bpfurtado.tas.builder;
 
+import static net.bpfurtado.tas.view.Util.addHeight;
+import static net.bpfurtado.tas.view.Util.menuItem;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -90,7 +93,6 @@ import net.bpfurtado.tas.view.RecentAdventuresMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
-import static net.bpfurtado.tas.view.Util.*;
 
 import org.apache.log4j.Logger;
 
@@ -566,36 +568,40 @@ public class Builder extends JFrame
     {
         String newText = sceneTA.getSelectedText();
         Scene newScene = adventure.split(currentScene, newText);
-        sceneTA.setText(currentScene.getText()); //It'll be saved with the TA text in the switchTo method invocation bellow.
+        sceneTA.setText(currentScene.getText()); //It'll be saved with the TA
+                                                 //text in the switchTo method
+                                                 //invocation bellow.
         switchTo(newScene);
     }
 
     public void showSceneCodeHelpDialog()
     {
-        HelpDialog helpDialog = new HelpDialog("Scene Code programming", "/net/bpfurtado/tas/builder/codeHelp.html");
+        HelpDialog helpDialog = HelpDialog.createNew();
 
         final SceneCodeToPasteHolder codeHolder = new SceneCodeToPasteHolder();
 
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenuItem copyMnIt = new JMenuItem("Copy", Util.getImage("copy_edit_003.gif"));
+        JMenuItem copyMnIt = menuItem("Copy", "copy.gif");
         copyMnIt.addActionListener(new ActionListener() {
             SceneCodeToPasteHolder holder = codeHolder;
 
             public void actionPerformed(ActionEvent e)
             {
-                getToolkit().getSystemClipboard().setContents(new StringSelection(holder.getText()), null);
+                getToolkit().getSystemClipboard().setContents(
+                                new StringSelection(holder.getText()), null);
             }
         });
         popupMenu.add(copyMnIt);
 
-        final JMenuItem copyAndPasteMnIt = new JMenuItem("Copy and Paste", Util.getImage("paste_edit_003.gif"));
+        final JMenuItem copyAndPasteMnIt = menuItem("Copy and Paste", "paste.gif");
         copyAndPasteMnIt.addActionListener(new ActionListener() {
             SceneCodeToPasteHolder holder = codeHolder;
 
             public void actionPerformed(ActionEvent e)
             {
                 try {
-                    codeTA.getDocument().insertString(codeTA.getCaretPosition(), holder.getText(), null);
+                    codeTA.getDocument().insertString(
+                                    codeTA.getCaretPosition(), holder.getText(), null);
                 } catch (BadLocationException ble) {
                     throw new AdventureException(ble.getMessage(), ble);
                 }
@@ -603,7 +609,13 @@ public class Builder extends JFrame
         });
         popupMenu.add(copyAndPasteMnIt);
 
-        helpDialog.getEditorPane().addMouseListener(new TextComponentForPasteMouseListener(popupMenu, copyAndPasteMnIt, helpDialog.getEditorPane(), codeTA, codeHolder));
+        helpDialog.getEditorPane().addMouseListener(
+                        new TextComponentForPasteMouseListener(
+                                        popupMenu,
+                                        copyAndPasteMnIt,
+                                        helpDialog.getEditorPane(),
+                                        codeTA,
+                                        codeHolder));
     }
 
     private JPanel headerFieldsPanelWidgets()

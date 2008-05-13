@@ -2,20 +2,20 @@
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
  *
  * This file is part of the Text Adventures Suite.
- * 
+ *
  * Text Adventures Suite is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Text Adventures Suite is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
 package net.bpfurtado.tas.view;
@@ -45,6 +45,11 @@ public class HelpDialog extends JFrame
     private String classpathHelpFile;
     private JEditorPane editorPane;
 
+    public static HelpDialog createNew()
+    {
+        return new HelpDialog("Scene Code programming", "/net/bpfurtado/tas/builder/codeHelp.html");
+    }
+
     public HelpDialog(String title, String fileInClassPath) throws HeadlessException
     {
         this.title = title;
@@ -67,12 +72,12 @@ public class HelpDialog extends JFrame
     private void widgets()
     {
         logger.debug("help file = " + classpathHelpFile);
-        
+
         StringBuilder text = new StringBuilder();
         for (String line : linesFromClasspath(classpathHelpFile)) {
             text.append(line);
         }
-        
+
         editorPane = new JEditorPane("text/html", text.toString());
         editorPane.setEditable(false);
         add(new JScrollPane(editorPane));

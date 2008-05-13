@@ -255,4 +255,9 @@ public class Util
 
         frame.setBounds(x, y, w, h);
     }
+
+    public static JMenuItem menuItem(String text, String image)
+    {
+        return new JMenuItem(text, getImage(image));
+    }
 }
