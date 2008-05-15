@@ -850,7 +850,7 @@ public class Builder extends JFrame
 
     private void chooseSceneBtAction(IPath path)
     {
-        ChooseSceneDialog dialog = new ChooseSceneDialog(Builder.this, adventure);
+        ChooseSceneDialog dialog = new ChooseSceneDialog(Builder.this);
         if (dialog.getScene() != null) {
             path.setTo(dialog.getScene());
             updateSceneView();

@@ -37,7 +37,6 @@ import javax.swing.JPanel;
 
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.ScenesListControllerResult;
-import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Scene;
 
 import org.apache.log4j.Logger;
@@ -53,14 +52,14 @@ public class ChooseSceneDialog extends JDialog
 
     private Scene choosenScene;
 
-    public ChooseSceneDialog(Builder builder, Adventure adventure)
+    public ChooseSceneDialog(Builder builder)
     {
         super(builder, true);
 
-        initView(adventure, builder);
+        initView(builder);
     }
 
-    private void initView(Adventure adventure, Builder builder)
+    private void initView(Builder builder)
     {
 		widgets(builder);
 
