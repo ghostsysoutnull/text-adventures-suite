@@ -20,8 +20,10 @@
  */
 package net.bpfurtado.tas.runner;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -71,8 +74,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame
-    implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener
+public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
 
@@ -82,7 +84,7 @@ public class Runner extends JFrame
     private Game game;
     private Adventure adventure;
 
-    private JPanel mainPanel;
+    private JPanel gamePanel;
     private JPanel scenesPn;
 
     private JLabel advName;
@@ -99,6 +101,8 @@ public class Runner extends JFrame
     protected CombatFrame combatFrame;
 
     protected Object skillToTestFrame;
+
+    private JPanel mainPanel;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -131,7 +135,8 @@ public class Runner extends JFrame
 
     private void openLastAdventure()
     {
-        if(!Conf.runner().is("openLastAdventureOnStart", false)) return;
+        if (!Conf.runner().is("openLastAdventureOnStart", false))
+            return;
 
         File advFile = new File(Conf.runner().get("lastAdventure"));
         if (advFile.exists()) {
@@ -152,13 +157,12 @@ public class Runner extends JFrame
     {
         menu();
 
-        createMainPanel();
+        add(createMainPanel());
 
         Util.setBoundsFrom(Conf.runner(), this);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             /**
              * TODO CHANGE TO WINDOW CLOSED!
              */
@@ -173,6 +177,33 @@ public class Runner extends JFrame
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultLookAndFeelDecorated(false);
         setVisible(true);
+    }
+
+    private JPanel createMainPanel()
+    {
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createGamePanel());
+        mainPanel.add(createLogPanel(), BorderLayout.PAGE_END);
+
+        mainPanel.setVisible(false);
+        return mainPanel;
+    }
+
+    private Box createLogPanel()
+    {
+        Box box = Box.createVerticalBox();
+        JTextArea ta = new JTextArea();
+        String s = "";
+        for (int i = 0; i < 50; i++) {
+            s += " line  " + i + "\n";
+        }
+        ta.setText(s);
+        JScrollPane sp = new JScrollPane(ta);
+        sp.setBorder(BorderFactory.createTitledBorder("Game log"));
+        sp.setPreferredSize(new Dimension(100, 100));
+        box.add(sp);
+
+        return box;
     }
 
     private void start(Adventure adventure, Scene sceneWhereToStart)
@@ -216,15 +247,14 @@ public class Runner extends JFrame
      */
     public void goTo(Scene sceneToOpen)
     {
-        /*logger.debug("Going to " + scene.getText());
-
-        sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
-        sceneTA.setCaretPosition(0);
-
-        if(scene.isEnd()) {
-            gameOver();
-            return;
-        }*/
+        /*
+         * logger.debug("Going to " + scene.getText());
+         *
+         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
+         * sceneTA.setCaretPosition(0);
+         *
+         * if(scene.isEnd()) { gameOver(); return; }
+         */
 
         openScene(sceneToOpen);
     }
@@ -233,8 +263,8 @@ public class Runner extends JFrame
     {
         pathsPn.removeAll();
         for (final IPath path : scene.getPaths()) {
-            if(!path.isVisible()) {
-                path.setVisible(true); //reset the path visibility status
+            if (!path.isVisible()) {
+                path.setVisible(true); // reset the path visibility status
                 continue;
             }
 
@@ -246,7 +276,7 @@ public class Runner extends JFrame
                 pathLb.setText(path.getText() + " (no destiny...)");
                 pathLb.setToolTipText("This path has no scene to go");
             }
-            pathLb.setText("<html><strong>"+pathLb.getText()+"</strong></html>");
+            pathLb.setText("<html><strong>" + pathLb.getText() + "</strong></html>");
 
             pathLb.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
             addEvents(path, pathLb);
@@ -256,9 +286,9 @@ public class Runner extends JFrame
 
     private void addEvents(final IPath path, final JLabel pathLb)
     {
-        pathLb.addMouseListener(new MouseAdapter()
-        {
+        pathLb.addMouseListener(new MouseAdapter() {
             IPath _path = path;
+
             public void mouseClicked(MouseEvent e)
             {
                 if (path.getTo() != null) {
@@ -312,16 +342,10 @@ public class Runner extends JFrame
             JButton combatBt = new JButton("Combat");
             combatBt.setMnemonic('c');
             combatBt.setAlignmentX(CENTER_ALIGNMENT);
-            combatBt.addActionListener(new ActionListener()
-            {
+            combatBt.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e)
                 {
-                    Runner.this.combatFrame =
-                        new CombatFrame(
-                                Runner.this,
-                                game.getPlayer(),
-                                game.getCurrentScene().getCombat(),
-                                Runner.this);
+                    Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(), game.getCurrentScene().getCombat(), Runner.this);
                 }
             });
             pathsPn.add(combatBt);
@@ -330,19 +354,13 @@ public class Runner extends JFrame
             JButton skillToTestBt = new JButton("Test your " + to.getSkillToTest().getName() + " Skill!");
             skillToTestBt.setMnemonic('t');
             skillToTestBt.setAlignmentX(CENTER_ALIGNMENT);
-            skillToTestBt.addActionListener(new ActionListener()
-            {
-                //333
+            skillToTestBt.addActionListener(new ActionListener() {
+                // 333
                 public void actionPerformed(ActionEvent e)
                 {
                     Skill skill = game.getCurrentScene().getSkillToTest();
-                    logger.debug("game.getCurrentScene().getSkillToTest()="+skill.getName());
-                    Runner.this.skillToTestFrame =
-                        new SkillTestFrame(
-                                Runner.this,
-                                game.getPlayer(),
-                                skill,
-                                Runner.this);
+                    logger.debug("game.getCurrentScene().getSkillToTest()=" + skill.getName());
+                    Runner.this.skillToTestFrame = new SkillTestFrame(Runner.this, game.getPlayer(), skill, Runner.this);
                 }
             });
             pathsPn.add(skillToTestBt);
@@ -375,15 +393,15 @@ public class Runner extends JFrame
 
     private void fireOpenAdventureEvent(File adventureFile)
     {
-        for(OpenAdventureListener listener : openAdventureListeners) {
+        for (OpenAdventureListener listener : openAdventureListeners) {
             listener.adventureOpenned(adventureFile);
         }
     }
 
-    private void createMainPanel()
+    private JPanel createGamePanel()
     {
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.LINE_AXIS));
+        gamePanel = new JPanel();
+        gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.LINE_AXIS));
 
         scenesPn = new JPanel();
         scenesPn.setAlignmentX(LEFT_ALIGNMENT);
@@ -416,13 +434,12 @@ public class Runner extends JFrame
         endPn.setAlignmentX(LEFT_ALIGNMENT);
         scenesPn.add(endPn);
 
-        mainPanel.add(scenesPn);
+        gamePanel.add(scenesPn);
 
         statsView = new PlayerPanelController();
-        mainPanel.add(statsView.getPanel());
+        gamePanel.add(statsView.getPanel());
 
-        mainPanel.setVisible(false);
-        add(mainPanel);
+        return gamePanel;
     }
 
     private JPanel createEndPanel()
@@ -438,8 +455,7 @@ public class Runner extends JFrame
 
         JButton startAgainBt = new JButton("Start again");
         startAgainBt.setMnemonic('S');
-        startAgainBt.addActionListener(new ActionListener()
-        {
+        startAgainBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 startAgain();
@@ -459,14 +475,10 @@ public class Runner extends JFrame
         menuBar.add(menu);
 
         JMenuItem startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
-        startAgainMnIt.addActionListener(new ActionListener()
-        {
+        startAgainMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                int answer = JOptionPane.showConfirmDialog(
-                        Runner.this,
-                        "Start Adventure again?",
-                        "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     startAgain();
                 }
@@ -475,8 +487,7 @@ public class Runner extends JFrame
         menu.add(startAgainMnIt);
 
         JMenuItem openMnIt = new JMenuItem("Open", Util.getImage("folder_table.png"));
-        openMnIt.addActionListener(new ActionListener()
-        {
+        openMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 openMenuAction();
@@ -489,8 +500,7 @@ public class Runner extends JFrame
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
         exitBt.setIcon(Util.getImage("cancel.png"));
 
-        exitBt.addActionListener(new ActionListener()
-        {
+        exitBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 exitApplication();
@@ -506,7 +516,7 @@ public class Runner extends JFrame
 
     private void startAgain()
     {
-        mainPanel.remove(endPn);
+        gamePanel.remove(endPn);
         endPn.setVisible(false);
         pathsPn.setVisible(true);
         statsView.startAgain();
@@ -523,12 +533,9 @@ public class Runner extends JFrame
     private void openMenuAction()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Runner.this,
-                    "Close current adventure?",
-                    "Warning",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
-            if (answer == JOptionPane.NO_OPTION) return;
+            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (answer == JOptionPane.NO_OPTION)
+                return;
         }
 
         fileChooser.setCurrentDirectory(new File(Conf.runner().get("lastOpenDir")));
@@ -542,8 +549,7 @@ public class Runner extends JFrame
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 Runner runner = null;
@@ -568,12 +574,12 @@ public class Runner extends JFrame
 
     public void saveAdventure(boolean isSaveAs)
     {
-        //Does nothing in this operations as a Adventure Runner
+        // Does nothing in this operations as a Adventure Runner
     }
 
     public void combatEnded(boolean keepAdventure)
     {
-        if(keepAdventure) {
+        if (keepAdventure) {
             openScene(game.getCurrentScene().getPaths().get(0).getTo());
         } else {
             gameOver();
@@ -583,7 +589,7 @@ public class Runner extends JFrame
     public void setSkillful(boolean skillful)
     {
         int sceneToGoIndex = 0;
-        if(!skillful) {
+        if (!skillful) {
             sceneToGoIndex = 1;
         }
         openScene(game.getCurrentScene().getPaths().get(sceneToGoIndex).getTo());
