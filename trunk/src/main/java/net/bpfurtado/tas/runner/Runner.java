@@ -51,7 +51,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.AdventureOpenner;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.builder.Builder;
@@ -61,6 +64,8 @@ import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
 import net.bpfurtado.tas.model.GoToSceneListener;
 import net.bpfurtado.tas.model.IPath;
+import net.bpfurtado.tas.model.PlayerEvent;
+import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.model.SkillTestListener;
@@ -74,7 +79,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener
+public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
 
@@ -103,6 +108,8 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     protected Object skillToTestFrame;
 
     private JPanel mainPanel;
+
+    private JTextArea logTA;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -192,13 +199,9 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     private Box createLogPanel()
     {
         Box box = Box.createVerticalBox();
-        JTextArea ta = new JTextArea();
-        String s = "";
-        for (int i = 0; i < 50; i++) {
-            s += " line  " + i + "\n";
-        }
-        ta.setText(s);
-        JScrollPane sp = new JScrollPane(ta);
+        this.logTA = new JTextArea();
+        logTA.setText("The adventure starts");
+        JScrollPane sp = new JScrollPane(logTA);
         sp.setBorder(BorderFactory.createTitledBorder("Game log"));
         sp.setPreferredSize(new Dimension(100, 100));
         box.add(sp);
@@ -219,6 +222,8 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         this.game = new GameImpl(a);
         statsView.setGame(game);
         game.addGoToSceneListener(this);
+
+        game.getPlayer().add(this);
     }
 
     public void openAdventure(File saveFile)
@@ -598,5 +603,16 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     private void exitApplication()
     {
         Util.exitApplication(this, Conf.runner());
+    }
+
+    public void receive(PlayerEvent ev)
+    {
+        statsView.updateView(ev);
+        try {
+            Document doc = logTA.getDocument();
+            doc.insertString(doc.getLength(), "\n" + ev.getDesc(), null);
+        } catch (BadLocationException e) {
+            throw new AdventureException(e);
+        }
     }
 }

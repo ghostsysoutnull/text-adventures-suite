@@ -1,5 +1,6 @@
 /**
- * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
+ * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]
+ * Created on 09/06/2008 18:40:15
  *
  * This file is part of the Text Adventures Suite.
  *
@@ -18,57 +19,38 @@
  *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
+
 package net.bpfurtado.tas.model;
 
-public class Skill
+public class PlayerEvent
 {
-    private String name;
-    private int level;
+    private String desc;
+    private String id;
 
-    public Skill(String name)
+    public PlayerEvent(String desc)
     {
-        setName(name);
+        this.desc = desc;
     }
 
-    public Skill(String name, int level)
+    public PlayerEvent(String id, String desc)
     {
-        setName(name);
-        setLevel(level);
+        this.id = id;
+        this.desc = desc;
     }
 
-    public String getName()
+    public String getDesc()
     {
-        return name;
+        return desc;
     }
 
-    public void setName(String name)
+    public String getId()
     {
-        this.name = name;
-    }
-
-    public int getLevel()
-    {
-        return level;
-    }
-
-    public void setLevel(int level)
-    {
-        this.level = level;
-    }
-
-    public void dec(int v)
-    {
-        level -= v;
-    }
-
-    public void inc(int v)
-    {
-        level += v;
+        return id;
     }
 
     @Override
     public String toString()
     {
-        return "[Skill: name=" + name + ", level=" + level + "]";
+        return "[PlayerEvent: desc=" + desc + "]";
     }
 }

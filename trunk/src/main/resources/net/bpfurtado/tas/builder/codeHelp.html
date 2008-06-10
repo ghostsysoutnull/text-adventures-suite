@@ -31,8 +31,8 @@ The following code would go well on some Scene Action code:
         <pre>
         player.incStamina(1);<br></br>
         player.decStamina(1);<br></br>
-        player.incSkill(2);<br></br>
-        player.decSkill(2);<br></br>
+        player.incCombatSkill(2);<br></br>
+        player.decCombatSkill(2);<br></br>
         player.incLuck(3);<br></br>
         player.decLuck(3);<br></br>
         player.incDamage(4);<br></br>
@@ -40,10 +40,17 @@ The following code would go well on some Scene Action code:
         </pre>
     </li>
     <li>
+        <strong>Update Skills</strong>:
+        <pre>
+        player.skill("strengh").inc(4);<br></br>
+        player.skill("climb-walls").dec(2);
+        </pre>
+    </li>
+    <li>
         <strong>Add</strong> attributes:
         <pre>
         player.addAttribute("long-sword");<br></br>
-        player.addAttribute("apples", 3);
+        player.addAttribute("apples", 3);<br></br>
         player.addAttribute("potion", "red");
         </pre>
     </li>

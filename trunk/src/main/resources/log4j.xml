@@ -3,15 +3,23 @@
 
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
 
-	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-				value="[%C{1}:%M:%L] - %m%n"/> 
-				<!-- value="%d{hh:mm:ss} %-5p [%C{1}:%M:%L] - %m%n"/>  -->
+                value="[%C{1}:%M:%L] - %m%n"/>
+                <!-- value="%d{hh:mm:ss} %-5p [%C{1}:%M:%L] - %m%n"/>  -->
         </layout>
-	</appender>
+    </appender>
 
-<!--	
+    <category name="net.bpfurtado.tas.runner.PlayerPanelController">
+        <priority value="debug"/>
+    </category>
+
+    <category name="net.bpfurtado.tas.runner.PlayerAttributesPanel">
+        <priority value="debug"/>
+    </category>
+
+<!--
     <category name="net.bpfurtado.adventure.builder">
         <priority value="debug"/>
     </category>
@@ -19,12 +27,12 @@
     <category name="net.bpfurtado.adventure.model.persistence">
         <priority value="info"/>
     </category>
-	
-	<category name="net.bpfurtado.adventure.model.Path">
+
+    <category name="net.bpfurtado.adventure.model.Path">
         <priority value="info"/>
     </category>
-    
-	<category name="net.bpfurtado.adventure.model.PathDepth">
+
+    <category name="net.bpfurtado.adventure.model.PathDepth">
         <priority value="warn"/>
     </category>
 
@@ -55,9 +63,9 @@
     <category name="net.bpfurtado.adventure.model.item.Item">
         <priority value="debug"/>
     </category>
-    
+
     -->
-    
+
     <category name="net.bpfurtado.tas.view.HelpDialog">
         <priority value="debug"/>
     </category>
@@ -65,7 +73,7 @@
     <category name="net.bpfurtado.adventure.model.Scene">
         <priority value="debug"/>
     </category>
-    
+
     <category name="net.bpfurtado">
         <priority value="warn"/>
     </category>
@@ -78,8 +86,8 @@
         <priority value="info"/>
     </category>
 
-	<root>
-	   <priority value ="debug"/>
-   	   <appender-ref ref="STDOUT"/>
-	</root>
+    <root>
+       <priority value ="debug"/>
+          <appender-ref ref="STDOUT"/>
+    </root>
 </log4j:configuration>
