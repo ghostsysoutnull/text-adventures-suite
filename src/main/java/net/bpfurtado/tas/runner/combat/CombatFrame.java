@@ -64,7 +64,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 	private int round = 1;
 	
 	private Combat combat;
-	private Player player;
+	private Fighter player;
 	
 	private LinkedList<Fighter> enemies = new LinkedList<Fighter>();
 	private Fighter currentEnemy;
@@ -79,7 +79,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 	private DefaultListModel attackResultsListModel;
 	private JFrame invokerFrame;
 
-	public CombatFrame(EndOfCombatListener listener, Player p, Combat c, JFrame invokerFrame)
+	public CombatFrame(EndOfCombatListener listener, Fighter p, Combat c, JFrame invokerFrame)
 	{
 		this.endOfCombatListener = listener;
 		this.player = p;
@@ -357,7 +357,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 				combat.add(new Fighter("Hell Hound 2 [3]", 5, 10));
 				combat.setType(CombatType.allAtTheSameTime);
 
-				Player player = new Player("Player", 16, 26);
+				Fighter player = new Player("Player", 16, 26);
 
 				JFrame invokerFrame = new JFrame();
 				invokerFrame.setBounds(100, 100, 800, 500);

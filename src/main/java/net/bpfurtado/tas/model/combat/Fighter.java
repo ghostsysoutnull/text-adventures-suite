@@ -2,20 +2,20 @@
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
  *
  * This file is part of the Text Adventures Suite.
- * 
+ *
  * Text Adventures Suite is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Text Adventures Suite is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
 package net.bpfurtado.tas.model.combat;
@@ -24,157 +24,180 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import net.bpfurtado.tas.model.PlayerEvent;
+import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.runner.combat.FighterView;
 
 import org.apache.log4j.Logger;
 
-public class Fighter 
+public class Fighter
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(Fighter.class);
-	
-	private static final Random RANDOM = new Random();
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(Fighter.class);
 
-	private String name;
-	private Skill combatSkill;
-	private Integer stamina;
-	private Integer damage = 2;
+    private static final Random RANDOM = new Random();
 
-	private List<AttackResultListener> listeners = new LinkedList<AttackResultListener>();
-	
-	private FighterView view;
-	
-	public Fighter(String name, int combatSkillLevel, int stamina)
-	{
-		super();
+    private String name;
+    private Skill combatSkill;
+    private Integer stamina;
+    private Integer damage = 2;
 
-		this.name = name;
-		this.combatSkill = new Skill("Combat", combatSkillLevel);
-		this.stamina = stamina;
-	}
-	
-	public void fightWith(Fighter enemy)
-	{
-		AttackResult myAttackResult = attack(this);
-		int myForce = myAttackResult.sum(); 
+    public List<PlayerEventListener> playerEventListeners = new LinkedList<PlayerEventListener>();
 
-		AttackResult enemyAttackResult = attack(enemy);
-		int enemyForce = enemyAttackResult.sum();
+    private List<AttackResultListener> listeners = new LinkedList<AttackResultListener>();
 
-		if (myForce > enemyForce) {
-			this.damage(enemy);
-		} else if (myForce < enemyForce) {
-			enemy.damage(this);
-		} 
-		
-		myAttackResult.defineType(enemyAttackResult);
+    private FighterView view;
 
-		notifyAtackResultListeners(myAttackResult);
-		enemy.notifyAtackResultListeners(enemyAttackResult);
-	}
+    public Fighter(String name, int combatSkillLevel, int stamina)
+    {
+        super();
 
-	public void notifyAtackResultListeners(AttackResult ar)
-	{
-		for (AttackResultListener l : listeners) {
-			l.attackResult(ar);
-		}
-	}
-	
-	private void damage(Fighter enemy)
-	{
-		enemy.setStamina(enemy.getStamina() - getDamage());
-	}
+        this.name = name;
+        this.combatSkill = new Skill("Combat", combatSkillLevel);
+        this.stamina = stamina;
+    }
 
-	public void addAtackResultListener(AttackResultListener l)
-	{
-		if (!listeners.contains(l)) {
-			listeners.add(l);
-		}
-	}
+    public void fightWith(Fighter enemy)
+    {
+        AttackResult myAttackResult = attack(this);
+        int myForce = myAttackResult.sum();
 
-	private AttackResult attack(Fighter f)
-	{
-		int dice1 = RANDOM.nextInt(6) + 1;
-		int dice2 = RANDOM.nextInt(6) + 1;
-		return new AttackResult(dice1, dice2, f);
-	}
+        AttackResult enemyAttackResult = attack(enemy);
+        int enemyForce = enemyAttackResult.sum();
 
-	public String getName()
-	{
-		return name;
-	}
+        if (myForce > enemyForce) {
+            this.damage(enemy);
+        } else if (myForce < enemyForce) {
+            enemy.damage(this);
+        }
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+        myAttackResult.defineType(enemyAttackResult);
 
-	public Integer getCombatSkillLevel()
-	{
-		return combatSkill.getLevel();
-	}
+        notifyAtackResultListeners(myAttackResult);
+        enemy.notifyAtackResultListeners(enemyAttackResult);
+    }
 
-	public void setCombatSkill(Integer combatSkillLevel)
-	{
-		this.combatSkill.setLevel(combatSkillLevel);
-	}
-	
-	public void setSkill(Integer combatSkillLevel)
-	{
-		this.combatSkill.setLevel(combatSkillLevel);
-	}
+    public void notifyAtackResultListeners(AttackResult ar)
+    {
+        for (AttackResultListener l : listeners) {
+            l.attackResult(ar);
+        }
+    }
 
-	public Integer getStamina()
-	{
-		return stamina;
-	}
+    private void damage(Fighter enemy)
+    {
+        enemy.setStamina(enemy.getStamina() - getDamage());
+    }
 
-	public void setStamina(Integer stamina)
-	{
-		this.stamina = stamina;
-	}
+    public void addAtackResultListener(AttackResultListener l)
+    {
+        if (!listeners.contains(l)) {
+            listeners.add(l);
+        }
+    }
 
-	public Integer getDamage()
-	{
-		return damage;
-	}
+    private AttackResult attack(Fighter f)
+    {
+        int dice1 = RANDOM.nextInt(6) + 1;
+        int dice2 = RANDOM.nextInt(6) + 1;
+        return new AttackResult(dice1, dice2, f);
+    }
 
-	public void setDamage(Integer damage)
-	{
-		this.damage = damage;
-	}
 
-	public boolean isDead()
-	{
-		return getStamina() <= 0;
-	}
-	
-	protected Skill getCombatSkill()
-	{
-		return combatSkill;
-	}
+    public void setSkill(Integer combatSkillLevel)
+    {
+        int old = combatSkillLevel;
+        this.combatSkill.setLevel(combatSkillLevel);
+        fire(new PlayerEvent(combatSkill.getName(), combatSkill.getName() + " was " + old + ", now is " + combatSkill.getLevel()));
+    }
 
-	@Override
-	public String toString()
-	{
-		return "[F: name="+name+"]";
-	}
+    public void setStamina(Integer stamina)
+    {
+        int old = this.stamina;
+        this.stamina = stamina;
+        fire(new PlayerEvent("Stamina", "Stamina was " + old + ", now is " + stamina));
+    }
 
-	public FighterView getView()
-	{
-		return view;
-	}
+    public void setDamage(Integer damage)
+    {
+        int old = this.damage;
+        this.damage = damage;
+        fire(new PlayerEvent("Damage", "Damage was " + old + ", now is " + damage));
+    }
 
-	public void setView(FighterView view)
-	{
-		this.view = view;
-	}
+    public boolean isDead()
+    {
+        return getStamina() <= 0;
+    }
 
-	public Fighter createCopy()
-	{
-		Fighter copy = new Fighter(getName(), getCombatSkillLevel(), getStamina());
-		copy.setDamage(getDamage());
-		return copy;
-	}
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public Integer getCombatSkillLevel()
+    {
+        return combatSkill.getLevel();
+    }
+
+    public void setCombatSkill(Integer combatSkillLevel)
+    {
+        this.combatSkill.setLevel(combatSkillLevel);
+    }
+
+    public Integer getStamina()
+    {
+        return stamina;
+    }
+
+    public Integer getDamage()
+    {
+        return damage;
+    }
+
+    protected Skill getCombatSkill()
+    {
+        return combatSkill;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[F: name=" + name + "]";
+    }
+
+    public FighterView getView()
+    {
+        return view;
+    }
+
+    public void setView(FighterView view)
+    {
+        this.view = view;
+    }
+
+    public Fighter createCopy()
+    {
+        Fighter copy = new Fighter(getName(), getCombatSkillLevel(), getStamina());
+        copy.setDamage(getDamage());
+        return copy;
+    }
+
+    public void add(PlayerEventListener listener)
+    {
+        playerEventListeners.add(listener);
+    }
+
+    protected void fire(PlayerEvent event)
+    {
+        for (PlayerEventListener listener : playerEventListeners) {
+            listener.receive(event);
+        }
+    }
 }

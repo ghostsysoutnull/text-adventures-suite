@@ -1,34 +1,32 @@
-/**                                                                           
- * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 19/10/2005 23:05:17                                                          
- *                                                                            
- * This file is part of the Text Adventures Suite.                            
- *                                                                            
- * Text Adventures Suite is free software: you can redistribute it and/or modify          
- * it under the terms of the GNU General Public License as published by       
- * the Free Software Foundation, either version 3 of the License, or          
- * (at your option) any later version.                                        
- *                                                                            
- * Text Adventures Suite is distributed in the hope that it will be useful,               
- * but WITHOUT ANY WARRANTY; without even the implied warranty of             
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              
- * GNU General Public License for more details.                               
- *                                                                            
- * You should have received a copy of the GNU General Public License          
- * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
- *                                                                            
- * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+/**
+ * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]
+ * Created on 19/10/2005 23:05:17
+ *
+ * This file is part of the Text Adventures Suite.
+ *
+ * Text Adventures Suite is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Text Adventures Suite is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Project page: http://code.google.com/p/text-adventures-suite/
+ */
 
 package net.bpfurtado.tas.runner;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -42,9 +40,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Player;
+import net.bpfurtado.tas.model.PlayerEvent;
 import net.bpfurtado.tas.model.Skill;
 
 import org.apache.log4j.Logger;
@@ -52,20 +52,24 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class PlayerPanelController //implements PlayerStatsViewer
+public class PlayerPanelController
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(PlayerPanelController.class);
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(PlayerPanelController.class);
 
-	static final Font DEFAULT_FONT = new Font("Arial Bold", 1, 14);
+    static final Font DEFAULT_FONT = new Font("Arial Bold", 1, 14);
 
     private Game game;
     private JPanel panel;
 
+    private PlayerAttributesPanel skillsPanel;
+
+    private PlayerAttributesPanel attributesPn;
+
     public PlayerPanelController()
     {
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
         panel.setAlignmentY(Component.TOP_ALIGNMENT);
         panel.setMinimumSize(new Dimension(160, 300));
         panel.setMaximumSize(new Dimension(200, 800));
@@ -82,6 +86,13 @@ public class PlayerPanelController //implements PlayerStatsViewer
         JOptionPane.showMessageDialog(panel, executedActionText);
     }
 
+    private List<PlayerEvent> playerEvents = new LinkedList<PlayerEvent>();
+
+    public void updateView(PlayerEvent ev)
+    {
+        playerEvents.add(ev);
+    }
+
     public void updateView(Game g)
     {
         this.game = g;
@@ -90,98 +101,102 @@ public class PlayerPanelController //implements PlayerStatsViewer
 
     public void updateView()
     {
+        logger.debug("START");
+
         if (game == null) {
             return;
         }
-        
+
         Player player = game.getPlayer();
-        
+
         panel.removeAll();
         panel.add(createTitle("Skills"));
-        PlayerAttributesPanel skillsPanel = new PlayerAttributesPanel();
-        for(Skill s: player.getSkills()) {
-        	skillsPanel.addLine(s.getName(), s.getLevel());
+        this.skillsPanel = new PlayerAttributesPanel();
+        for (Skill s : player.getSkills()) {
+            skillsPanel.addLine(s.getName(), s.getLevel());
         }
-		panel.add(skillsPanel.getPanel());
-		panel.add(Box.createRigidArea(new Dimension(0, 10)));
-		
-		panel.add(createTitle("Attributes"));
-		PlayerAttributesPanel attributesPn = new PlayerAttributesPanel();
+        panel.add(skillsPanel.getPanel());
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        panel.add(createTitle("Attributes"));
+        this.attributesPn = new PlayerAttributesPanel();
         attributesPn.addLine("Stamina", player.getStamina());
-        attributesPn.addLine("Luck", player.getLuck());
         attributesPn.addLine("Damage", player.getDamage());
 
         Set<Entry<String, Object>> unorderedAttributes = player.getAttributesEntrySet();
-		if (!unorderedAttributes.isEmpty()) {
+        if (!unorderedAttributes.isEmpty()) {
 
-			List<Entry<String, Object>> orderedAttributes = new LinkedList<Entry<String, Object>>(unorderedAttributes);
-			Collections.sort(orderedAttributes, new Comparator<Entry<String, Object>>()
-			{
-				public int compare(Entry<String, Object> o1, Entry<String, Object> o2)
-				{
-					return o1.getKey().compareTo(o2.getKey());
-				}
-			});
+            List<Entry<String, Object>> orderedAttributes = new LinkedList<Entry<String, Object>>(unorderedAttributes);
+            Collections.sort(orderedAttributes, new Comparator<Entry<String, Object>>() {
+                public int compare(Entry<String, Object> o1, Entry<String, Object> o2)
+                {
+                    return o1.getKey().compareTo(o2.getKey());
+                }
+            });
 
-			for (Entry<String, Object> attributeEntry : orderedAttributes) {
-				attributesPn.addLine(attributeEntry.getKey(), attributeEntry.getValue());
-			}
-		} /*else {
-			System.out.println("PlayerPanelController.updateView()");
-			attributesPn.setAsHavingNoAttributes();
-		}*/
+            for (Entry<String, Object> attributeEntry : orderedAttributes) {
+                attributesPn.addLine(attributeEntry.getKey(), attributeEntry.getValue());
+            }
+        }
 
-		panel.add(attributesPn.getPanel());
+        panel.add(attributesPn.getPanel());
+
+        for (PlayerEvent playerEvent : playerEvents) {
+            updateViewFor(playerEvent);
+        }
+        playerEvents.clear();
     }
 
-	private JLabel createTitle(String title)
-	{
-		JLabel attributesLb = new JLabel(" " + title + " ");
-		attributesLb.setAlignmentX(JPanel.LEFT_ALIGNMENT);
-		attributesLb.setAlignmentY(JPanel.TOP_ALIGNMENT);
+    void updateViewFor(final PlayerEvent ev)
+    {
+        Timer t = new Timer(1, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                updateAsChanged(ev);
+            }
+        });
+        t.setRepeats(false);
+        t.start();
+
+        t = new Timer(1000, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                updateAsNormal(ev);
+            }
+        });
+        t.setRepeats(false);
+        t.start();
+    }
+
+    private void updateAsNormal(final PlayerEvent ev)
+    {
+        skillsPanel.updateAsNormal(ev);
+        attributesPn.updateAsNormal(ev);
+    }
+
+    private void updateAsChanged(final PlayerEvent ev)
+    {
+        skillsPanel.updateAsChanged(ev);
+        attributesPn.updateAsChanged(ev);
+    }
+
+    private JLabel createTitle(String title)
+    {
+        JLabel attributesLb = new JLabel(" " + title + " ");
+        attributesLb.setAlignmentX(JPanel.LEFT_ALIGNMENT);
+        attributesLb.setAlignmentY(JPanel.TOP_ALIGNMENT);
         attributesLb.setFont(DEFAULT_FONT);
         attributesLb.setBorder(BorderFactory.createRaisedBevelBorder());
-		return attributesLb;
-	}
+        return attributesLb;
+    }
 
     public void setGame(Game game)
     {
         this.game = game;
     }
 
-	public void startAgain()
-	{
-		panel.removeAll();
-	}
-}
-
-class ItemMouseListener extends MouseAdapter
-{
-    private JLabel name;
-//    Item item;
-    private Game game;
-
-    ItemMouseListener(JLabel name, /*Item item,*/ Game g)
+    public void startAgain()
     {
-        this.name = name;
-//        this.item = item;
-        this.game = g;
-    }
-
-    public void mouseClicked(MouseEvent e)
-    {
-//        item.use(g);
-    }
-
-    public void mouseEntered(MouseEvent e)
-    {
-        name.setForeground(Color.BLUE);
-        name.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-
-    public void mouseExited(MouseEvent e)
-    {
-        name.setForeground(Color.BLACK);
-        name.setCursor(null);
+        panel.removeAll();
     }
 }
