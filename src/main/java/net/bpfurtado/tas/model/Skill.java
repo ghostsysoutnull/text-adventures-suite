@@ -22,19 +22,31 @@ package net.bpfurtado.tas.model;
 
 public class Skill
 {
-    public static Skill NULL_OBJECT = new Skill("NULL", 0);
+    public static Skill NULL_OBJECT = new Skill(null, "NULL", 0);
+
+    private Player p;
 
     private String name;
     private int level;
 
+    /**
+     * to read from the XML
+     * TODO verifi how that instance is used later.
+     */
     public Skill(String name)
     {
         setName(name);
     }
 
-    public Skill(String name, int level)
+    public Skill(Player p, String name)
     {
         setName(name);
+        this.p = p;
+    }
+
+    public Skill(Player p, String name, int level)
+    {
+        this(p, name);
         setLevel(level);
     }
 
@@ -60,12 +72,14 @@ public class Skill
 
     public void dec(int v)
     {
-        level -= v;
+        inc(-v);
     }
 
     public void inc(int v)
     {
+        int old = level;
         level += v;
+        p.fireEvent(this, old);
     }
 
     @Override

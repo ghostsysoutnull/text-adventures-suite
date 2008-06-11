@@ -54,7 +54,7 @@ public class Fighter
         super();
 
         this.name = name;
-        this.combatSkill = new Skill("Combat", combatSkillLevel);
+        this.combatSkill = new Skill(null, "Combat", combatSkillLevel);
         this.stamina = stamina;
     }
 
