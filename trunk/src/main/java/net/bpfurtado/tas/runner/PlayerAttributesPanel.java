@@ -40,6 +40,8 @@ public class PlayerAttributesPanel
 {
     private static Logger logger = Logger.getLogger(PlayerAttributesPanel.class);
 
+    private static final int lineHeight = 25;
+
     private JPanel main;
     private GridBagConstraints c;
 
@@ -84,8 +86,6 @@ public class PlayerAttributesPanel
     {
         JLabel name = new JLabel();
 
-        int lineH = 25;
-
         name.setFont(PlayerPanelController.DEFAULT_FONT);
         c.weightx = .75;
         c.gridx = 0;
@@ -94,8 +94,8 @@ public class PlayerAttributesPanel
             name.setText(" " + key.toString());
             c.gridwidth = 2;
             c.anchor = GridBagConstraints.LINE_END;
-            main.add(name, c); //Set maximum size here too, all other finishing needed
-            main.setMaximumSize(new Dimension(200, line * lineH));
+            main.add(name, c);
+            setMaximumSize();
             return ++line;
         } else {
             name.setText(" " + key + ": ");
@@ -114,11 +114,13 @@ public class PlayerAttributesPanel
         c.anchor = GridBagConstraints.LINE_END;
         main.add(valueLb, c);
 
-        main.setMaximumSize(new Dimension(200, line * lineH));
-
-        logger.debug("line=" + line + ", times=" + (line * lineH));
-
+        setMaximumSize();
         return line;
+    }
+
+    private void setMaximumSize()
+    {
+        main.setMaximumSize(new Dimension(200, line * lineHeight));
     }
 
     void setAsHavingNoAttributes()
