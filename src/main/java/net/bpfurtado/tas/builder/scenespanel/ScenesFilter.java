@@ -44,12 +44,11 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class ScenesFilter implements ScenesListControllerListener
+public class ScenesFilter extends SceneListBase implements ScenesListControllerListener
 {
     private static Logger logger = Logger.getLogger(ScenesFilter.class);
 
     private JPanel panel;
-    private JList list;
 
     private ScenesSource scenesSource;
 
@@ -68,7 +67,7 @@ public class ScenesFilter implements ScenesListControllerListener
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-        list = new JList(new DefaultListModel());
+        list.setModel(new DefaultListModel());
         list.setCellRenderer(new FilteredScenesListCellRenderer());
 
         JScrollPane scrollPane = new JScrollPane(list);
@@ -152,14 +151,6 @@ public class ScenesFilter implements ScenesListControllerListener
     private void rankRule(String filter, SceneRank sceneRank, String text, int rankPoints)
     {
         if (text.trim().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-            if (sceneRank == null) {
-                int a = 0;
-                a++;
-            } else if (sceneRank.getRank() == null) {
-                int a = 0;
-                a++;
-            }
-
             sceneRank.setRank(sceneRank.getRank() + rankPoints);
         }
     }

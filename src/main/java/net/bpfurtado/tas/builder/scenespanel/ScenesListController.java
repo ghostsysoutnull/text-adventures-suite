@@ -149,7 +149,9 @@ public class ScenesListController
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-
+                    for(ScenesListControllerListener l: listeners) {
+                        l.focusOnList();
+                    }
                 }
             }
 
