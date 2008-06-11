@@ -84,6 +84,8 @@ public class PlayerAttributesPanel
     {
         JLabel name = new JLabel();
 
+        int lineH = 25;
+
         name.setFont(PlayerPanelController.DEFAULT_FONT);
         c.weightx = .75;
         c.gridx = 0;
@@ -92,7 +94,8 @@ public class PlayerAttributesPanel
             name.setText(" " + key.toString());
             c.gridwidth = 2;
             c.anchor = GridBagConstraints.LINE_END;
-            main.add(name, c);
+            main.add(name, c); //Set maximum size here too, all other finishing needed
+            main.setMaximumSize(new Dimension(200, line * lineH));
             return ++line;
         } else {
             name.setText(" " + key + ": ");
@@ -111,7 +114,9 @@ public class PlayerAttributesPanel
         c.anchor = GridBagConstraints.LINE_END;
         main.add(valueLb, c);
 
-        main.setMaximumSize(new Dimension(200, line * 25));
+        main.setMaximumSize(new Dimension(200, line * lineH));
+
+        logger.debug("line=" + line + ", times=" + (line * lineH));
 
         return line;
     }
@@ -123,6 +128,7 @@ public class PlayerAttributesPanel
         c.gridy = line;
         c.anchor = GridBagConstraints.LINE_END;
         main.add(new JLabel("No attributes"), c);
+        line = 0;
     }
 
     JComponent getPanel()
