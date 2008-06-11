@@ -2,20 +2,20 @@
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
  *
  * This file is part of the Text Adventures Suite.
- * 
+ *
  * Text Adventures Suite is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Text Adventures Suite is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
 package net.bpfurtado.tas.builder.scenespanel;
@@ -46,148 +46,156 @@ import org.apache.log4j.Logger;
 
 public class ScenesFilter implements ScenesListControllerListener
 {
-	private static Logger logger = Logger.getLogger(ScenesFilter.class);
+    private static Logger logger = Logger.getLogger(ScenesFilter.class);
 
-	private JPanel panel;
-	private JList list;
+    private JPanel panel;
+    private JList list;
 
-	private ScenesSource scenesSource;
+    private ScenesSource scenesSource;
 
-	private boolean displayAddNewAndDeleteButtons;
+    private boolean displayAddNewAndDeleteButtons;
 
-	public ScenesFilter(ScenesSource scenesSource, boolean showButtons)
-	{
-		this.scenesSource = scenesSource;
-		this.displayAddNewAndDeleteButtons = showButtons;
-		initView();
-		events();
-	}
+    public ScenesFilter(ScenesSource scenesSource, boolean showButtons)
+    {
+        this.scenesSource = scenesSource;
+        this.displayAddNewAndDeleteButtons = showButtons;
+        initView();
+        events();
+    }
 
-	private void initView()
-	{
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		
-		list = new JList(new DefaultListModel());
-		list.setCellRenderer(new FilteredScenesListCellRenderer());
-		
-		JScrollPane scrollPane = new JScrollPane(list);
-		scrollPane.setBorder(BorderFactory.createTitledBorder("Filtered scenes"));
-		scrollPane.setMinimumSize(ScenesListController.INTERNAL_LIST_DIMENSION);
-		scrollPane.setPreferredSize(ScenesListController.INTERNAL_LIST_DIMENSION);
-		panel.add(scrollPane);
-	}
+    private void initView()
+    {
+        panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-	private void events()
-	{
-		list.addMouseListener(new MouseAdapter()
-		{
-			public void mouseClicked(MouseEvent e)
-			{
-				scenesListMouseClicked();
-			}
-		});
-	}
+        list = new JList(new DefaultListModel());
+        list.setCellRenderer(new FilteredScenesListCellRenderer());
 
-	void scenesListMouseClicked()
-	{
-		if (displayAddNewAndDeleteButtons) {
-			Scene selectedScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).getScene();
-			scenesSource.switchTo(selectedScene, list.getSelectedIndex());
-		}
-	}
+        JScrollPane scrollPane = new JScrollPane(list);
+        scrollPane.setBorder(BorderFactory.createTitledBorder("Filtered scenes"));
+        scrollPane.setMinimumSize(ScenesListController.INTERNAL_LIST_DIMENSION);
+        scrollPane.setPreferredSize(ScenesListController.INTERNAL_LIST_DIMENSION);
+        panel.add(scrollPane);
+    }
 
-	public JPanel getPanel()
-	{
-		return panel;
-	}
+    private void events()
+    {
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e)
+            {
+                scenesListMouseClicked();
+            }
+        });
+    }
 
-	public boolean isPanelVisible()
-	{
-		return false;
-	}
+    void scenesListMouseClicked()
+    {
+        if (displayAddNewAndDeleteButtons) {
+            SceneRank sceneRank = (SceneRank) list.getModel().getElementAt(list.getSelectedIndex());
+            scenesSource.switchTo(sceneRank.getScene(), list.getSelectedIndex());
+        }
+    }
 
-	public void searchFieldUpdated(String filterExp)
-	{
-		if (filterExp.trim().length() > 0) {
-			panel.setVisible(true);
-			rankScenes(filterExp);
-		} else {
-			panel.setVisible(false);
-		}
-	}
+    public JPanel getPanel()
+    {
+        return panel;
+    }
 
-	private void rankScenes(String filter)
-	{
-		List<SceneRank> ranked = new LinkedList<SceneRank>();
-		for (Scene s : scenesSource.getScenes()) {
-			SceneRank sceneRank = new SceneRank();
-			rankRule(filter, sceneRank, s.getId()+"", 11);
-			rankRule(filter, sceneRank, s.getTags(), 8);
-			rankRule(filter, sceneRank, s.getName(), 5);
-			rankRule(filter, sceneRank, s.getText(), 3);
-			rankRule(filter, sceneRank, s.getCode(), 3);
-			for (IPath p : s.getPaths()) {
-				rankRule(filter, sceneRank, p.getText(), 1);
-			}
-			if (sceneRank.getRank() > 0) {
-				sceneRank.setScene(s);
-				ranked.add(sceneRank);
-			}
-		}
-		Collections.sort(ranked);
-		logger.debug(ranked);
+    public boolean isPanelVisible()
+    {
+        return false;
+    }
 
-		DefaultListModel model = (DefaultListModel) list.getModel();
-		model.clear();
-		for (SceneRank sr : ranked) {
-			model.addElement(sr);
-		}
-	}
+    public void searchFieldUpdated(String filterExp)
+    {
+        if (filterExp.trim().length() > 0) {
+            panel.setVisible(true);
+            rankScenes(filterExp);
+        } else {
+            panel.setVisible(false);
+        }
+    }
 
-	private void rankRule(String filter, SceneRank sceneRank, String name, int rankPoints)
-	{
-		if (name.trim().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
-			sceneRank.setRank(sceneRank.getRank() + rankPoints);
-		}
-	}
+    private void rankScenes(String filter)
+    {
+        List<SceneRank> ranked = new LinkedList<SceneRank>();
+        for (Scene scene : scenesSource.getScenes()) {
+            SceneRank sceneRank = new SceneRank();
+            applyFirstRankRules(filter, scene, sceneRank);
+            for (IPath p : scene.getPaths()) {
+                rankRule(filter, sceneRank, p.getText(), 1);
+            }
+            if (sceneRank.getRank() > 0) {
+                sceneRank.setScene(scene);
+                ranked.add(sceneRank);
+            }
+        }
+        Collections.sort(ranked);
+        logger.debug(ranked);
 
-	public void sort(SortBy by)
-	{
-	}
+        DefaultListModel model = (DefaultListModel) list.getModel();
+        model.clear();
+        for (SceneRank sr : ranked) {
+            model.addElement(sr);
+        }
+    }
 
-	public JList getList()
-	{
-		return list;
-	}
+    private void applyFirstRankRules(String filter, Scene s, SceneRank sceneRank)
+    {
+        rankRule(filter, sceneRank, s.getId() + "", 11);
+        rankRule(filter, sceneRank, s.getTags(), 8);
+        rankRule(filter, sceneRank, s.getName(), 5);
+        rankRule(filter, sceneRank, s.getText(), 3);
+        rankRule(filter, sceneRank, s.getCode(), 3);
+    }
+
+    private void rankRule(String filter, SceneRank sceneRank, String text, int rankPoints)
+    {
+        if (text.trim().toLowerCase().indexOf(filter.toLowerCase()) != -1) {
+            if (sceneRank == null) {
+                int a = 0;
+                a++;
+            } else if (sceneRank.getRank() == null) {
+                int a = 0;
+                a++;
+            }
+
+            sceneRank.setRank(sceneRank.getRank() + rankPoints);
+        }
+    }
+
+    public void sort(SortBy by)
+    {
+    }
+
+    public JList getList()
+    {
+        return list;
+    }
 }
-
-
 
 class FilteredScenesListCellRenderer extends JLabel implements ListCellRenderer
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(SceneCellRenderer.class);
-	
-	private static final long serialVersionUID = -809320266653417815L;
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(SceneCellRenderer.class);
 
-	public FilteredScenesListCellRenderer()
+    private static final long serialVersionUID = -809320266653417815L;
+
+    public FilteredScenesListCellRenderer()
     {
         setOpaque(true);
     }
 
-    public Component getListCellRendererComponent(
-            JList list, Object value, int index,
-            boolean isSelected, boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         SceneRank sceneRank = (SceneRank) value;
 
-		setText(" [" + sceneRank.getScene().getId() + "] " + sceneRank.getScene().getName() + " (" + sceneRank.getRank() + ")");
+        setText(" [" + sceneRank.getScene().getId() + "] " + sceneRank.getScene().getName() + " (" + sceneRank.getRank() + ")");
 
         Color orphanSceneColor = new Color(133, 213, 157);
 
         if (sceneRank.getScene().isOrphan()) {
-			setBackground(isSelected ? Util.oceanColor : orphanSceneColor);
+            setBackground(isSelected ? Util.oceanColor : orphanSceneColor);
         } else {
             setBackground(isSelected ? Util.oceanColor : Color.white);
         }
