@@ -31,9 +31,6 @@ import java.util.Map.Entry;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.model.combat.Fighter;
 
-/**
- * @author Bruno Patini Furtado
- */
 public class Player extends Fighter
 {
     private static final Random rand = new Random();
@@ -41,7 +38,7 @@ public class Player extends Fighter
     private Map<String, Object> attributes = new HashMap<String, Object>();
     private Map<String, Skill> skills = new HashMap<String, Skill>();
 
-    private Skill luck = new Skill("Luck", rand.nextInt(7) + 6);
+    private Skill luck = new Skill(this, "Luck", rand.nextInt(7) + 6);
 
     public Player(String name)
     {
@@ -51,19 +48,21 @@ public class Player extends Fighter
         add(getLuck());
     }
 
-    private void add(Skill s)
-    {
-        skills.put(s.getName(), s);
-    }
-
     public Player(String name, int combatSkill, int stamina)
     {
         super(name, combatSkill, stamina);
     }
 
+    private void add(Skill skill)
+    {
+        skills.put(skill.getName(), skill);
+        fireEvent("Skill " + skill.getName() + " added with level " + skill.getLevel());
+    }
+
     public void addSkill(String name, int level)
     {
-        add(new Skill(name, level));
+        Skill skill = new Skill(this, name, level);
+        add(skill);
     }
 
     public Skill skill(String skillName)
@@ -80,16 +79,18 @@ public class Player extends Fighter
         return luck;
     }
 
-    public void setLuck(int newLuckValue)
+    public void setLuck(int value)
     {
-        luck.setLevel(newLuckValue);
+        int old = luck.getLevel();
+        luck.setLevel(value);
+        fireEvent(luck, old);
     }
 
     public void setAttribute(String name, String value)
     {
         String old = (String) attributes.get(name);
         attributes.put(name, value);
-        fire(new PlayerEvent(name, name + " was " + old + ", now is " + value));
+        fireEvent(name, value, old);
     }
 
     public void addAttribute(String name)
@@ -225,15 +226,33 @@ public class Player extends Fighter
         return "Player";
     }
 
-    @Override
-    public String toString()
-    {
-        return "[Player: " + attributes + "]";
-    }
-
     public static void main(String[] args)
     {
         Player p = new Player("H");
         p.incIntValue("coins", 30);
+    }
+
+    private void fireEvent(String name, String value, String old)
+    {
+        fire(new PlayerEvent(name, name + " was " + old + ", now is " + value));
+    }
+
+    /**
+     * Used by skills
+     */
+    public void fireEvent(Skill s, int oldLevel)
+    {
+        fire(new PlayerEvent(s.getName(), s.getName() + " was " + oldLevel + ", now is " + s.getLevel()));
+    }
+
+    private void fireEvent(String description)
+    {
+        fire(new PlayerEvent(description));
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[Player: " + attributes + "]";
     }
 }
