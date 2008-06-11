@@ -63,8 +63,9 @@ public class PlayerPanelController
     private JPanel panel;
 
     private PlayerAttributesPanel skillsPanel;
-
     private PlayerAttributesPanel attributesPn;
+
+    private List<PlayerEvent> playerEvents = new LinkedList<PlayerEvent>();
 
     public PlayerPanelController()
     {
@@ -85,8 +86,6 @@ public class PlayerPanelController
         updateView();
         JOptionPane.showMessageDialog(panel, executedActionText);
     }
-
-    private List<PlayerEvent> playerEvents = new LinkedList<PlayerEvent>();
 
     public void updateView(PlayerEvent ev)
     {
