@@ -362,7 +362,7 @@ public class Builder extends JFrame
         return advTitlePn;
     }
 
-    public Scene getActualScene()
+    public Scene getCurrentScene()
     {
         return this.currentScene;
     }

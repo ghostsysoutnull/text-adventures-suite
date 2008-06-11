@@ -80,8 +80,7 @@ public class ScenesList implements ScenesListControllerListener
     {
         for (int i = 0; i < list.getModel().getSize(); i++) {
             Scene s = (Scene) list.getModel().getElementAt(i);
-            //logger.debug(builder.getActualScene() + ".equals(" + s + ")");
-            if(builder.getActualScene().equals(s)) {
+            if(builder.getCurrentScene().equals(s)) {
                 list.setSelectedIndex(i);
                 list.ensureIndexIsVisible(i);
                 break;
@@ -113,14 +112,14 @@ public class ScenesList implements ScenesListControllerListener
 
             list.setCellRenderer(new SceneCellRenderer(builder.getAdventure().getStart()));
 
-            removeSceneBt.setEnabled(!builder.getActualScene().equals(builder.getAdventure().getStart()));
+            removeSceneBt.setEnabled(!builder.getCurrentScene().equals(builder.getAdventure().getStart()));
         } else {
             List<Scene> forbiddenScenes = new LinkedList<Scene>();
-            for (IPath p : builder.getActualScene().getPaths()) {
+            for (IPath p : builder.getCurrentScene().getPaths()) {
                 if (p.getTo() != null)
                     forbiddenScenes.add(p.getTo());
             }
-            forbiddenScenes.add(builder.getActualScene());
+            forbiddenScenes.add(builder.getCurrentScene());
 
             for (Scene s : builder.getAdventure().getScenes()) {
                 if (!forbiddenScenes.contains(s))
