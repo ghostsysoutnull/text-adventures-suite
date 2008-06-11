@@ -23,7 +23,6 @@
 package net.bpfurtado.tas.builder.scenespanel;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -40,7 +39,6 @@ import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListSelectionModel;
 
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListController.SortBy;
@@ -53,7 +51,7 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class ScenesList implements ScenesListControllerListener
+public class ScenesList extends SceneListBase implements ScenesListControllerListener
 {
     private static final Logger logger = Logger.getLogger(ScenesList.class);
 
@@ -61,7 +59,6 @@ public class ScenesList implements ScenesListControllerListener
 
     private Builder builder;
 
-    private JList list;
     private JButton removeSceneBt;
 
     private boolean displayAddNewAndDeleteButtons;
@@ -155,7 +152,13 @@ public class ScenesList implements ScenesListControllerListener
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-        list = widgetScenesList();
+        list.addMouseListener(new MouseAdapter()
+        {
+            public void mouseClicked(MouseEvent e)
+            {
+                scenesListMouseClicked();
+            }
+        });
         list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
         list.setVisibleRowCount(-1);
 
@@ -209,25 +212,6 @@ public class ScenesList implements ScenesListControllerListener
         builder.getAdventure().remove(toRemove);
         builder.switchTo(builder.getAdventure().getStart());
         builder.markAsDirty();
-    }
-
-    private JList widgetScenesList()
-    {
-        JList scenesList = new JList();
-        scenesList.setFont(new Font("Courier New", 0, 10));
-
-        scenesList.addMouseListener(new MouseAdapter()
-        {
-            public void mouseClicked(MouseEvent e)
-            {
-                scenesListMouseClicked();
-            }
-        });
-
-        scenesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        scenesList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-
-        return scenesList;
     }
 
     private void newSceneButtonActionPerformed()
