@@ -68,7 +68,11 @@ public class Player extends Fighter
 
     public Skill skill(String skillName)
     {
-        return skills.get(skillName);
+        Skill skill = skills.get(skillName);
+        if (skill == null) {
+            return Skill.NULL_OBJECT;
+        }
+        return skill;
     }
 
     public Skill getLuck()

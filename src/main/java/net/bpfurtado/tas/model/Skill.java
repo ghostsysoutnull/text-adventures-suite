@@ -22,6 +22,8 @@ package net.bpfurtado.tas.model;
 
 public class Skill
 {
+    public static Skill NULL_OBJECT = new Skill("NULL", 0);
+
     private String name;
     private int level;
 
