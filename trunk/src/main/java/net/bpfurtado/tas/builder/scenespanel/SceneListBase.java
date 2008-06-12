@@ -31,11 +31,13 @@ import javax.swing.ListSelectionModel;
 
 import org.apache.log4j.Logger;
 
-public abstract class SceneListBase
+public abstract class SceneListBase implements ScenesListControllerListener
 {
     private static final Logger logger = Logger.getLogger(SceneListBase.class);
 
     protected JList list;
+
+    private FilterScenesFieldsHolder holder;
 
     public SceneListBase()
     {
@@ -45,7 +47,7 @@ public abstract class SceneListBase
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_UP && list.getSelectedIndex() == 0) {
-                    logger.debug("focus on txt field");
+                    holder.focusOnFilterMainField();
                 }
             }
 
@@ -57,6 +59,11 @@ public abstract class SceneListBase
             {
             }
         });
+    }
+
+    public void set(FilterScenesFieldsHolder holder)
+    {
+        this.holder = holder;
     }
 
     public void focusOnList()

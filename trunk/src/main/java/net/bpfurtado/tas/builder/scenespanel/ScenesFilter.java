@@ -56,6 +56,7 @@ public class ScenesFilter extends SceneListBase implements ScenesListControllerL
 
     public ScenesFilter(ScenesSource scenesSource, boolean showButtons)
     {
+        super();
         this.scenesSource = scenesSource;
         this.displayAddNewAndDeleteButtons = showButtons;
         initView();

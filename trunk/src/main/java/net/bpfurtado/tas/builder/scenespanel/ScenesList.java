@@ -51,22 +51,21 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class ScenesList extends SceneListBase implements ScenesListControllerListener
+public class ScenesList extends SceneListBase
 {
     private static final Logger logger = Logger.getLogger(ScenesList.class);
 
     private JPanel mainPanel;
+    private JButton removeSceneBt;
 
     private Builder builder;
-
-    private JButton removeSceneBt;
+    private SortBy sortBy = SortBy.Name;
 
     private boolean displayAddNewAndDeleteButtons;
 
-    private SortBy sortBy = SortBy.Name;
-
     public ScenesList(Builder builder, boolean showButtonsPane)
     {
+        super();
         this.builder = builder;
 
         this.displayAddNewAndDeleteButtons = showButtonsPane;
