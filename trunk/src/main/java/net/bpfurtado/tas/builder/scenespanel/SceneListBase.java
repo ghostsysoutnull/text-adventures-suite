@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 
 public abstract class SceneListBase implements ScenesListControllerListener
 {
+    @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(SceneListBase.class);
 
     protected JList list;
@@ -68,8 +69,10 @@ public abstract class SceneListBase implements ScenesListControllerListener
 
     public void focusOnList()
     {
-        list.setSelectedIndex(0);
-        list.requestFocusInWindow();
+        if (list.getModel().getSize() > 0) {
+            list.setSelectedIndex(0);
+            list.requestFocusInWindow();
+        }
     }
 
     protected JList buildList()
