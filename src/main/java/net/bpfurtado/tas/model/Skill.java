@@ -24,7 +24,7 @@ public class Skill
 {
     public static Skill NULL_OBJECT = new Skill(null, "NULL", 0);
 
-    private Player p;
+    private Player player;
 
     private String name;
     private int level;
@@ -41,13 +41,23 @@ public class Skill
     public Skill(Player p, String name)
     {
         setName(name);
-        this.p = p;
+        this.player = p;
     }
 
     public Skill(Player p, String name, int level)
     {
         this(p, name);
         setLevel(level);
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public void setPlayer(Player player)
+    {
+        this.player = player;
     }
 
     public String getName()
@@ -79,7 +89,7 @@ public class Skill
     {
         int old = level;
         level += v;
-        p.fireEvent(this, old);
+        player.fireEvent(this, old);
     }
 
     @Override

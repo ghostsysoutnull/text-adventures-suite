@@ -43,14 +43,20 @@ public class Player extends Fighter
     public Player(String name)
     {
         super(name, rand.nextInt(7) + 6, rand.nextInt(13) + 12);
-
-        add(getCombatSkill());
-        add(getLuck());
+        init();
     }
 
     public Player(String name, int combatSkill, int stamina)
     {
         super(name, combatSkill, stamina);
+        init();
+    }
+
+    private void init()
+    {
+        getCombatSkill().setPlayer(this);
+        add(getCombatSkill());
+        add(getLuck());
     }
 
     private void add(Skill skill)
