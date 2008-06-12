@@ -45,7 +45,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class ScenesListController
+public class ScenesListController implements FilterScenesFieldsHolder
 {
     @SuppressWarnings("unused")
     private static Logger logger = Logger.getLogger(ScenesListController.class);
@@ -56,7 +56,7 @@ public class ScenesListController
     private JPanel mainPn = null;
     private JPanel centerPn = null;
 
-    private JTextField searchTF;
+    private JTextField filterTf;
     private JPanel onePn = null;
     private JPanel anotherPn = null;
 
@@ -77,20 +77,27 @@ public class ScenesListController
         return mainPn;
     }
 
-    public void add(ScenesListControllerListener l)
+    public void add(ScenesListControllerListener listener)
     {
+        listener.set(this);
+
         if (onePn == null) {
-            onePn = l.getPanel();
-            onePn.setVisible(l.isPanelVisible());
+            onePn = listener.getPanel();
+            onePn.setVisible(listener.isPanelVisible());
             centerPn.add(onePn);
         } else if (anotherPn == null) {
-            anotherPn = l.getPanel();
-            anotherPn.setVisible(l.isPanelVisible());
+            anotherPn = listener.getPanel();
+            anotherPn.setVisible(listener.isPanelVisible());
             centerPn.add(anotherPn);
         } else {
             throw new IllegalStateException();
         }
-        listeners.add(l);
+        listeners.add(listener);
+    }
+
+    public void focusOnFilterMainField()
+    {
+        filterTf.requestFocusInWindow();
     }
 
     private void initView()
@@ -113,15 +120,15 @@ public class ScenesListController
 
     private void searchFieldWidget(JPanel panelToAdd)
     {
-        searchTF = new JTextField(15);
-        searchTF.setMaximumSize(new Dimension(500, 21));
+        filterTf = new JTextField(15);
+        filterTf.setMaximumSize(new Dimension(500, 21));
 
-        searchTF.setToolTipText("Type some words to filter the scenes scenesList");
+        filterTf.setToolTipText("Type some words to filter the scenes scenesList");
 
         JPanel searchBarPn = new JPanel();
         searchBarPn.setLayout(new BoxLayout(searchBarPn, BoxLayout.LINE_AXIS));
         searchBarPn.add(Box.createRigidArea(new Dimension(4, 0)));
-        searchBarPn.add(searchTF);
+        searchBarPn.add(filterTf);
 
         searchBarPn.add(buildClearBt(searchBarPn));
         sortLb = sortLbWidget();
@@ -129,7 +136,7 @@ public class ScenesListController
 
         panelToAdd.add(searchBarPn);
 
-        searchTF.getDocument().addDocumentListener(new DocumentListener() {
+        filterTf.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e)
             {
             }
@@ -145,7 +152,7 @@ public class ScenesListController
             }
         });
 
-        searchTF.addKeyListener(new KeyListener() {
+        filterTf.addKeyListener(new KeyListener() {
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
@@ -174,7 +181,7 @@ public class ScenesListController
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                searchTF.setText("");
+                filterTf.setText("");
             }
         });
         return clearLb;
@@ -207,7 +214,7 @@ public class ScenesListController
     protected void searchFieldUpdateEvent()
     {
         for (ScenesListControllerListener l : listeners) {
-            l.searchFieldUpdated(searchTF.getText());
+            l.searchFieldUpdated(filterTf.getText());
         }
     }
 

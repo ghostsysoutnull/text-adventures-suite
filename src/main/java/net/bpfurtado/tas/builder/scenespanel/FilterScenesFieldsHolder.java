@@ -1,5 +1,6 @@
 /**
- * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
+ * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]
+ * Created on 12/06/2008 17:06:11
  *
  * This file is part of the Text Adventures Suite.
  *
@@ -18,20 +19,10 @@
  *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
+
 package net.bpfurtado.tas.builder.scenespanel;
 
-import javax.swing.JPanel;
-
-import net.bpfurtado.tas.builder.scenespanel.ScenesListController.SortBy;
-
-public interface ScenesListControllerListener
+public interface FilterScenesFieldsHolder
 {
-    void searchFieldUpdated(String filterExp);
-    JPanel getPanel();
-    boolean isPanelVisible();
-    void sort(SortBy by);
-
-    void focusOnList();
-
-    void set(FilterScenesFieldsHolder holder);
+    void focusOnFilterMainField();
 }
