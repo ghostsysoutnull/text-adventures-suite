@@ -525,6 +525,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         endPn.setVisible(false);
         pathsPn.setVisible(true);
         statsView.startAgain();
+        logTA.setText("");
         startGame();
     }
 
