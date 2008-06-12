@@ -70,7 +70,7 @@ public class SkillTestFrame extends JDialog
 
     private SkillTestListener endOfSkillTestListener;
 
-    public SkillTestFrame(SkillTestListener endOfSkillTestListener, 
+    public SkillTestFrame(SkillTestListener endOfSkillTestListener,
                     Player player, Skill skillToTest, JFrame invokerFrame)
     {
         logger.debug("skillToTest.getName()=" + skillToTest.getName() + ":" + skillToTest.getLevel());
@@ -122,6 +122,8 @@ public class SkillTestFrame extends JDialog
                     boolean skillful = total <= getSkillLevelToTest();
                     if (skillful) {
                         text = "YOU WON";
+                        /* We need to find the skill again as this instance we have came from the scene XML */
+                        player.skill(skillToTest.getName()).dec(1);
                     }
                     main.add(createEndButton(text, skillful), BorderLayout.PAGE_END);
                     main.add(Box.createRigidArea(new Dimension(0, 4)));
