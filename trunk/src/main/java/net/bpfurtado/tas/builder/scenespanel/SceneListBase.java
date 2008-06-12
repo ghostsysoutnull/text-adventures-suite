@@ -40,6 +40,8 @@ public abstract class SceneListBase implements ScenesListControllerListener
 
     private FilterScenesFieldsHolder holder;
 
+    abstract void scenesListMouseClicked();
+
     public SceneListBase()
     {
         list = buildList();
@@ -49,6 +51,8 @@ public abstract class SceneListBase implements ScenesListControllerListener
             {
                 if (e.getKeyCode() == KeyEvent.VK_UP && list.getSelectedIndex() == 0) {
                     holder.focusOnFilterMainField();
+                } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    scenesListMouseClicked();
                 }
             }
 

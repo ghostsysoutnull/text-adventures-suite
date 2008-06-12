@@ -401,7 +401,7 @@ public class Builder extends JFrame
         updateView(true);
     }
 
-    private void updateView(boolean focusToSceneName)
+    private void updateView(boolean focusToSceneTextArea)
     {
         logger.debug("here");
         if (currentScene == null) {
@@ -417,8 +417,8 @@ public class Builder extends JFrame
 
         playFromCurrentMnIt.setText("Play from '" + currentScene.getName() + "'");
 
-        if (focusToSceneName) {
-            sceneNameTF.requestFocusInWindow();
+        if (focusToSceneTextArea) {
+            sceneTA.requestFocusInWindow();
         }
     }
 
