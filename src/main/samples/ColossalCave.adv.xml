@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<adventure startScene="0">
+  <name>Colossal Cave</name>
+  <assertions><![CDATA[]]></assertions>
+  <scenes>
+    <scene id="0" isEnd="false" name="Start" tags="Start" from="">
+      <text><![CDATA[You have ahead of you a cave full of treasures, monsters and misteries, will you enter it?]]></text>
+      <code><![CDATA[//Code is not executed in the Start scene.]]></code>
+      <path toScene="1" order="0">enter the cave</path>
+    </scene>
+    <scene id="1" isEnd="false" name="enter the cave" tags="" from="0">
+      <text><![CDATA[You see a greate room, with passages to the north, east and west, where will you go?]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="2" order="0">North</path>
+      <path toScene="11" order="1">East</path>
+      <path toScene="" order="2">west</path>
+    </scene>
+    <scene id="2" isEnd="false" name="north" tags="" from="1,11">
+      <text><![CDATA[you find a smaller chamber with a skeleton lying. Will you check the skeleton or leave this room to the north corridor?]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="6" order="0">Leave this room to the north corridor</path>
+      <path toScene="3" order="1">Check the skeleton</path>
+    </scene>
+    <scene id="3" isEnd="false" name="check the skeleton" tags="" from="2">
+      <text><![CDATA[You find with the old clothes of this long gone warrior 5 gold coins.
+There's also a broken sword of no use and a helmet, what will you do?
+
+Take the sword?
+Take the helmet?
+Respect at least the weapons of this dead fellow and leave the body.]]></text>
+      <code><![CDATA[player.addAttribute("gold-coins", 5);
+]]></code>
+      <path toScene="4" order="0">Take the sword</path>
+      <path toScene="5" order="1">Take the helmet</path>
+      <path toScene="6" order="2">leave the body</path>
+    </scene>
+    <scene id="4" isEnd="false" name="Take the sword" tags="" from="3">
+      <text><![CDATA[This sword worths nothing, why did you take it?
+
+Will you try the helmet?
+Or leave the body?]]></text>
+      <code><![CDATA[player.addAttribute("broken-sword");
+]]></code>
+      <path toScene="5" order="0">try the helmet</path>
+      <path toScene="6" order="1">leave the body</path>
+    </scene>
+    <scene id="5" isEnd="false" name="Take the helmet" tags="" from="4,3">
+      <text><![CDATA[You try this old rusty helmet and it fits perfectly on your head, the only problem is that a huge headache takes you in a glimpsy, you feel pain and after a while dizzy.
+
+You loose 2 skill points, that was a cursed helmet, probably what helped this adventurer to die long time ago.
+
+You leave it and follow to the corridor at north.]]></text>
+      <code><![CDATA[player.decCombatSkill(2);
+]]></code>
+      <path toScene="6" order="0">follow to the corridor at north</path>
+    </scene>
+    <scene id="6" isEnd="false" name="follow to the corridor at north" tags="" from="2,5,4,3">
+      <text><![CDATA[On this corridor you find a huge abyss with a very old rope bridge suspended above it, there's a light on the other side.
+
+Will you try to walk over the bridge and trust its safety?
+Or explore more the place?]]></text>
+      <code><![CDATA[
+ ]]></code>
+      <path toScene="7" order="0">Explore more the place</path>
+      <path toScene="" order="1">Try to walk over the bridge</path>
+    </scene>
+    <scene id="7" isEnd="false" name="explore more the place" tags="" from="6">
+      <skill-test name="Luck"/>
+      <text><![CDATA[As you turn your back to the dark corner at your left you see a huge snake that jumps to the attack!
+
+Test you luck to get rid of her poisoned bite!]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="8" order="0">Luck!</path>
+      <path toScene="9" order="1">You got bitten!</path>
+    </scene>
+    <scene id="8" isEnd="false" name="Luck!" tags="combat snake" from="7">
+      <text><![CDATA[You escape the first attack!
+
+You engage in combat with this big snake!]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="12" order="0">engage in combat</path>
+    </scene>
+    <scene id="9" isEnd="false" name="You got bitten!" tags="" from="7">
+      <text><![CDATA[You got bitten! As the poison enters your veins you loose 4 stamina points!
+
+Now you must fight the snake!]]></text>
+      <code><![CDATA[player.decStamina(4);
+
+]]></code>
+      <path toScene="12" order="0">fight the snake</path>
+    </scene>
+    <scene id="10" isEnd="false" name="won the snake" tags="" from="12">
+      <text><![CDATA[You defeated the snake!
+
+A few meters from your position  you find the snake's nest. Among some cracked egg shells you find a piece of a purple fine cloth. It has some old golden drawnings, which cannot be reasoned to any picture familiar of your now.
+
+Will you take the cloth with you or drop it away?
+
+
+]]></text>
+      <code><![CDATA[
+]]></code>
+      <path toScene="14" order="0">take the cloth</path>
+      <path toScene="13" order="1">drop it away</path>
+    </scene>
+    <scene id="11" isEnd="false" name="east (dec stamina)" tags="" from="1">
+      <text><![CDATA[east (dec stamina)]]></text>
+      <code><![CDATA[player.decStamina(1);
+]]></code>
+      <path toScene="2" order="0">go north</path>
+    </scene>
+    <scene id="12" isEnd="false" name="Fight the snake!" tags="" from="8,9">
+      <combat type="oneAtATime">
+        <enemy name="Snake" skill="7" stamina="7" damage="2"/>
+      </combat>
+      <text><![CDATA[You take your sword with both hands and...]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="10" order="0">fight with the Goblin</path>
+    </scene>
+    <scene id="13" isEnd="false" name="drop it away" tags="" from="10">
+      <text><![CDATA[You let this purple piece of cloth on the floor and suddenly a cold wind takes it towards the cliff a few meters ahead. The cloth is lost now, you fell like lost something valuable...
+
+There's nothing else to do here. You follow to the rope bridge.]]></text>
+      <code><![CDATA[]]></code>
+      <path toScene="" order="0">follow to the rope brdge</path>
+    </scene>
+    <scene id="14" isEnd="false" name="take the cloth" tags="" from="10">
+      <text><![CDATA[You take the cloth and feel like wearing it on one of your shoulders and on your chest. Imediately you have a good sensation. This can only be some sort of magic, maybe this was part of wizard's cloth.
+
+You gain 2 stamina points and 1 combat skill point.
+
+You feel and cold wind suddenly... but it goes away seconds later...
+
+There's nothing else to do here. You follow to the rope bridge.]]></text>
+      <code><![CDATA[player.incStamina(1);
+player.incCombatSkill(1);
+]]></code>
+      <path toScene="15" order="0">follow to the rope bridge</path>
+    </scene>
+    <scene id="15" isEnd="false" name="Rope bridge" tags="" from="14">
+      <text><![CDATA[This bridge is old and should be replaced as soon as possible. But you have no other way to go.]]></text>
+      <code><![CDATA[]]></code>
+    </scene>
+  </scenes>
+</adventure>
