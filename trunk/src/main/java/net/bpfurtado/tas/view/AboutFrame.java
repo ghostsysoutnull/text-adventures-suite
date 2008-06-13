@@ -2,31 +2,36 @@
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com] - 2005
  *
  * This file is part of the Text Adventures Suite.
- * 
+ *
  * Text Adventures Suite is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * Text Adventures Suite is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  * Project page: http://code.google.com/p/text-adventures-suite/
  */
 package net.bpfurtado.tas.view;
+
+import static net.bpfurtado.tas.view.Util.addHeight;
 
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
@@ -42,8 +47,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import net.bpfurtado.commons.io.FileUtils;
-
-import static net.bpfurtado.tas.view.Util.*;
 
 public class AboutFrame extends JDialog
 {
@@ -104,12 +107,12 @@ public class AboutFrame extends JDialog
 
     private Component createEnvironmentVariablesPanel()
     {
-        return createTAPanel(getEnvironmentVars());
+        return createTAPanel(getEnvironmentVars(), true);
     }
 
     private JPanel createSystemPropertiesPanel()
     {
-        return createTAPanel(getSystemProperties());
+        return createTAPanel(getSystemProperties(), true);
     }
 
     private JPanel createTAPanel(String text)
@@ -123,12 +126,37 @@ public class AboutFrame extends JDialog
         return p;
     }
 
+    private JPanel createTAPanel(String text, boolean sort)
+    {
+        if (!sort) {
+            return createTAPanel(text);
+        }
+
+        StringTokenizer stk = new StringTokenizer(text, "\n");
+        List<String> lines = new LinkedList<String>();
+        while (stk.hasMoreTokens()) {
+            String line = stk.nextToken();
+            lines.add(line + "\n");
+        }
+        Collections.sort(lines);
+        StringBuilder b = new StringBuilder();
+        for (String line : lines) {
+            b.append(line);
+        }
+        text = b.toString();
+        return createTAPanel(text);
+    }
+
     private String getSystemProperties()
     {
-        Set<Entry<Object, Object>> entrySet = System.getProperties().entrySet();
+        List<String> lines = new LinkedList<String>();
+        for (Entry<Object, Object> e : System.getProperties().entrySet()) {
+            lines.add(e.getKey() + " = " + e.getValue() + "\n");
+        }
+        //Collections.sort(lines);
         StringBuilder b = new StringBuilder();
-        for (Entry<Object, Object> e : entrySet) {
-            b.append(e.getKey() + " = " + e.getValue() + "\n");
+        for (String line : lines) {
+            b.append(line);
         }
         return b.toString();
     }
@@ -162,7 +190,7 @@ public class AboutFrame extends JDialog
     {
         return createTAPanel(FileUtils.allLinesFromClasspath("/net/bpfurtado/tas/view/about.txt"));
     }
-    
+
     public static void main(String[] args)
     {
         SwingUtilities.invokeLater(new Runnable() {
