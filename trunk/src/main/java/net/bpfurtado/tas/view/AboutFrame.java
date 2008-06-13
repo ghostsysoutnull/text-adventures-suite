@@ -148,14 +148,9 @@ public class AboutFrame extends JDialog
 
     private String getSystemProperties()
     {
-        List<String> lines = new LinkedList<String>();
-        for (Entry<Object, Object> e : System.getProperties().entrySet()) {
-            lines.add(e.getKey() + " = " + e.getValue() + "\n");
-        }
-        //Collections.sort(lines);
         StringBuilder b = new StringBuilder();
-        for (String line : lines) {
-            b.append(line);
+        for (Entry<Object, Object> e : System.getProperties().entrySet()) {
+            b.append(e.getKey() + " = " + e.getValue() + "\n");
         }
         return b.toString();
     }
