@@ -143,8 +143,7 @@ public class AboutFrame extends JDialog
         for (String line : lines) {
             b.append(line);
         }
-        text = b.toString();
-        return createTAPanel(text);
+        return createTAPanel(b.toString());
     }
 
     private String getSystemProperties()
