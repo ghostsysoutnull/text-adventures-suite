@@ -76,6 +76,10 @@ public class Fighter
 
         notifyAtackResultListeners(myAttackResult);
         enemy.notifyAtackResultListeners(enemyAttackResult);
+        
+        for (AttackResultListener l : listeners) {
+            l.roundEnded();
+        }
     }
 
     public void notifyAtackResultListeners(AttackResult ar)
