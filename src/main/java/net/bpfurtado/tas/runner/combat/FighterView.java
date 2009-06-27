@@ -133,8 +133,13 @@ public class FighterView implements AttackResultListener
 			panel.setBorder(createCompoundBorder(createBevelBorder(0), createEmptyBorder(3, 3, 3, 3)));
 		}
 	}
+	
+	public void roundEnded() 
+    {
+        //does nothing
+    }
 
-	@Override
+    @Override
 	public String toString()
 	{
 		return "[FV: fighter=" + fighter + "]";

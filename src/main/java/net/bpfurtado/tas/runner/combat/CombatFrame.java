@@ -335,17 +335,22 @@ public class CombatFrame extends JDialog implements AttackResultListener
 		p.add(Box.createRigidArea(new Dimension(8, 0)));
 	}
 
-	public void attackResult(AttackResult r)
+	public void attackResult(AttackResult attackResult)
 	{
 		/* JList output history only */
 		
-		attackResultsListModel.addElement(r.roundInfoToString(round));
-
+		attackResultsListModel.addElement(attackResult.roundInfoToString(round));
+		
 		attackResultsList.setSelectedIndex(attackResultsListModel.size() - 1);
 		attackResultsList.ensureIndexIsVisible(attackResultsListModel.size() - 1);
 	}
+	
+	public void roundEnded() 
+	{
+	    attackResultsListModel.addElement("==================");
+    }
 
-	public static void main(String[] args)
+    public static void main(String[] args)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{

@@ -79,11 +79,12 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
+public class Runner extends JFrame 
+    implements AdventureOpenner, GoToSceneListener, 
+               EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
 
-    @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(Runner.class);
 
     private Game game;
@@ -612,6 +613,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         try {
             Document doc = logTA.getDocument();
             doc.insertString(doc.getLength(), "\n" + ev.getDesc(), null);
+            logTA.setCaretPosition(doc.getLength());
         } catch (BadLocationException e) {
             throw new AdventureException(e);
         }
