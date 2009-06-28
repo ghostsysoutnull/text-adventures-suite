@@ -27,8 +27,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class Conf
 {
+    private static final Logger logger = Logger.getLogger(Conf.class);
+    
     private static final Conf builder = new Conf("builder");
     private static final Conf runner = new Conf("runner");
     private static final Conf oppening = new Conf("oppeningScreen");
@@ -55,7 +59,7 @@ public class Conf
     private Conf(String type)
     {
         p = new Properties();
-        confFileName = System.getProperty("user.home") + File.separator + ".adventure-tools" + File.separator + type + File.separator + "config.xml";
+        confFileName = getHome() + File.separator + type + File.separator + "config.xml";
         confFile = new File(confFileName);
         try {
             if (confFile.exists()) {
@@ -67,6 +71,21 @@ public class Conf
         } catch (IOException ioe) {
             throw new AdventureException("Could not save the last used dir", ioe);
         }
+    }
+
+    public static String getHome()
+    {
+        return System.getProperty("user.home") + File.separator + ".adventure-tools";
+    }
+    
+    public static File getSavedGamesFolder()
+    {
+        File savedGamesFolder = new File(getHome() + File.separator + "savedGames");
+        if (!savedGamesFolder.exists()) {
+            logger.debug("Saved Games folder not found, creating it: [" + savedGamesFolder + "]");
+            savedGamesFolder.mkdirs();
+        }
+        return savedGamesFolder;
     }
 
     public String get(String key)

@@ -20,6 +20,7 @@
  */
 package net.bpfurtado.tas.model.combat;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -31,8 +32,10 @@ import net.bpfurtado.tas.runner.combat.FighterView;
 
 import org.apache.log4j.Logger;
 
-public class Fighter
+public class Fighter implements Serializable
 {
+    private static final long serialVersionUID = -810138909324356865L;
+
     @SuppressWarnings("unused")
     private static Logger logger = Logger.getLogger(Fighter.class);
 
@@ -48,6 +51,13 @@ public class Fighter
     private List<AttackResultListener> listeners = new LinkedList<AttackResultListener>();
 
     private FighterView view;
+    
+    /**
+     * To Deserialize
+     */
+    public Fighter()
+    {
+    }
 
     public Fighter(String name, int combatSkillLevel, int stamina)
     {

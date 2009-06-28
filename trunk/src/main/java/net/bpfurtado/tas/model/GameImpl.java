@@ -27,6 +27,7 @@ import java.util.List;
 
 import net.bpfurtado.tas.runner.CodeExecutionAnalyser;
 import net.bpfurtado.tas.runner.PostCodeExecutionAction;
+import net.bpfurtado.tas.runner.SaveGame;
 
 /**
  * @author Bruno Patini Furtado
@@ -69,8 +70,19 @@ public class GameImpl implements Game
 			setSceneToOpen(NO_SCENE_TO_GO);
 		}
 	}
+	
+	/**
+	 * FIXME Remove method if not used!
+	 */
+	public void open(SaveGame saveGame)
+    {
+        this.player = saveGame.getPlayer();
+//        int sceneId = saveGame.getSceneId();
+//        Scene lastScene = adventure.getScene(sceneId);
+//        open(lastScene);
+    }
 
-	private void innerOpenPath(Scene scene)
+    private void innerOpenPath(Scene scene)
 	{
 		setCurrentScene(scene);
 

@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 27/10/2005 22:56:47                                                          
+ * Created on 27/06/2009 21:11:50
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -18,32 +18,45 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
-
-package net.bpfurtado.tas.model;
-
-import java.util.Collection;
-
-import net.bpfurtado.tas.runner.SaveGame;
-
-/**
- * @author Bruno Patini Furtado
  */
-public interface Game
+
+package net.bpfurtado.tas.runner;
+
+import java.io.Serializable;
+
+import net.bpfurtado.tas.model.Player;
+
+public class SaveGame implements Serializable
 {
-    void open(Scene scene);
-    void execPostCodeActions();
+    private static final long serialVersionUID = 6976207148524442036L;
 
-    Player getPlayer();
-    void addGoToSceneListener(GoToSceneListener goToSceneListener);
+    private Player player;
+    private int sceneId;
+    private String adventureFilePath;
 
-	void setCurrentScene(Scene scene);
-	Scene getCurrentScene();
+    public String getAdventureFilePath()
+    {
+        return adventureFilePath;
+    }
 
-	void setSceneToOpen(int sceneId);
-	int getSceneIdToOpen();
+    public void setAdventureFilePath(String adventureFile)
+    {
+        this.adventureFilePath = adventureFile;
+    }
 
-	void addPathToHideByOrder(Collection<Integer> pathsToHide);
-	void execAssertions();
-    void open(SaveGame saveGame);
+    public SaveGame(Player p, int sceneId)
+    {
+        this.player = p;
+        this.sceneId = sceneId;
+    }
+
+    public Player getPlayer()
+    {
+        return player;
+    }
+
+    public int getSceneId()
+    {
+        return sceneId;
+    }
 }

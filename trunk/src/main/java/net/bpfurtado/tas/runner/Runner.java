@@ -27,11 +27,19 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,13 +87,12 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame 
-    implements AdventureOpenner, GoToSceneListener, 
-               EndOfCombatListener, SkillTestListener, PlayerEventListener
+public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
 
     private static final Logger logger = Logger.getLogger(Runner.class);
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
     private Game game;
     private Adventure adventure;
@@ -98,19 +105,17 @@ public class Runner extends JFrame
     private JPanel pathsPn;
     private JPanel endPn;
 
+    private JPanel mainPanel;
+    private JTextArea logTA;
+    private JMenuItem saveMnIt;
+
     private final JFileChooser fileChooser = new JFileChooser();
     private List<OpenAdventureListener> openAdventureListeners;
     private RecentAdventuresMenuController recentMenuController;
 
     private PlayerPanelController statsView;
-
     protected CombatFrame combatFrame;
-
     protected Object skillToTestFrame;
-
-    private JPanel mainPanel;
-
-    private JTextArea logTA;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -170,7 +175,8 @@ public class Runner extends JFrame
         Util.setBoundsFrom(Conf.runner(), this);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        addWindowListener(new WindowAdapter()
+        {
             /**
              * TODO CHANGE TO WINDOW CLOSED!
              */
@@ -236,6 +242,7 @@ public class Runner extends JFrame
         Conf.runner().save();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
+        saveMnIt.setEnabled(true);
 
         fireOpenAdventureEvent(saveFile);
         startGame();
@@ -255,10 +262,10 @@ public class Runner extends JFrame
     {
         /*
          * logger.debug("Going to " + scene.getText());
-         *
+         * 
          * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
          * sceneTA.setCaretPosition(0);
-         *
+         * 
          * if(scene.isEnd()) { gameOver(); return; }
          */
 
@@ -292,7 +299,8 @@ public class Runner extends JFrame
 
     private void addEvents(final IPath path, final JLabel pathLb)
     {
-        pathLb.addMouseListener(new MouseAdapter() {
+        pathLb.addMouseListener(new MouseAdapter()
+        {
             IPath _path = path;
 
             public void mouseClicked(MouseEvent e)
@@ -348,7 +356,8 @@ public class Runner extends JFrame
             JButton combatBt = new JButton("Combat");
             combatBt.setMnemonic('c');
             combatBt.setAlignmentX(CENTER_ALIGNMENT);
-            combatBt.addActionListener(new ActionListener() {
+            combatBt.addActionListener(new ActionListener()
+            {
                 public void actionPerformed(ActionEvent e)
                 {
                     Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(), game.getCurrentScene().getCombat(), Runner.this);
@@ -360,7 +369,8 @@ public class Runner extends JFrame
             JButton skillToTestBt = new JButton("Test your " + to.getSkillToTest().getName() + " Skill!");
             skillToTestBt.setMnemonic('t');
             skillToTestBt.setAlignmentX(CENTER_ALIGNMENT);
-            skillToTestBt.addActionListener(new ActionListener() {
+            skillToTestBt.addActionListener(new ActionListener()
+            {
                 // 333
                 public void actionPerformed(ActionEvent e)
                 {
@@ -461,7 +471,8 @@ public class Runner extends JFrame
 
         JButton startAgainBt = new JButton("Start again");
         startAgainBt.setMnemonic('S');
-        startAgainBt.addActionListener(new ActionListener() {
+        startAgainBt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 startAgain();
@@ -481,7 +492,8 @@ public class Runner extends JFrame
         menuBar.add(menu);
 
         JMenuItem startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
-        startAgainMnIt.addActionListener(new ActionListener() {
+        startAgainMnIt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -492,8 +504,25 @@ public class Runner extends JFrame
         });
         menu.add(startAgainMnIt);
 
+        this.saveMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", menu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                saveAction();
+            }
+        });
+
+        Util.menuItem("Load Saved Game", 'l', KeyEvent.VK_L, "folder_table.png", menu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                loadSavedGameAction();
+            }
+        });
+
         JMenuItem openMnIt = new JMenuItem("Open", Util.getImage("folder_table.png"));
-        openMnIt.addActionListener(new ActionListener() {
+        openMnIt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 openMenuAction();
@@ -506,7 +535,8 @@ public class Runner extends JFrame
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
         exitBt.setIcon(Util.getImage("cancel.png"));
 
-        exitBt.addActionListener(new ActionListener() {
+        exitBt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 exitApplication();
@@ -518,6 +548,61 @@ public class Runner extends JFrame
         Util.addHelpMenu(menuBar, this);
 
         setJMenuBar(menuBar);
+    }
+
+    protected void loadSavedGameAction()
+    {
+        logger.debug("Load...");
+        fileChooser.setCurrentDirectory(Conf.getSavedGamesFolder());
+        int returnVal = fileChooser.showOpenDialog(Runner.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File saveGameFile = fileChooser.getSelectedFile();
+            logger.debug("Opening: " + saveGameFile.getName() + ".");
+            openSaveGameFile(saveGameFile);
+        }
+    }
+
+    private void openSaveGameFile(File saveGameFile)
+    {
+        try { // 222
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveGameFile));
+            SaveGame saveGame = (SaveGame) in.readObject();
+            logger.debug("last adv file = " + saveGame.getAdventureFilePath());
+            
+            openAdventure(new File(saveGame.getAdventureFilePath()));
+            game.open(saveGame);
+            openScene(adventure.getScene(saveGame.getSceneId()));
+        } catch (Exception e) {
+            throw new AdventureException(e);
+        }
+    }
+
+    protected void saveAction()
+    {
+        logger.debug("Save...");
+
+        SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
+        saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
+
+        File savedGamesFolder = Conf.getSavedGamesFolder();
+
+        // 111
+        String saveGameName = savedGamesFolder.getAbsolutePath() + File.separator + adventure.getName();
+        saveGameName += "#" + sdf.format(new Date());
+        saveGameName = saveGameName.replaceAll(" ", "") + ".saveGame.tas";
+
+        try {
+            log("Saving game to file: [" + saveGameName + "]...");
+            File saveGameFile = new File(saveGameName);
+            saveGameFile.createNewFile();
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(saveGameFile));
+            out.writeObject(saveGame);
+            out.flush();
+            out.close();
+            log("Game saved!");
+        } catch (IOException e) {
+            throw new AdventureException(e);
+        }
     }
 
     private void startAgain()
@@ -556,7 +641,8 @@ public class Runner extends JFrame
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
             public void run()
             {
                 Runner runner = null;
@@ -610,9 +696,14 @@ public class Runner extends JFrame
     public void receive(PlayerEvent ev)
     {
         statsView.updateView(ev);
+        log(ev.getDesc());
+    }
+
+    private void log(String msg)
+    {
         try {
             Document doc = logTA.getDocument();
-            doc.insertString(doc.getLength(), "\n" + ev.getDesc(), null);
+            doc.insertString(doc.getLength(), "\n" + msg, null);
             logTA.setCaretPosition(doc.getLength());
         } catch (BadLocationException e) {
             throw new AdventureException(e);

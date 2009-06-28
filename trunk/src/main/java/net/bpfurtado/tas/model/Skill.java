@@ -20,8 +20,12 @@
  */
 package net.bpfurtado.tas.model;
 
-public class Skill
+import java.io.Serializable;
+
+public class Skill implements Serializable
 {
+    private static final long serialVersionUID = 6619915916576611215L;
+
     public static Skill NULL_OBJECT = new Skill(null, "NULL", 0);
 
     private Player player;
@@ -30,8 +34,14 @@ public class Skill
     private int level;
 
     /**
-     * to read from the XML
-     * TODO verifi how that instance is used later.
+     * To Deserialize
+     */
+    public Skill()
+    {
+    }
+
+    /**
+     * to read from the XML TODO verifi how that instance is used later.
      */
     public Skill(String name)
     {

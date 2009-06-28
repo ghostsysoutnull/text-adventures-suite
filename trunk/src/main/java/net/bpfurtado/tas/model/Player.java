@@ -22,6 +22,7 @@
 
 package net.bpfurtado.tas.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -31,8 +32,10 @@ import java.util.Map.Entry;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.model.combat.Fighter;
 
-public class Player extends Fighter
+public class Player extends Fighter implements Serializable
 {
+    private static final long serialVersionUID = -5128951986418140176L;
+
     private static final Random rand = new Random();
 
     private Map<String, Object> attributes = new HashMap<String, Object>();
@@ -40,6 +43,14 @@ public class Player extends Fighter
 
     private Skill luck = new Skill(this, "Luck", rand.nextInt(7) + 6);
 
+    /**
+     * To Deserialize
+     */
+    public Player()
+    {
+        // TODO Auto-generated constructor stub
+    }
+    
     public Player(String name)
     {
         super(name, rand.nextInt(7) + 6, rand.nextInt(13) + 12);
