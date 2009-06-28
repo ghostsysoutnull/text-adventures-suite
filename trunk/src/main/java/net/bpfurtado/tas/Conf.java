@@ -161,7 +161,7 @@ public class Conf
         p.setProperty(key, value.toString());
     }
 
-    public static File findOrCreateAplicationHomeDir(AdventureOpenner adventureOpenner)
+    public static File findOrCreateAplicationHomeDir(EntityPersistedOnFileOpenner adventureOpenner)
     {
         String recentFilesFileName = System.getProperty("user.home");
         recentFilesFileName += "/.adventure-tools/" + adventureOpenner.getApplicationName();

@@ -51,7 +51,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.bpfurtado.tas.builder.OpenAdventureListener;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.model.DepthManager;
 import net.bpfurtado.tas.model.IPath;
 import net.bpfurtado.tas.model.Scene;
@@ -62,7 +62,7 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class DepthScenesViewController implements OpenAdventureListener
+public class DepthScenesViewController implements EntityPersistedOnFileOpenActionListener
 {
     private static final Logger logger = Logger.getLogger(DepthScenesViewController.class);
 
@@ -400,7 +400,7 @@ public class DepthScenesViewController implements OpenAdventureListener
         Util.showComponent(panel);
     }
 
-    public void adventureOpenned(File adventureFile)
+    public void fileOpenedAction(File file)
     {
         depthLists.clear();
     }

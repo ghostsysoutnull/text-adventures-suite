@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 10/10/2005 12:44:00                                                          
+ * Created on 10/10/2005 21:02:14                                                          
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -20,14 +20,20 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */                                                                           
 
-package net.bpfurtado.tas.builder;
+package net.bpfurtado.tas;
 
 import java.io.File;
 
 /**
  * @author Bruno Patini Furtado
  */
-public interface OpenAdventureListener
+public interface EntityPersistedOnFileOpenner 
 {
-    void adventureOpenned(File adventureFile);
+    void open(File file);
+    void save(boolean isSaveAs);
+
+    boolean isDirty();
+    boolean hasAnOpenEntity();
+
+    String getApplicationName();
 }

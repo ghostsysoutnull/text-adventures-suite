@@ -68,8 +68,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
 import net.bpfurtado.tas.AdventureException;
-import net.bpfurtado.tas.AdventureOpenner;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.builder.combat.BuilderCombatPanelManager;
 import net.bpfurtado.tas.builder.depth.DepthScenesFrame;
 import net.bpfurtado.tas.builder.scenespanel.ChooseSceneDialog;
@@ -89,7 +89,7 @@ import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
 import net.bpfurtado.tas.model.persistence.XMLAdventureWriter;
 import net.bpfurtado.tas.runner.Runner;
 import net.bpfurtado.tas.view.HelpDialog;
-import net.bpfurtado.tas.view.RecentAdventuresMenuController;
+import net.bpfurtado.tas.view.RecentFilesMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
@@ -100,7 +100,7 @@ import org.apache.log4j.Logger;
  * @author Bruno Patini Furtado
  */
 public class Builder extends JFrame
-    implements AdventureOpenner, ScenesSource,
+    implements EntityPersistedOnFileOpenner, ScenesSource,
                AdventureNeedsSavingController, IBuilder
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
@@ -144,10 +144,10 @@ public class Builder extends JFrame
     private RandomPathNameGenerator randomPathNameGenerator = new RandomPathNameGenerator();
 
     private List<PathView> pathViews = new LinkedList<PathView>();
-    private List<OpenAdventureListener> openAdventureListeners;
+    private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
     private ScenesList scenesList = null;
 
-    private RecentAdventuresMenuController recentMenuController;
+    private RecentFilesMenuController recentMenuController;
 
     private File saveFile;
     boolean isDirty = false;
@@ -157,8 +157,10 @@ public class Builder extends JFrame
 
     public Builder()
     {
-        openAdventureListeners = new LinkedList<OpenAdventureListener>();
-        recentMenuController = new RecentAdventuresMenuController(this, this);
+        recentMenuController = new RecentFilesMenuController(this, this, "recentAdventures.txt");
+
+        openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openAdventureListeners.add(recentMenuController);
 
         initView();
         markAsClean();
@@ -181,7 +183,7 @@ public class Builder extends JFrame
 
         File advFile = new File(Conf.builder().get("lastAdventure"));
         if (advFile.exists()) {
-            openAdventure(advFile);
+            open(advFile);
         }
     }
 
@@ -1013,7 +1015,7 @@ public class Builder extends JFrame
             saveFile = fileChooser.getSelectedFile();
             // saveConfigItem("lastOpenDir"); //111 TODO Remove me
 
-            openAdventure(saveFile);
+            open(saveFile);
         }
     }
 
@@ -1045,7 +1047,7 @@ public class Builder extends JFrame
             {
                 try {
                     if (isDirty) {
-                        saveAdventure(false);
+                        save(false);
                     }
                     Runner.runAdventure(saveFile);
                     // new Runner(adventure); TODO Remove this
@@ -1070,7 +1072,7 @@ public class Builder extends JFrame
         });
     }
 
-    public void openAdventure(File advFile)
+    public void open(File advFile)
     {
         DepthManager.getInstance().reset();
 
@@ -1092,19 +1094,17 @@ public class Builder extends JFrame
 
     private void fireOpenAdventureEvent(File adventureFile)
     {
-        for (OpenAdventureListener listener : openAdventureListeners) {
-            listener.adventureOpenned(adventureFile);
+        for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
+            listener.fileOpenedAction(adventureFile);
         }
-        
-        recentMenuController.fileOpenedAction(adventureFile);
     }
 
     private void saveAdventureMenuAction(boolean isSaveAs)
     {
-        saveAdventure(isSaveAs);
+        save(isSaveAs);
     }
 
-    public void saveAdventure(boolean isSaveAs)
+    public void save(boolean isSaveAs)
     {
         logger.debug("Saving...");
         boolean wasNewSaveFile = false;
@@ -1202,7 +1202,7 @@ public class Builder extends JFrame
         });
     }
 
-    public boolean hasAnOpenAdventure()
+    public boolean hasAnOpenEntity()
     {
         return adventure != null;
     }

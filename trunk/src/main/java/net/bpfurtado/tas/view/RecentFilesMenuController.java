@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.view;
 
@@ -38,15 +38,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import net.bpfurtado.tas.AdventureException;
-import net.bpfurtado.tas.AdventureOpenner;
 import net.bpfurtado.tas.Conf;
-import net.bpfurtado.tas.builder.FileOpennedListener;
-import net.bpfurtado.tas.builder.OpenAdventureAction;
+import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
+import net.bpfurtado.tas.builder.OpenEntityPersistedOnFileAction;
 
 /**
  * @author Bruno Patini Furtado
  */
-public class RecentFilesMenuController implements FileOpennedListener
+public class RecentFilesMenuController implements EntityPersistedOnFileOpenActionListener
 {
     private static final int MAX_ENTRIES_IN_RECENT_LIST = 10;
 
@@ -57,17 +57,17 @@ public class RecentFilesMenuController implements FileOpennedListener
     private LinkedList<File> recentFiles = new LinkedList<File>();
     private LinkedList<JMenuItem> menuItems = new LinkedList<JMenuItem>();
 
-    private AdventureOpenner adventureOpenner;
-    private String recentFileName;
+    private EntityPersistedOnFileOpenner entityOpenner;
+    private File historyFile;
 
-    private JFrame parentDialogFrame;
+    private JFrame parentFrame;
 
-    public RecentFilesMenuController(JFrame parentDialogFrame, AdventureOpenner advOpenner)
+    public RecentFilesMenuController(EntityPersistedOnFileOpenner openner, JFrame parent, String historyFileName)
     {
-        this.parentDialogFrame = parentDialogFrame;
-        this.adventureOpenner = advOpenner;
-        
-        recentFileName = obtainRecentAdventureFileName();
+        this.entityOpenner = openner;
+        this.parentFrame = parent;
+
+        this.historyFile = buildHistoryFile(historyFileName);
         createOpenRecentAdventuresMenu();
     }
 
@@ -87,26 +87,25 @@ public class RecentFilesMenuController implements FileOpennedListener
             openRecentMenu = new JMenu("Open Recent...");
             openRecentMenu.setIcon(Util.getImage("time.png"));
             openRecentMenu.setEnabled(false);
-            
+
             openRecentMenu.setMnemonic('R');
-            File recentFile = new File(recentFileName);
-            if (!recentFile.exists()) {
+            if (!historyFile.exists()) {
                 return;
             }
 
-            BufferedReader reader = new BufferedReader(new FileReader(recentFile));
+            BufferedReader reader = new BufferedReader(new FileReader(historyFile));
             for (String filePath = reader.readLine(); filePath != null; filePath = reader.readLine()) {
                 File file = new File(filePath);
                 if (file.exists()) {
-					addToRecent(file);
-				}
+                    addToRecent(file);
+                }
             }
             reader.close();
-            
+
             if (!recentFiles.isEmpty()) {
                 openRecentMenu.setEnabled(true);
             }
-            
+
         } catch (Exception e) {
             throw new AdventureException(e);
         }
@@ -114,23 +113,26 @@ public class RecentFilesMenuController implements FileOpennedListener
 
     private void addToRecent(File recentFile)
     {
-        if(recentFiles.contains(recentFile)) {
-            for(JMenuItem item : menuItems) {
-                if (item.getText().equals(recentFile.getName())
-                    || item.getText().startsWith("<html>"+recentFile.getName()+" <")) {
+        if (recentFiles.contains(recentFile)) {
+            for (JMenuItem item : menuItems) {
+                if (item.getText().equals(recentFile.getName()) 
+                 || item.getText().startsWith("<html>" + recentFile.getName() + " <")) 
+                {
                     openRecentMenu.remove(item);
                     menuItems.remove(item);
                     recentFiles.remove(recentFile);
 
-                    item.setText("<html>"+recentFile.getName()+" <DEFAULT_FONT size=-2 color=blue><b><i>"+
-                            sdf.format(new Date())+"</i></b></DEFAULT_FONT> </html>");
+                    item.setText("<html>" + recentFile.getName() + 
+                            " <DEFAULT_FONT size=-2 color=blue><b><i>" + 
+                            sdf.format(new Date()) + 
+                            "</i></b></DEFAULT_FONT> </html>");
 
                     openRecentMenu.add(item, 0);
                     menuItems.add(0, item);
                     recentFiles.addFirst(recentFile);
 
                     openRecentMenu.setEnabled(true);
-                    
+
                     saveRecentEntriesFile();
 
                     return;
@@ -155,7 +157,7 @@ public class RecentFilesMenuController implements FileOpennedListener
     private void saveRecentEntriesFile()
     {
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter(new File(recentFileName)));
+            PrintWriter writer = new PrintWriter(new FileWriter(historyFile));
             Collections.reverse(recentFiles);
             for (File f : recentFiles) {
                 writer.println(f.getAbsolutePath());
@@ -171,19 +173,15 @@ public class RecentFilesMenuController implements FileOpennedListener
     private JMenuItem buildRecentMenuItem(File recentFile)
     {
         JMenuItem menuItem = new JMenuItem(recentFile.getName());
-        menuItem.addActionListener(
-                new OpenAdventureAction(
-                        parentDialogFrame,
-                        adventureOpenner,
-                        recentFile.getAbsolutePath()));
+        menuItem.addActionListener(new OpenEntityPersistedOnFileAction(parentFrame, entityOpenner, recentFile));
         openRecentMenu.add(menuItem, 0);
 
         return menuItem;
     }
 
-    private String obtainRecentAdventureFileName()
+    private File buildHistoryFile(String fileName)
     {
-        File appHomeDir = Conf.findOrCreateAplicationHomeDir(adventureOpenner);
-        return appHomeDir + "/recent";
+        File appHomeDir = Conf.findOrCreateAplicationHomeDir(entityOpenner);
+        return new File(appHomeDir + File.separator + fileName); // "/recent.txt"
     }
 }
