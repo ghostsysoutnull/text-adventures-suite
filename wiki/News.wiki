@@ -2,4 +2,4 @@
 
 = News =
 
-Now Runner has save games feature!
+Now Runner has a 'Save Game' feature!
