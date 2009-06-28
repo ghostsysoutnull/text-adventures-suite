@@ -24,7 +24,6 @@ package net.bpfurtado.tas.view;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,13 +39,14 @@ import javax.swing.JMenuItem;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.AdventureOpenner;
+import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.builder.FileOpennedListener;
 import net.bpfurtado.tas.builder.OpenAdventureAction;
-import net.bpfurtado.tas.builder.OpenAdventureListener;
 
 /**
  * @author Bruno Patini Furtado
  */
-public class RecentAdventuresMenuController implements OpenAdventureListener
+public class RecentAdventuresMenuController implements FileOpennedListener
 {
     private static final int MAX_ENTRIES_IN_RECENT_LIST = 10;
 
@@ -62,10 +62,10 @@ public class RecentAdventuresMenuController implements OpenAdventureListener
 
     private JFrame parentDialogFrame;
 
-    public RecentAdventuresMenuController(JFrame parentDialogFrame, AdventureOpenner builder)
+    public RecentAdventuresMenuController(JFrame parentDialogFrame, AdventureOpenner advOpenner)
     {
         this.parentDialogFrame = parentDialogFrame;
-        this.adventureOpenner = builder;
+        this.adventureOpenner = advOpenner;
         recentFileName = obtainRecentAdventureFileName();
         createOpenRecentAdventuresMenu();
     }
@@ -75,9 +75,9 @@ public class RecentAdventuresMenuController implements OpenAdventureListener
         return openRecentMenu;
     }
 
-    public void adventureOpenned(File adventureFile)
+    public void fileOpenedAction(File file)
     {
-        addToRecent(adventureFile);
+        addToRecent(file);
     }
 
     private void createOpenRecentAdventuresMenu()
@@ -106,10 +106,8 @@ public class RecentAdventuresMenuController implements OpenAdventureListener
                 openRecentMenu.setEnabled(true);
             }
             
-        } catch (FileNotFoundException fnfe) {
-            throw new AdventureException(fnfe);
-        } catch (IOException ioe) {
-            throw new AdventureException(ioe);
+        } catch (Exception e) {
+            throw new AdventureException(e);
         }
     }
 
@@ -184,20 +182,7 @@ public class RecentAdventuresMenuController implements OpenAdventureListener
 
     private String obtainRecentAdventureFileName()
     {
-        File appHomeDir = findOrCreateAplicationHomeDir();
+        File appHomeDir = Conf.findOrCreateAplicationHomeDir(adventureOpenner);
         return appHomeDir + "/recent";
-    }
-
-    private File findOrCreateAplicationHomeDir()
-    {
-        String recentFilesFileName = System.getProperty("user.home");
-        recentFilesFileName += "/.adventure-tools/" + adventureOpenner.getApplicationName();
-        File recentFilesDir = new File(recentFilesFileName);
-        if (!recentFilesDir.exists()) {
-            if (!recentFilesDir.mkdirs()) {
-                throw new AdventureException("Could not create dirs [" + recentFilesDir + "]");
-            }
-        }
-        return recentFilesDir;
     }
 }
