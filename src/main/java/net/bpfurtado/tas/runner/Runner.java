@@ -61,10 +61,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import net.bpfurtado.tas.AdventureException;
-import net.bpfurtado.tas.AdventureOpenner;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.builder.Builder;
-import net.bpfurtado.tas.builder.OpenAdventureListener;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
@@ -79,7 +79,7 @@ import net.bpfurtado.tas.model.combat.EndOfCombatListener;
 import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
 import net.bpfurtado.tas.runner.combat.CombatFrame;
 import net.bpfurtado.tas.view.ErrorFrame;
-import net.bpfurtado.tas.view.RecentAdventuresMenuController;
+import net.bpfurtado.tas.view.RecentFilesMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.Util;
 
@@ -87,7 +87,7 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
+public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
@@ -112,17 +112,20 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     private JMenuItem saveMnIt;
 
     private final JFileChooser fileChooser = new JFileChooser();
-    private List<OpenAdventureListener> openAdventureListeners;
-    private RecentAdventuresMenuController recentMenuController;
+    private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
+    private RecentFilesMenuController recentAdventuresMenuController;
+    private RecentFilesMenuController recentSavedGamesMenuController;
 
     private PlayerPanelController statsView;
     protected CombatFrame combatFrame;
     protected Object skillToTestFrame;
 
+    private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
+
     public static Runner runAdventure(File adventureFile)
     {
         Runner r = new Runner();
-        r.openAdventure(adventureFile);
+        r.open(adventureFile);
         return r;
     }
 
@@ -155,14 +158,44 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
 
         File advFile = new File(Conf.runner().get("lastAdventure"));
         if (advFile.exists()) {
-            openAdventure(advFile);
+            open(advFile);
         }
     }
 
     private void init()
     {
-        openAdventureListeners = new LinkedList<OpenAdventureListener>();
-        recentMenuController = new RecentAdventuresMenuController(this, this);
+        recentAdventuresMenuController = new RecentFilesMenuController(this, this, "recentAdventures.txt");
+        recentSavedGamesMenuController = new RecentFilesMenuController(new EntityPersistedOnFileOpenner()
+        {
+            public String getApplicationName()
+            {
+                return Runner.this.getApplicationName();
+            }
+
+            public boolean hasAnOpenEntity()
+            {
+                return false;
+            }
+
+            public boolean isDirty()
+            {
+                return false;
+            }
+
+            public void open(File file)
+            {
+            }
+
+            public void save(boolean isSaveAs)
+            {
+            }
+        }, this, "recentSavedGames.txt");
+
+        openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openAdventureListeners.add(recentAdventuresMenuController);
+
+        this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openSavedGamesListener.add(recentSavedGamesMenuController);
 
         initView();
     }
@@ -234,7 +267,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         game.getPlayer().add(this);
     }
 
-    public void openAdventure(File saveFile)
+    public void open(File saveFile)
     {
         adventure = new XMLAdventureReader().read(saveFile);
 
@@ -338,7 +371,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
             new ErrorFrame(this, e, "Open Scene");
         }
     }
-    
+
     private void openScene(Scene to)
     {
         openScene(to, true);
@@ -347,7 +380,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     /**
      * Attention here!!!
      */
-    private void openScene(Scene to, boolean execActions) 
+    private void openScene(Scene to, boolean execActions)
     {
         if (execActions) {
             game.open(to);
@@ -404,7 +437,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         updateView();
     }
 
-    public boolean hasAnOpenAdventure()
+    public boolean hasAnOpenEntity()
     {
         return adventure != null;
     }
@@ -419,11 +452,9 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
 
     private void fireOpenAdventureEvent(File adventureFile)
     {
-        for (OpenAdventureListener listener : openAdventureListeners) {
-            listener.adventureOpenned(adventureFile);
+        for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
+            listener.fileOpenedAction(adventureFile);
         }
-        
-        recentMenuController.fileOpenedAction(adventureFile);
     }
 
     private JPanel createGamePanel()
@@ -541,7 +572,11 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
             }
         });
         menu.add(openMnIt);
-        menu.add(recentMenuController.getOpenRecentMenu());
+
+        menu.add(recentAdventuresMenuController.getOpenRecentMenu());
+        menu.add(new JSeparator());
+
+        menu.add(recentSavedGamesMenuController.getOpenRecentMenu());
         menu.add(new JSeparator());
 
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
@@ -581,12 +616,21 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
             SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
             Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
 
-            openAdventure(new File(saveGame.getAdventureFilePath()));
+            open(new File(saveGame.getAdventureFilePath()));
             game.open(saveGame);
             game.getPlayer().add(this);
             openScene(adventure.getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
+
+            fireOpenSavedGameEvent(saveGameFile);
         } catch (Exception e) {
             throw new AdventureException(e);
+        }
+    }
+
+    private void fireOpenSavedGameEvent(File saveGameFile)
+    {
+        for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
+            listener.fileOpenedAction(saveGameFile);
         }
     }
 
@@ -651,7 +695,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File adventureFile = fileChooser.getSelectedFile();
             System.out.println("Opening: " + adventureFile.getName() + ".");
-            openAdventure(adventureFile);
+            open(adventureFile);
         }
     }
 
@@ -681,7 +725,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         return false;
     }
 
-    public void saveAdventure(boolean isSaveAs)
+    public void save(boolean isSaveAs)
     {
         // Does nothing in this operations as a Adventure Runner
     }

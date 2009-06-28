@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.builder;
 
@@ -28,42 +28,41 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
-
-import net.bpfurtado.tas.AdventureOpenner;
+import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.view.Util;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author Bruno Patini Furtado
  */
-public class OpenAdventureAction implements ActionListener
+public class OpenEntityPersistedOnFileAction implements ActionListener
 {
-	private static Logger logger = Logger.getLogger(OpenAdventureAction.class);
-	
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(OpenEntityPersistedOnFileAction.class);
+
     private JFrame frame;
 
-    private AdventureOpenner adventureOpenner;
+    private EntityPersistedOnFileOpenner entityOpenner;
 
-    private String adventureFileName;
+    private File fileName;
 
-    public OpenAdventureAction(JFrame frame, AdventureOpenner adventureOpenner, String adventureFileName)
+    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, File fileName)
     {
         this.frame = frame;
-        this.adventureOpenner = adventureOpenner;
-        this.adventureFileName = adventureFileName;
+        this.entityOpenner = entityOpenner;
+        this.fileName = fileName;
     }
 
     public void actionPerformed(ActionEvent e)
     {
-    	logger.debug("HEre");
-    	
-        if (adventureOpenner.isDirty()) {
+        if (entityOpenner.isDirty()) {
             int answer = Util.showSaveDialog(frame, "Do you want to save it before openning another adventure?");
             if (answer == Util.SAVE_DIALOG_OPT_CANCEL)
                 return;
             else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
-                adventureOpenner.saveAdventure(false);
+                entityOpenner.save(false);
         }
-        adventureOpenner.openAdventure(new File(adventureFileName));
+        entityOpenner.open(fileName);
     }
 }

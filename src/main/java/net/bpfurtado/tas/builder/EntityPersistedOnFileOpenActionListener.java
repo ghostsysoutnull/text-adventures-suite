@@ -24,7 +24,7 @@ package net.bpfurtado.tas.builder;
 
 import java.io.File;
 
-public interface FileOpennedListener
+public interface EntityPersistedOnFileOpenActionListener
 {
     void fileOpenedAction(File file);
 }
