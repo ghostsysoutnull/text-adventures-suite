@@ -160,4 +160,17 @@ public class Conf
     {
         p.setProperty(key, value.toString());
     }
+
+    public static File findOrCreateAplicationHomeDir(AdventureOpenner adventureOpenner)
+    {
+        String recentFilesFileName = System.getProperty("user.home");
+        recentFilesFileName += "/.adventure-tools/" + adventureOpenner.getApplicationName();
+        File recentFilesDir = new File(recentFilesFileName);
+        if (!recentFilesDir.exists()) {
+            if (!recentFilesDir.mkdirs()) {
+                throw new AdventureException("Could not create dirs [" + recentFilesDir + "]");
+            }
+        }
+        return recentFilesDir;
+    }
 }

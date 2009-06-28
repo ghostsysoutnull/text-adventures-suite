@@ -163,7 +163,6 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     {
         openAdventureListeners = new LinkedList<OpenAdventureListener>();
         recentMenuController = new RecentAdventuresMenuController(this, this);
-        openAdventureListeners.add(recentMenuController);
 
         initView();
     }
@@ -423,6 +422,8 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         for (OpenAdventureListener listener : openAdventureListeners) {
             listener.adventureOpenned(adventureFile);
         }
+        
+        recentMenuController.fileOpenedAction(adventureFile);
     }
 
     private JPanel createGamePanel()
@@ -578,7 +579,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
         try { // 222
             XStream xs = new XStream();
             SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
-            logger.debug("last adv file = " + saveGame.getAdventureFilePath());
+            Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
 
             openAdventure(new File(saveGame.getAdventureFilePath()));
             game.open(saveGame);

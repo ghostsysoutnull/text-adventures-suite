@@ -159,7 +159,6 @@ public class Builder extends JFrame
     {
         openAdventureListeners = new LinkedList<OpenAdventureListener>();
         recentMenuController = new RecentAdventuresMenuController(this, this);
-        openAdventureListeners.add(recentMenuController);
 
         initView();
         markAsClean();
@@ -1096,6 +1095,8 @@ public class Builder extends JFrame
         for (OpenAdventureListener listener : openAdventureListeners) {
             listener.adventureOpenned(adventureFile);
         }
+        
+        recentMenuController.fileOpenedAction(adventureFile);
     }
 
     private void saveAdventureMenuAction(boolean isSaveAs)
