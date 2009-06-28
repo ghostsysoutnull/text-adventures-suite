@@ -61,10 +61,7 @@
         <priority value="debug"/>
         </category>
 
-        <category name="net.bpfurtado.adventure.runner.Runner">
-        <priority value="debug"/>
-        </category>
-
+     
         <category name="net.bpfurtado.adventure.runner.PlayerPanelController">
         <priority value="debug"/>
         </category>
@@ -74,6 +71,10 @@
         </category>
 
     -->
+    
+   	<category name="net.bpfurtado.tas.runner.Runner">
+        <priority value="debug"/>
+	</category>
 
     <category name="net.bpfurtado.tas.view.HelpDialog">
         <priority value="debug" />

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.bpfurtado.tas.model.Game;
+import net.bpfurtado.tas.model.Scene;
 
 import org.apache.log4j.Logger;
 
@@ -81,9 +82,11 @@ public class CodeExecutionAnalyser
 				game.getCurrentScene().setText(text);
 			}
 
-		} catch (EvalError e1) {
-			throw new BadSceneCodeException("Bad Scene code, call the scene author :)", e1);
-		}
+		} catch (EvalError e) {
+            Scene currentScene = game.getCurrentScene();
+            String sceneStr = "[Scene: id=" + currentScene.getId() + ", code=" + currentScene.getCode() + ", name=" + currentScene.getName() + "]";
+            throw new BadSceneCodeException("Bad Scene " + sceneStr + " code, call the scene author :)", e);
+        }
 		return actions;
 	}
 }
