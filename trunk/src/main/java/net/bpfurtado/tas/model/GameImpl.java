@@ -71,15 +71,14 @@ public class GameImpl implements Game
 		}
 	}
 	
-	/**
-	 * FIXME Remove method if not used!
-	 */
-	public void open(SaveGame saveGame)
+	public void openNoActions(Scene to)
+    {
+	    setCurrentScene(to);
+    }
+
+    public void open(SaveGame saveGame)
     {
         this.player = saveGame.getPlayer();
-//        int sceneId = saveGame.getSceneId();
-//        Scene lastScene = adventure.getScene(sceneId);
-//        open(lastScene);
     }
 
     private void innerOpenPath(Scene scene)
