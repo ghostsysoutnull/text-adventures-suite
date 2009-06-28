@@ -33,11 +33,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -87,8 +85,12 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
+import com.thoughtworks.xstream.XStream;
+
 public class Runner extends JFrame implements AdventureOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
+    private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
+
     private static final long serialVersionUID = -2215614593644954452L;
 
     private static final Logger logger = Logger.getLogger(Runner.class);
@@ -256,7 +258,7 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     }
 
     /**
-     * TODO rever o uso deste método
+     * TODO review this method usage
      */
     public void goTo(Scene sceneToOpen)
     {
@@ -337,13 +339,22 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
             new ErrorFrame(this, e, "Open Scene");
         }
     }
+    
+    private void openScene(Scene to)
+    {
+        openScene(to, true);
+    }
 
     /**
      * Attention here!!!
      */
-    private void openScene(Scene to)
+    private void openScene(Scene to, boolean execActions) 
     {
-        game.open(to);
+        if (execActions) {
+            game.open(to);
+        } else {
+            game.openNoActions(to);
+        }
 
         to = game.getCurrentScene();
         openSceneLight(to);
@@ -565,13 +576,14 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
     private void openSaveGameFile(File saveGameFile)
     {
         try { // 222
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(saveGameFile));
-            SaveGame saveGame = (SaveGame) in.readObject();
+            XStream xs = new XStream();
+            SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
             logger.debug("last adv file = " + saveGame.getAdventureFilePath());
-            
+
             openAdventure(new File(saveGame.getAdventureFilePath()));
             game.open(saveGame);
-            openScene(adventure.getScene(saveGame.getSceneId()));
+            game.getPlayer().add(this);
+            openScene(adventure.getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
         } catch (Exception e) {
             throw new AdventureException(e);
         }
@@ -595,10 +607,13 @@ public class Runner extends JFrame implements AdventureOpenner, GoToSceneListene
             log("Saving game to file: [" + saveGameName + "]...");
             File saveGameFile = new File(saveGameName);
             saveGameFile.createNewFile();
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(saveGameFile));
-            out.writeObject(saveGame);
-            out.flush();
-            out.close();
+
+            XStream xs = new XStream();
+            String savedGameXML = xs.toXML(saveGame);
+            PrintWriter writer = new PrintWriter(saveGameFile);
+            writer.print(savedGameXML);
+            writer.flush();
+            writer.close();
             log("Game saved!");
         } catch (IOException e) {
             throw new AdventureException(e);

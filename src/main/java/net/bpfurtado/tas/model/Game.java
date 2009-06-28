@@ -46,4 +46,5 @@ public interface Game
 	void addPathToHideByOrder(Collection<Integer> pathsToHide);
 	void execAssertions();
     void open(SaveGame saveGame);
+    void openNoActions(Scene to);
 }

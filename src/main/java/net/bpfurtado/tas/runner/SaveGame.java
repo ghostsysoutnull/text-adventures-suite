@@ -44,9 +44,12 @@ public class SaveGame implements Serializable
         this.adventureFilePath = adventureFile;
     }
 
-    public SaveGame(Player p, int sceneId)
+    public SaveGame(Player player, int sceneId)
     {
-        this.player = p;
+        this.player = player;
+        //Otherwise we get a ref to the Runner itself, through event listeners...
+        this.player.clearEventListeners();
+        
         this.sceneId = sceneId;
     }
 
