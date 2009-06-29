@@ -565,10 +565,47 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private void menu()
     {
         JMenuBar menuBar = new JMenuBar();
-        JMenu menu = new JMenu("Adventure");
-        menu.setMnemonic('A');
+        menuAdv(menuBar);
+        menuSaveGame(menuBar);
 
-        menuBar.add(menu);
+        SettingsUtil.addSettingsMenu(menuBar, Conf.runner());
+        Util.addHelpMenu(menuBar, this);
+
+        setJMenuBar(menuBar);
+    }
+
+    private void menuSaveGame(JMenuBar menuBar)
+    {
+        JMenu saveGameMenu = new JMenu("Save Game");
+        saveGameMenu.setMnemonic('G');
+        menuBar.add(saveGameMenu);
+
+        this.saveMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                saveGameAction();
+            }
+        });
+
+        Util.menuItem("Open Saved Game", 'O', KeyEvent.VK_O, "folder_table.png", saveGameMenu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                loadSavedGameAction();
+            }
+        });
+
+        saveGameMenu.add(new JSeparator());
+        saveGameMenu.add(recentSavedGamesMenuController.getOpenRecentMenu());
+    }
+
+    private void menuAdv(JMenuBar menuBar)
+    {
+        JMenu advMenu = new JMenu("Adventure");
+        advMenu.setMnemonic('A');
+
+        menuBar.add(advMenu);
 
         JMenuItem startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
         startAgainMnIt.addActionListener(new ActionListener()
@@ -581,23 +618,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 }
             }
         });
-        menu.add(startAgainMnIt);
-
-        this.saveMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", menu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                saveGameAction();
-            }
-        });
-
-        Util.menuItem("Load Saved Game", 'l', KeyEvent.VK_L, "folder_table.png", menu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                loadSavedGameAction();
-            }
-        });
+        advMenu.add(startAgainMnIt);
 
         JMenuItem openMnIt = new JMenuItem("Open", Util.getImage("folder_table.png"));
         openMnIt.addActionListener(new ActionListener()
@@ -607,13 +628,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 openMenuAction();
             }
         });
-        menu.add(openMnIt);
+        advMenu.add(openMnIt);
 
-        menu.add(recentAdventuresMenuController.getOpenRecentMenu());
-        menu.add(new JSeparator());
-
-        menu.add(recentSavedGamesMenuController.getOpenRecentMenu());
-        menu.add(new JSeparator());
+        advMenu.add(recentAdventuresMenuController.getOpenRecentMenu());
+        advMenu.add(new JSeparator());
 
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
         exitBt.setIcon(Util.getImage("cancel.png"));
@@ -625,12 +643,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 exitApplication();
             }
         });
-        menu.add(exitBt);
-
-        SettingsUtil.addSettingsMenu(menuBar, Conf.runner());
-        Util.addHelpMenu(menuBar, this);
-
-        setJMenuBar(menuBar);
+        advMenu.add(exitBt);
     }
 
     protected void loadSavedGameAction()
@@ -694,8 +707,9 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             writer.flush();
             writer.close();
             log("Game saved!");
-            
-            //Will signal the recent menu to update: FIXME: it's a bit confusing...
+
+            // Will signal the recent menu to update: FIXME: it's a bit
+            // confusing...
             fireOpenSavedGameEvent(saveGameFile);
         } catch (IOException e) {
             throw new AdventureException(e);
