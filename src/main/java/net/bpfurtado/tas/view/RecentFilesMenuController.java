@@ -78,8 +78,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
 
     public void fileOpenedAction(File file)
     {
-        //111
         addToRecent(file);
+        openRecentMenu.setEnabled(true);
     }
 
     private void createOpenRecentAdventuresMenu()
