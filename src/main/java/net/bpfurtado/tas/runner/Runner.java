@@ -87,7 +87,7 @@ import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
+public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
 {
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
@@ -164,8 +164,42 @@ public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoTo
 
     private void init()
     {
-        recentAdventuresMenuController = new RecentFilesMenuController(this, this, "recentAdventures.txt");
-        recentSavedGamesMenuController = new RecentFilesMenuController(new EntityPersistedOnFileOpenner()
+        buildRecentMenus();
+        initView();
+    }
+
+    private void buildRecentMenus()
+    {
+        EntityPersistedOnFileOpenner advOpenner = new EntityPersistedOnFileOpenner()
+        {
+            public String getApplicationName()
+            {
+                return Runner.this.getApplicationName();
+            }
+
+            public boolean hasAnOpenEntity()
+            {
+                return Runner.this.hasAnOpenEntity();
+            }
+
+            public boolean isDirty()
+            {
+                return Runner.this.isDirty();
+            }
+
+            public void open(File file)
+            {
+                Runner.this.open(file);
+            }
+
+            public void save(boolean isSaveAs)
+            {
+                Runner.this.save(isSaveAs);
+            }
+        };
+        recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
+
+        EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
         {
             public String getApplicationName()
             {
@@ -184,20 +218,22 @@ public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoTo
 
             public void open(File file)
             {
+                Runner.this.openSaveGameFile(file);
             }
 
             public void save(boolean isSaveAs)
             {
+                Runner.this.saveGameAction();
             }
-        }, this, "recentSavedGames.txt");
+        };
+
+        recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
 
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
 
         this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openSavedGamesListener.add(recentSavedGamesMenuController);
-
-        initView();
     }
 
     private void initView()
@@ -551,7 +587,7 @@ public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoTo
         {
             public void actionPerformed(ActionEvent e)
             {
-                saveAction();
+                saveGameAction();
             }
         });
 
@@ -634,10 +670,8 @@ public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoTo
         }
     }
 
-    protected void saveAction()
+    private void saveGameAction()
     {
-        logger.debug("Save...");
-
         SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
         saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
 
@@ -660,6 +694,9 @@ public class Runner extends JFrame implements EntityPersistedOnFileOpenner, GoTo
             writer.flush();
             writer.close();
             log("Game saved!");
+            
+            //Will signal the recent menu to update: FIXME: it's a bit confusing...
+            fireOpenSavedGameEvent(saveGameFile);
         } catch (IOException e) {
             throw new AdventureException(e);
         }
