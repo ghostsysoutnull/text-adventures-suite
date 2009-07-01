@@ -40,16 +40,20 @@ class SceneTextAreaPopupListener extends MouseAdapter
     private static final Logger logger = Logger.getLogger(SceneTextAreaPopupListener.class);
 
     private JPopupMenu popup;
+    private JTextArea sceneTA;
+    
     private JMenuItem createPathMnIt;
     private JMenuItem splitSceneMnIt;
-    private JTextArea sceneTA;
+    private JMenuItem combatMnIt;
 
-    SceneTextAreaPopupListener(JPopupMenu popupMenu, JMenuItem createPathMnIt, JMenuItem splitSceneMnIt, JTextArea sceneTA)
+    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt, JMenuItem splitSceneMnIt, JMenuItem combatMnIt)
     {
         popup = popupMenu;
-        this.createPathMnIt = createPathMnIt;
         this.sceneTA = sceneTA;
+        
+        this.createPathMnIt = createPathMnIt;
         this.splitSceneMnIt = splitSceneMnIt;
+        this.combatMnIt = combatMnIt;
     }
 
     public void mousePressed(MouseEvent e)
@@ -73,6 +77,7 @@ class SceneTextAreaPopupListener extends MouseAdapter
             splitSceneMnIt.setEnabled(false);
             createPathMnIt.setText("Select some text...");
         } else {
+            combatMnIt.setEnabled(true);
             splitSceneMnIt.setEnabled(true);
             createPathMnIt.setEnabled(true);
             createPathMnIt.setText("Create Path '" + sceneTA.getSelectedText().trim() + "'");

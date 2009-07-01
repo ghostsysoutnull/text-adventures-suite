@@ -390,9 +390,11 @@ public class Scene extends TextObject implements Comparable<Scene>
         logger.debug("getPathsSize()=" + getPathsSize());
         logger.debug("type.exactPathsNumberPermited()=" + type.exactPathsNumberPermited());
 
-        boolean canHaveMorePaths = !(type.hasPathsNumberRestrictions() && getPathsSize() >= type.exactPathsNumberPermited());
-        logger.debug("canHaveMorePaths=" + canHaveMorePaths);
-        return canHaveMorePaths;
+        if (type.hasPathsNumberRestrictions()) {
+            return getPathsSize() < type.exactPathsNumberPermited();
+        } else {
+            return true;
+        }
     }
 
     public Skill getSkillToTest()
