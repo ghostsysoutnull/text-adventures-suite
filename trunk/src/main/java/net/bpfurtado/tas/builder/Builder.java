@@ -84,6 +84,7 @@ import net.bpfurtado.tas.model.DepthManager;
 import net.bpfurtado.tas.model.IPath;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.model.SceneType;
+import net.bpfurtado.tas.model.combat.Fighter;
 import net.bpfurtado.tas.model.persistence.AdventureReaderException;
 import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
 import net.bpfurtado.tas.model.persistence.XMLAdventureWriter;
@@ -450,7 +451,9 @@ public class Builder extends JFrame
         sceneTypesWidgets.updateView(currentScene, adventure.getStart());
 
         pathsPane.setVisible(!currentScene.isEnd());
-        newPathBt.setVisible(currentScene.canHaveMorePaths());
+        
+        logger.debug("newPathBt.setVisible = " + currentScene.canHaveMorePaths());
+        newPathBt.setEnabled(currentScene.canHaveMorePaths());
 
         removeTab(TAB_TITLE_COMBAT);
         removeTab(TAB_TITLE_SKILL_TEST);
@@ -465,7 +468,7 @@ public class Builder extends JFrame
         Util.showComponent(pathsPane);
     }
 
-    private void createSkillTestTab(Scene actualScene2)
+    private void createSkillTestTab(Scene currentSceneAux)
     {
         JPanel p = new JPanel();
         p.add(new JLabel("Test your Skill"));
@@ -477,7 +480,7 @@ public class Builder extends JFrame
         sceneTabs.setSelectedIndex(1);
     }
 
-    private void createCombatTab(Scene scene)
+    private BuilderCombatPanelManager createCombatTab(Scene scene)
     {
         BuilderCombatPanelManager combatPanelManager = new BuilderCombatPanelManager(this, currentScene.getCombat());
         if (sceneTabs.indexOfTab(TAB_TITLE_COMBAT) != -1) {
@@ -485,6 +488,19 @@ public class Builder extends JFrame
         }
         sceneTabs.insertTab(TAB_TITLE_COMBAT, null/* icon */, combatPanelManager.getPanel(), null/* tip */, 1);
         sceneTabs.setSelectedIndex(1);
+        
+        return combatPanelManager;
+    }
+
+    private void createCombatTab(Scene scene, String rawTextWithEnemy)
+    { 
+        //333
+        
+        changeSceneTypeEvent(SceneType.combat);
+        
+        BuilderCombatPanelManager combatPanelManager = createCombatTab(scene);
+        Fighter fighter = new CombatEnemyRawTextParser().parse(rawTextWithEnemy);
+        combatPanelManager.addNewFighterAction(fighter);
     }
 
     private void removeTab(String tabName)
@@ -540,8 +556,17 @@ public class Builder extends JFrame
             }
         });
         popupMenu.add(splitSceneMnIt);
-
-        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, createPathMnIt, splitSceneMnIt, sceneTA));
+        
+        final JMenuItem addCombatEnemiesMnIt = new JMenuItem("Add Combat Enemy");
+        addCombatEnemiesMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                addCombatEnemySceneTextAreaContextMenuItemAction();
+            }
+        });
+        popupMenu.add(addCombatEnemiesMnIt);
+        
+        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt, addCombatEnemiesMnIt));
 
         panel.add(headerFieldsPanelWidgets());
 
@@ -563,6 +588,13 @@ public class Builder extends JFrame
         mainPathsPane = createPathsPane();
         panel.add(mainPathsPane);
         return panel;
+    }
+
+    protected void addCombatEnemySceneTextAreaContextMenuItemAction()
+    {
+        // 111
+        String rawTextWithEnemy = sceneTA.getSelectedText();
+        createCombatTab(currentScene, rawTextWithEnemy);
     }
 
     protected void splitSceneAction()
@@ -672,7 +704,7 @@ public class Builder extends JFrame
 
         Util.addWidth(tagsPn, 10);
 
-        this.sceneTypesWidgets = new SceneTypesWidgets(tagsPn, this); // 222
+        this.sceneTypesWidgets = new SceneTypesWidgets(tagsPn, this);
 
         return tagsPn;
     }

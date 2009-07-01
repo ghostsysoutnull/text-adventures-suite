@@ -142,16 +142,7 @@ public class BuilderCombatPanelManager
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				Fighter fighter = npcGen.generateFighter();
-				combat.add(fighter);
-				DefaultListModel m = (DefaultListModel) list.getModel();
-				m.addElement(fighter);
-				
-				int idx = m.getSize() - 1;
-				list.setSelectedIndex(idx);
-				list.ensureIndexIsVisible(idx);
-				
-				adv.markAsDirty();
+				addNewFighterAction(npcGen.generateFighter()); //111
 			}
 		});
 		tb.add(newBt);
@@ -443,6 +434,19 @@ public class BuilderCombatPanelManager
 	{
 		return panel;
 	}
+
+    public void addNewFighterAction(Fighter fighter) //222
+    {
+        combat.add(fighter);
+        DefaultListModel m = (DefaultListModel) list.getModel();
+        m.addElement(fighter);
+        
+        int idx = m.getSize() - 1;
+        list.setSelectedIndex(idx);
+        list.ensureIndexIsVisible(idx);
+        
+        adv.markAsDirty();
+    }
 }
 
 class FighterCellRenderer extends JLabel implements ListCellRenderer

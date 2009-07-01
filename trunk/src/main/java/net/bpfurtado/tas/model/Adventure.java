@@ -195,4 +195,10 @@ public class Adventure
     {
         this.assertions = assertions;
     }
+
+    public void addCombatEnemy(String rawTextWithEnemy)
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }
