@@ -452,7 +452,6 @@ public class Builder extends JFrame
 
         pathsPane.setVisible(!currentScene.isEnd());
         
-        logger.debug("newPathBt.setVisible = " + currentScene.canHaveMorePaths());
         newPathBt.setEnabled(currentScene.canHaveMorePaths());
 
         removeTab(TAB_TITLE_COMBAT);
