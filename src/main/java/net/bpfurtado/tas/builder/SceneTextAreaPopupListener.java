@@ -43,17 +43,16 @@ class SceneTextAreaPopupListener extends MouseAdapter
     private JTextArea sceneTA;
     
     private JMenuItem createPathMnIt;
-    private JMenuItem splitSceneMnIt;
-    private JMenuItem combatMnIt;
 
-    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt, JMenuItem splitSceneMnIt, JMenuItem combatMnIt)
+    private JMenuItem[] m;
+
+    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt, JMenuItem... menuItems)
     {
         popup = popupMenu;
         this.sceneTA = sceneTA;
         
         this.createPathMnIt = createPathMnIt;
-        this.splitSceneMnIt = splitSceneMnIt;
-        this.combatMnIt = combatMnIt;
+        this.m = menuItems;
     }
 
     public void mousePressed(MouseEvent e)
@@ -74,13 +73,18 @@ class SceneTextAreaPopupListener extends MouseAdapter
 
         if (sceneTA.getSelectedText() == null) {
             createPathMnIt.setEnabled(false);
-            splitSceneMnIt.setEnabled(false);
             createPathMnIt.setText("Select some text...");
+            
+            for(JMenuItem it : m) {
+                it.setEnabled(false);
+            }
         } else {
-            combatMnIt.setEnabled(true);
-            splitSceneMnIt.setEnabled(true);
             createPathMnIt.setEnabled(true);
             createPathMnIt.setText("Create Path '" + sceneTA.getSelectedText().trim() + "'");
+            
+            for(JMenuItem it : m) {
+                it.setEnabled(true);
+            }
         }
 
         popup.show(e.getComponent(), e.getX(), e.getY());

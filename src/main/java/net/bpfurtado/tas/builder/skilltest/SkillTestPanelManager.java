@@ -31,63 +31,69 @@ import net.bpfurtado.tas.model.Skill;
 
 public class SkillTestPanelManager
 {
-	private JTextField nameTf;
-	private JPanel p;
+    private JTextField nameTf;
+    private JPanel p;
 
-	private Scene s;
+    private Scene s;
 
-	public SkillTestPanelManager(Scene s)
-	{
-		this.s = s;
+    public SkillTestPanelManager(Scene s)
+    {
+        this.s = s;
 
-		if (s.getSkillToTest() == null) {
-			addInitialSkill();
-		}
-		
-		widgets();
-		events();
+        if (s.getSkillToTest() == null) {
+            addInitialSkill();
+        }
 
-	}
+        widgets();
+        events();
 
-	private void widgets()
-	{
-		p = new JPanel();
-		p.add(new JLabel("Skill to test:"));
+    }
 
-		nameTf = new JTextField(s.getSkillToTest().getName(), 35);
-		p.add(nameTf);
-	}
+    private void widgets()
+    {
+        p = new JPanel();
+        p.add(new JLabel("Skill to test:"));
 
-	private void events()
-	{
-		nameTf.getDocument().addDocumentListener(new DocumentListener()
-		{
-			public void changedUpdate(DocumentEvent e)
-			{
-				System.out.println(".changedUpdate()");
-			}
+        nameTf = new JTextField(s.getSkillToTest().getName(), 35);
+        p.add(nameTf);
+    }
 
-			public void insertUpdate(DocumentEvent e)
-			{
-				s.getSkillToTest().setName(nameTf.getText());
-				System.out.println(".insertUpdate()");
-			}
+    private void events()
+    {
+        nameTf.getDocument().addDocumentListener(new DocumentListener()
+        {
+            public void changedUpdate(DocumentEvent e)
+            {
+                System.out.println(".changedUpdate()");
+            }
 
-			public void removeUpdate(DocumentEvent e)
-			{
-				s.getSkillToTest().setName(nameTf.getText());
-				System.out.println(".removeUpdate()");
-			}
-		});
-	}
+            public void insertUpdate(DocumentEvent e)
+            {
+                s.getSkillToTest().setName(nameTf.getText());
+                System.out.println(".insertUpdate()");
+            }
 
-	private void addInitialSkill()
-	{
-		s.setSkillToTest(new Skill(""));
-	}
+            public void removeUpdate(DocumentEvent e)
+            {
+                s.getSkillToTest().setName(nameTf.getText());
+                System.out.println(".removeUpdate()");
+            }
+        });
+    }
 
-	public JPanel getPanel()
-	{
-		return p;
-	}
+    private void addInitialSkill()
+    {
+        s.setSkillToTest(new Skill(""));
+    }
+
+    public void setSkill(String name)
+    {
+        s.getSkillToTest().setName(name);
+        nameTf.setText(name);
+    }
+
+    public JPanel getPanel()
+    {
+        return p;
+    }
 }

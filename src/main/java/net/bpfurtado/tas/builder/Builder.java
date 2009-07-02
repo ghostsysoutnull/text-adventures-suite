@@ -466,8 +466,19 @@ public class Builder extends JFrame
         Util.showComponent(pathsBtsPane);
         Util.showComponent(pathsPane);
     }
-
-    private void createSkillTestTab(Scene currentSceneAux)
+    
+    private void createSkillTestTab(Scene scene, String skillPhraseRawText)
+    {
+        // 222
+        changeSceneTypeEvent(SceneType.skillTest);
+        
+        SkillTestPanelManager m = createSkillTestTab(scene);
+        if (skillPhraseRawText.toLowerCase().indexOf("luck") != -1) {
+            m.setSkill("Luck");
+        }
+    }
+    
+    private SkillTestPanelManager createSkillTestTab(Scene currentSceneAux)
     {
         JPanel p = new JPanel();
         p.add(new JLabel("Test your Skill"));
@@ -475,8 +486,12 @@ public class Builder extends JFrame
         if (sceneTabs.indexOfTab(TAB_TITLE_COMBAT) != -1) {
             sceneTabs.removeTabAt(1);
         }
-        sceneTabs.insertTab(TAB_TITLE_SKILL_TEST, null/* icon */, new SkillTestPanelManager(currentScene).getPanel(), null/* tip */, 1);
+        
+        SkillTestPanelManager skillTestPanelManager = new SkillTestPanelManager(currentSceneAux);
+        sceneTabs.insertTab(TAB_TITLE_SKILL_TEST, null/* icon */, skillTestPanelManager.getPanel(), null/* tip */, 1);
         sceneTabs.setSelectedIndex(1);
+        
+        return skillTestPanelManager;
     }
 
     private BuilderCombatPanelManager createCombatTab(Scene scene)
@@ -493,8 +508,6 @@ public class Builder extends JFrame
 
     private void createCombatTab(Scene scene, String rawTextWithEnemy)
     { 
-        //333
-        
         changeSceneTypeEvent(SceneType.combat);
         
         BuilderCombatPanelManager combatPanelManager = createCombatTab(scene);
@@ -565,7 +578,20 @@ public class Builder extends JFrame
         });
         popupMenu.add(addCombatEnemiesMnIt);
         
-        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt, addCombatEnemiesMnIt));
+        final JMenuItem testYourSkillMnIt = new JMenuItem("Add 'Test Your Skill'");
+        testYourSkillMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                //000
+                addTestYourSkillMnItSceneTextAreaContextMenuItemAction();
+            }
+        });
+        popupMenu.add(testYourSkillMnIt);
+        
+        sceneTA.addMouseListener(
+                new SceneTextAreaPopupListener(
+                        popupMenu, sceneTA, createPathMnIt, 
+                        splitSceneMnIt, addCombatEnemiesMnIt, testYourSkillMnIt));
 
         panel.add(headerFieldsPanelWidgets());
 
@@ -589,11 +615,16 @@ public class Builder extends JFrame
         return panel;
     }
 
+    protected void addTestYourSkillMnItSceneTextAreaContextMenuItemAction()
+    {
+        //111
+        
+        createSkillTestTab(currentScene, sceneTA.getSelectedText());
+    }
+
     protected void addCombatEnemySceneTextAreaContextMenuItemAction()
     {
-        // 111
-        String rawTextWithEnemy = sceneTA.getSelectedText();
-        createCombatTab(currentScene, rawTextWithEnemy);
+        createCombatTab(currentScene, sceneTA.getSelectedText());
     }
 
     protected void splitSceneAction()
