@@ -466,7 +466,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void openSceneLight(Scene sceneToOpen)
     {
-        sceneTA.setText("[" + sceneToOpen.getId() + "]\n" + sceneToOpen.getText());
+        //sceneTA.setText("[" + sceneToOpen.getId() + "]\n" + sceneToOpen.getText());
+        sceneTA.setText(sceneToOpen.getText());
         sceneTA.setCaretPosition(0);
 
         createPathsPane(sceneToOpen);
@@ -480,7 +481,11 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void updateView()
     {
-        advName.setText(adventure.getName());
+        if (game.getCurrentScene() == null) {
+            advName.setText(adventure.getName());
+        } else {
+            advName.setText(adventure.getName() + " [" + game.getCurrentScene().getId() + "]");
+        }
         statsView.updateView();
 
         Util.showComponent(mainPanel);

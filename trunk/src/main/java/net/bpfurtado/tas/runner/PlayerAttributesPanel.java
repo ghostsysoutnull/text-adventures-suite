@@ -74,10 +74,11 @@ public class PlayerAttributesPanel
         for (Component c : main.getComponents()) {
             if (c instanceof JLabel) {
                 JLabel l = (JLabel) c;
-                if (l.getText().indexOf(ev.getId()) != -1) {
-                    logger.debug("Color of " + l.getText() + " to " + color);
-                    l.setForeground(color);
-                }
+                if (ev.getId() != null)
+                    if (l.getText().indexOf(ev.getId()) != -1) {
+                        logger.debug("Color of " + l.getText() + " to " + color);
+                        l.setForeground(color);
+                    }
             }
         }
     }
