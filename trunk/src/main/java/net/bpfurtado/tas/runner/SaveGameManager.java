@@ -23,11 +23,12 @@
 package net.bpfurtado.tas.runner;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map.Entry;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
@@ -35,27 +36,112 @@ import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
+
 import com.thoughtworks.xstream.XStream;
 
 public class SaveGameManager
 {
-    private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
     
-    private SaveGameListener listener;
+    private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
+
     private Game game;
-    
+    private SaveGameListener listener;
+
     public SaveGameManager(Game game, SaveGameListener list)
     {
         this.game = game;
         this.listener = list;
     }
 
-    void openSaveGameFile(File saveGameFile, PlayerEventListener playerEventListener)
+    void save()
     {
-        try { 
-            XStream xs = new XStream();
-            SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
+        SaveGame saveGame = buildSaveGame();
+        Document xml = createXML(saveGame);
+        File file = buildSaveGameFile();
+
+        write(xml, file);
+
+        listener.fireOpenSavedGameEvent(file);
+    }
+
+    private File buildSaveGameFile()
+    {
+        File savedGamesFolder = Conf.getSavedGamesFolder();
+
+        String saveGameName = savedGamesFolder.getAbsolutePath() + File.separator + game.getAdventure().getName();
+        saveGameName += "#" + sdf.format(new Date());
+        saveGameName = saveGameName.replaceAll(" ", "") + ".saveGame.tas";
+
+        File saveGameFile = new File(saveGameName);
+        return saveGameFile;
+    }
+
+    private SaveGame buildSaveGame()
+    {
+        SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
+        saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
+        return saveGame;
+    }
+
+    private Document createXML(SaveGame saveGame)
+    {
+        Document xml = DocumentHelper.createDocument();
+
+        Element root = xml.addElement("savegame");
+        root.addAttribute("sceneId", saveGame.getSceneId() + "");
+        root.addAttribute("adventureFilePath", saveGame.getAdventureFilePath());
+
+        Element p = root.addElement("player");
+
+        Element skills = p.addElement("skills");
+        for (Skill sk : saveGame.getPlayer().getSkills()) {
+            Element skill = skills.addElement("skill");
+            skill.addAttribute("name", sk.getName());
+            skill.addAttribute("level", sk.getLevel() + "");
+        }
+
+        Element attributes = p.addElement("attributes");
+        for (Entry<String, String> e : saveGame.getPlayer().getAttributesEntrySet()) {
+            Element attribute = attributes.addElement("skill");
+            attribute.addAttribute("key", e.getKey());
+            attribute.addAttribute("value", e.getValue());
+        }
+
+        return xml;
+    }
+
+    private void write(Document xml, File saveFile)
+    {
+        try {
+            listener.log("Saving game to file: [" + saveFile + "]...");
+
+            OutputFormat format = OutputFormat.createPrettyPrint();
+            format.setEncoding("ISO-8859-1");
+            format.setNewlines(true);
+            format.setLineSeparator(System.getProperty("line.separator"));
+            XMLWriter writer = new XMLWriter(new FileWriter(saveFile), format);
+
+            writer.write(xml);
+            writer.flush();
+            writer.close();
+
+            listener.log("Game saved!");
+        } catch (Exception e) {
+            throw new AdventureException("Error writing Save Game", e);
+        }
+    }
+
+    void open(File saveGameFile, PlayerEventListener playerEventListener)
+    {
+        try {
+            SaveGame saveGame = read(saveGameFile);
+            
             Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
 
             for (Skill s : saveGame.getPlayer().getSkills()) {
@@ -73,35 +159,11 @@ public class SaveGameManager
         }
     }
 
-    void saveGameAction()
+    private SaveGame read(File saveGameFile) throws FileNotFoundException
     {
-        SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
-        saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
-
-        File savedGamesFolder = Conf.getSavedGamesFolder();
-
-        String saveGameName = savedGamesFolder.getAbsolutePath() + File.separator + game.getAdventure().getName();
-        saveGameName += "#" + sdf.format(new Date());
-        saveGameName = saveGameName.replaceAll(" ", "") + ".saveGame.tas";
-
-        try {
-            listener.log("Saving game to file: [" + saveGameName + "]...");
-            File saveGameFile = new File(saveGameName);
-            saveGameFile.createNewFile();
-
-            XStream xs = new XStream();
-            String savedGameXML = xs.toXML(saveGame);
-            PrintWriter writer = new PrintWriter(saveGameFile);
-            writer.print(savedGameXML);
-            writer.flush();
-            writer.close();
-            listener.log("Game saved!");
-
-            // Will signal the recent menu to update: FIXME: it's a bit
-            // confusing...
-            listener.fireOpenSavedGameEvent(saveGameFile);
-        } catch (IOException e) {
-            throw new AdventureException(e);
-        }
+        //FIXME not using XStream anymore
+        XStream xs = new XStream();
+        SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
+        return saveGame;
     }
 }
