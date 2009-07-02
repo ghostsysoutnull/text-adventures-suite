@@ -33,11 +33,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -85,16 +80,12 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-import com.thoughtworks.xstream.XStream;
-
-public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener
+public class Runner extends JFrame 
+    implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
-    private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
-
     private static final long serialVersionUID = -2215614593644954452L;
 
     private static final Logger logger = Logger.getLogger(Runner.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
     private Game game;
     private Adventure adventure;
@@ -121,6 +112,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     protected Object skillToTestFrame;
 
     private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
+
+    private SaveGameManager saveGameManager;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -153,6 +146,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void openLastAdventure()
     {
+        logger.debug("START");
+        
         if (!Conf.runner().is("openLastAdventureOnStart", false))
             return;
 
@@ -166,6 +161,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     {
         buildRecentMenus();
         initView();
+        
+        //openLastAdventure();
     }
 
     private void buildRecentMenus()
@@ -218,12 +215,12 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
             public void open(File file)
             {
-                Runner.this.openSaveGameFile(file);
+                Runner.this.saveGameManager.openSaveGameFile(file, Runner.this);
             }
 
             public void save(boolean isSaveAs)
             {
-                Runner.this.saveGameAction();
+                Runner.this.saveGameManager.saveGameAction();
             }
         };
 
@@ -294,13 +291,15 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         openScene(sceneWhereToStart);
     }
 
-    private void createGame(Adventure a)
+    private void createGame(Adventure adventure)
     {
-        this.game = new GameImpl(a);
+        game = new GameImpl(adventure);
         statsView.setGame(game);
         game.addGoToSceneListener(this);
 
         game.getPlayer().add(this);
+        
+        saveGameManager = new SaveGameManager(game, this);
     }
 
     public void open(File saveFile)
@@ -322,7 +321,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     {
         mainPanel.setVisible(true);
         createGame(adventure);
-        openSceneLight(adventure.getStart());
+        openSceneLite(adventure.getStart());
     }
 
     /**
@@ -416,7 +415,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     /**
      * Attention here!!!
      */
-    private void openScene(Scene to, boolean execActions)
+    public void openScene(Scene to, boolean execActions)
     {
         if (execActions) {
             game.open(to);
@@ -425,7 +424,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
 
         to = game.getCurrentScene();
-        openSceneLight(to);
+        openSceneLite(to);
 
         if (to.isEnd()) {
             gameOver();
@@ -464,7 +463,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         updateView();
     }
 
-    private void openSceneLight(Scene sceneToOpen)
+    private void openSceneLite(Scene sceneToOpen)
     {
         //sceneTA.setText("[" + sceneToOpen.getId() + "]\n" + sceneToOpen.getText());
         sceneTA.setText(sceneToOpen.getText());
@@ -589,7 +588,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         {
             public void actionPerformed(ActionEvent e)
             {
-                saveGameAction();
+                Runner.this.saveGameManager.saveGameAction();
             }
         });
 
@@ -659,65 +658,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File saveGameFile = fileChooser.getSelectedFile();
             logger.debug("Opening: " + saveGameFile.getName() + ".");
-            openSaveGameFile(saveGameFile);
+            saveGameManager.openSaveGameFile(saveGameFile, this);
         }
     }
 
-    private void openSaveGameFile(File saveGameFile)
-    {
-        try { // 222
-            XStream xs = new XStream();
-            SaveGame saveGame = (SaveGame) xs.fromXML(new FileReader(saveGameFile));
-            Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
-
-            open(new File(saveGame.getAdventureFilePath()));
-            game.open(saveGame);
-            game.getPlayer().add(this);
-            openScene(adventure.getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
-
-            fireOpenSavedGameEvent(saveGameFile);
-        } catch (Exception e) {
-            throw new AdventureException(e);
-        }
-    }
-
-    private void fireOpenSavedGameEvent(File saveGameFile)
+    public void fireOpenSavedGameEvent(File saveGameFile)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
             listener.fileOpenedAction(saveGameFile);
-        }
-    }
-
-    private void saveGameAction()
-    {
-        SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
-        saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
-
-        File savedGamesFolder = Conf.getSavedGamesFolder();
-
-        // 111
-        String saveGameName = savedGamesFolder.getAbsolutePath() + File.separator + adventure.getName();
-        saveGameName += "#" + sdf.format(new Date());
-        saveGameName = saveGameName.replaceAll(" ", "") + ".saveGame.tas";
-
-        try {
-            log("Saving game to file: [" + saveGameName + "]...");
-            File saveGameFile = new File(saveGameName);
-            saveGameFile.createNewFile();
-
-            XStream xs = new XStream();
-            String savedGameXML = xs.toXML(saveGame);
-            PrintWriter writer = new PrintWriter(saveGameFile);
-            writer.print(savedGameXML);
-            writer.flush();
-            writer.close();
-            log("Game saved!");
-
-            // Will signal the recent menu to update: FIXME: it's a bit
-            // confusing...
-            fireOpenSavedGameEvent(saveGameFile);
-        } catch (IOException e) {
-            throw new AdventureException(e);
         }
     }
 
@@ -815,7 +763,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         log(ev.getDesc());
     }
 
-    private void log(String msg)
+    public void log(String msg)
     {
         try {
             Document doc = logTA.getDocument();

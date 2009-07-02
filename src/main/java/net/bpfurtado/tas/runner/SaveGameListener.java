@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 27/06/2009 21:11:50
+ * Created on 02/07/2009 19:15:32
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -18,49 +18,18 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */
+ */ 
 
 package net.bpfurtado.tas.runner;
 
-import java.io.Serializable;
+import java.io.File;
 
-import net.bpfurtado.tas.model.Player;
+import net.bpfurtado.tas.model.Scene;
 
-public class SaveGame implements Serializable
+interface SaveGameListener
 {
-    private static final long serialVersionUID = 6976207148524442036L;
-
-    private Player player;
-    private int sceneId;
-    private String adventureFilePath;
-
-    public String getAdventureFilePath()
-    {
-        return adventureFilePath;
-    }
-
-    public void setAdventureFilePath(String adventureFile)
-    {
-        this.adventureFilePath = adventureFile;
-    }
-
-    public SaveGame(Player player, int sceneId)
-    {
-        this.player = player;
-        
-        //Otherwise we get a ref to the Runner itself, through event listeners...
-        this.player.clearEventListeners();
-        
-        this.sceneId = sceneId;
-    }
-
-    public Player getPlayer()
-    {
-        return player;
-    }
-
-    public int getSceneId()
-    {
-        return sceneId;
-    }
+    void fireOpenSavedGameEvent(File f);
+    void open(File adventure);
+    void openScene(Scene to, boolean execActions);
+    void log(String msg);
 }

@@ -47,4 +47,6 @@ public interface Game
 	void execAssertions();
     void open(SaveGame saveGame);
     void openNoActions(Scene to);
+    
+    Adventure getAdventure();
 }
