@@ -8,13 +8,13 @@
 		</layout>
 	</appender>
 	<category name="net.bpfurtado.tas.builder.Builder">
-        <priority value="debug" />
+        <priority value="warn" />
     </category>
 	<category name="net.bpfurtado.tas.runner">
 		<priority value="debug" />
 	</category>
 	<category name="net.bpfurtado.tas.model.Scene">
-		<priority value="debug" />
+		<priority value="warn" />
 	</category>
 	<category name="net.bpfurtado">
 		<priority value="warn" />
