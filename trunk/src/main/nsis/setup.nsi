@@ -47,7 +47,7 @@ Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
     File text-adventures-suite.jnlp
-    File ..\..\..\target\TextAdventuresSuite.jar
+    File ..\..\text-adventures-suite_1.1.jar
     SetOutPath $INSTDIR\lib
     File /r ..\..\..\lib\*
     

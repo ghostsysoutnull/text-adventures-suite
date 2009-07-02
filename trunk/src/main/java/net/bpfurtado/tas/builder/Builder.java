@@ -395,6 +395,8 @@ public class Builder extends JFrame
     public void goTo(Scene sceneToGo)
     {
         currentScene = sceneToGo;
+        Conf.builder().set("lastViewedSceneId", currentScene.getId());
+        
         updateView();
     }
 
@@ -405,7 +407,6 @@ public class Builder extends JFrame
 
     private void updateView(boolean focusToSceneTextArea)
     {
-        logger.debug("here");
         if (currentScene == null) {
             currentScene = adventure.getStart();
         }
@@ -416,6 +417,8 @@ public class Builder extends JFrame
 
         scenesList.updateView();
         updateSceneView();
+        
+        sceneTabs.setSelectedIndex(0);
 
         playFromCurrentMnIt.setText("Play from '" + currentScene.getName() + "'");
 
@@ -582,16 +585,25 @@ public class Builder extends JFrame
         testYourSkillMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                //000
                 addTestYourSkillMnItSceneTextAreaContextMenuItemAction();
             }
         });
         popupMenu.add(testYourSkillMnIt);
         
+        final JMenuItem addCodeToAddItemMnIt = new JMenuItem("Add 'Item'");
+        addCodeToAddItemMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                //000
+                addCodeToAddItemMnItSceneTextAreaContextMenuItemAction();
+            }
+        });
+        popupMenu.add(addCodeToAddItemMnIt);
+        
         sceneTA.addMouseListener(
                 new SceneTextAreaPopupListener(
                         popupMenu, sceneTA, createPathMnIt, 
-                        splitSceneMnIt, addCombatEnemiesMnIt, testYourSkillMnIt));
+                        splitSceneMnIt, addCombatEnemiesMnIt, testYourSkillMnIt, addCodeToAddItemMnIt));
 
         panel.add(headerFieldsPanelWidgets());
 
@@ -615,10 +627,15 @@ public class Builder extends JFrame
         return panel;
     }
 
+    protected void addCodeToAddItemMnItSceneTextAreaContextMenuItemAction()
+    {
+        // 111
+        currentScene.setCode(currentScene.getCode() + "\n player.addAttribute(\"" + sceneTA.getSelectedText().trim() + "\");\n");
+        codeTA.setText(currentScene.getCode());
+    }
+
     protected void addTestYourSkillMnItSceneTextAreaContextMenuItemAction()
     {
-        //111
-        
         createSkillTestTab(currentScene, sceneTA.getSelectedText());
     }
 
@@ -1248,9 +1265,28 @@ public class Builder extends JFrame
     private void initViewWithNewAdventureObj()
     {
         mainPanel.setVisible(true);
-        goTo(adventure.getStart());
+        
+        try {
+            String lastViewedSceneId = Conf.builder().get("lastViewedSceneId");
+            if (lastViewedSceneId == null) {
+                goTo(adventure.getStart());
+            } else {
+                Scene scene = adventure.getScene(Integer.parseInt(lastViewedSceneId));
+                if (scene != null) {
+                    goTo(scene);
+                } else {
+                    goTo(adventure.getStart());
+                }
+            }
+        } catch (AdventureException e) {
+            logger.warn("Tried to open last viewed scene", e);
+            goTo(adventure.getStart());
+        }
 
-        /** Não está dentro do método updateView pois só precisa ser invocado uma vez */
+        /**
+         * Not called inside the method updateView since it needs
+         * only to be invoked once.
+         */
         scenesList.prepareView(adventure.getStart());
     }
 
