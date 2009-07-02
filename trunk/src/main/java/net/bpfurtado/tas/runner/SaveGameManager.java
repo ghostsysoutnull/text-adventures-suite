@@ -33,6 +33,7 @@ import java.util.Map.Entry;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Game;
+import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
 
@@ -97,18 +98,22 @@ public class SaveGameManager
         root.addAttribute("sceneId", saveGame.getSceneId() + "");
         root.addAttribute("adventureFilePath", saveGame.getAdventureFilePath());
 
-        Element p = root.addElement("player");
+        Player player = saveGame.getPlayer();
+        
+        Element xmlPlayer = root.addElement("player");
+        xmlPlayer.addAttribute("stamina", player.getStamina() + "");
+        xmlPlayer.addAttribute("damage", player.getDamage() + "");
 
-        Element skills = p.addElement("skills");
-        for (Skill sk : saveGame.getPlayer().getSkills()) {
+        Element skills = xmlPlayer.addElement("skills");
+        for (Skill sk : player.getSkills()) {
             Element skill = skills.addElement("skill");
             skill.addAttribute("name", sk.getName());
             skill.addAttribute("level", sk.getLevel() + "");
         }
 
-        Element attributes = p.addElement("attributes");
-        for (Entry<String, String> e : saveGame.getPlayer().getAttributesEntrySet()) {
-            Element attribute = attributes.addElement("skill");
+        Element attributes = xmlPlayer.addElement("attributes");
+        for (Entry<String, String> e : player.getAttributesEntrySet()) {
+            Element attribute = attributes.addElement("attribute");
             attribute.addAttribute("key", e.getKey());
             attribute.addAttribute("value", e.getValue());
         }
