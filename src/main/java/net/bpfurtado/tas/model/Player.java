@@ -37,7 +37,7 @@ public class Player extends Fighter
 
     private static final Random rand = new Random();
 
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, String> attributes = new HashMap<String, String>();
     private Map<String, Skill> skills = new HashMap<String, Skill>();
 
     private Skill luck = new Skill(this, "Luck", rand.nextInt(7) + 6);
@@ -109,7 +109,7 @@ public class Player extends Fighter
 
     public void addAttribute(String name, int value)
     {
-        attributes.put(name, value);
+        attributes.put(name, value+"");
         fire(new PlayerEvent(name, "Attribute " + name + " added with [" + value + "]"));
     }
 
@@ -127,7 +127,7 @@ public class Player extends Fighter
 
     public int getIntValue(String name)
     {
-        return (Integer) attributes.get(name);
+        return (Integer) Integer.parseInt(attributes.get(name));
     }
 
     public void decIntValue(String name, int amount)
@@ -151,7 +151,7 @@ public class Player extends Fighter
         } catch (Exception e) {
             throw new AdventureException(e);
         }
-        attributes.put(name, increasedValue);
+        attributes.put(name, increasedValue+"");
 
         fire(new PlayerEvent(name + " has now the value of " + increasedValue));
     }
@@ -160,7 +160,7 @@ public class Player extends Fighter
     {
         Object value = attributes.get(name);
         if (value == null) {
-            attributes.put(name, 0);
+            attributes.put(name, "0");
         }
         return attributes.get(name);
     }
@@ -219,7 +219,7 @@ public class Player extends Fighter
         return (String) attributes.get(name);
     }
 
-    public Set<Entry<String, Object>> getAttributesEntrySet()
+    public Set<Entry<String, String>> getAttributesEntrySet()
     {
         return attributes.entrySet();
     }

@@ -54,7 +54,6 @@ import org.apache.log4j.Logger;
  */
 public class PlayerPanelController
 {
-    @SuppressWarnings("unused")
     private static Logger logger = Logger.getLogger(PlayerPanelController.class);
 
     static final Font DEFAULT_FONT = new Font("Arial Bold", 1, 14);
@@ -122,18 +121,18 @@ public class PlayerPanelController
         attributesPn.addLine("Stamina", player.getStamina());
         attributesPn.addLine("Damage", player.getDamage());
 
-        Set<Entry<String, Object>> unorderedAttributes = player.getAttributesEntrySet();
+        Set<Entry<String, String>> unorderedAttributes = player.getAttributesEntrySet();
         if (!unorderedAttributes.isEmpty()) {
 
-            List<Entry<String, Object>> orderedAttributes = new LinkedList<Entry<String, Object>>(unorderedAttributes);
-            Collections.sort(orderedAttributes, new Comparator<Entry<String, Object>>() {
-                public int compare(Entry<String, Object> o1, Entry<String, Object> o2)
+            List<Entry<String, String>> orderedAttributes = new LinkedList<Entry<String, String>>(unorderedAttributes);
+            Collections.sort(orderedAttributes, new Comparator<Entry<String, String>>() {
+                public int compare(Entry<String, String> o1, Entry<String, String> o2)
                 {
                     return o1.getKey().compareTo(o2.getKey());
                 }
             });
 
-            for (Entry<String, Object> attributeEntry : orderedAttributes) {
+            for (Entry<String, String> attributeEntry : orderedAttributes) {
                 attributesPn.addLine(attributeEntry.getKey(), attributeEntry.getValue());
             }
         }

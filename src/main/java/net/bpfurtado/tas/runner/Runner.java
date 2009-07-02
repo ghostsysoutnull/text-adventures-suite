@@ -215,12 +215,12 @@ public class Runner extends JFrame
 
             public void open(File file)
             {
-                Runner.this.saveGameManager.openSaveGameFile(file, Runner.this);
+                Runner.this.saveGameManager.open(file, Runner.this);
             }
 
             public void save(boolean isSaveAs)
             {
-                Runner.this.saveGameManager.saveGameAction();
+                Runner.this.saveGameManager.save();
             }
         };
 
@@ -588,7 +588,7 @@ public class Runner extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                Runner.this.saveGameManager.saveGameAction();
+                Runner.this.saveGameManager.save();
             }
         });
 
@@ -658,7 +658,7 @@ public class Runner extends JFrame
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File saveGameFile = fileChooser.getSelectedFile();
             logger.debug("Opening: " + saveGameFile.getName() + ".");
-            saveGameManager.openSaveGameFile(saveGameFile, this);
+            saveGameManager.open(saveGameFile, this);
         }
     }
 
