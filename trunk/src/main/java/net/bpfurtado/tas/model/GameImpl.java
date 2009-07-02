@@ -169,4 +169,9 @@ public class GameImpl implements Game
 	{
 		return sceneIdToOpen;
 	}
+
+    public Adventure getAdventure()
+    {
+        return adventure;
+    }
 }

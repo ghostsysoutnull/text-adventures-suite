@@ -41,7 +41,7 @@ public class Player extends Fighter
     private Map<String, Skill> skills = new HashMap<String, Skill>();
 
     private Skill luck = new Skill(this, "Luck", rand.nextInt(7) + 6);
-    
+
     public Player(String name)
     {
         super(name, rand.nextInt(7) + 6, rand.nextInt(13) + 12);
