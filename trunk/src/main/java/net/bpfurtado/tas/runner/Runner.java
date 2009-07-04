@@ -65,6 +65,7 @@ import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
 import net.bpfurtado.tas.model.GoToSceneListener;
 import net.bpfurtado.tas.model.IPath;
+import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEvent;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Scene;
@@ -80,8 +81,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame 
-    implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
+public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
 
@@ -147,7 +147,7 @@ public class Runner extends JFrame
     private void openLastAdventure()
     {
         logger.debug("START");
-        
+
         if (!Conf.runner().is("openLastAdventureOnStart", false))
             return;
 
@@ -161,8 +161,8 @@ public class Runner extends JFrame
     {
         buildRecentMenus();
         initView();
-        
-        //openLastAdventure();
+
+        // openLastAdventure();
     }
 
     private void buildRecentMenus()
@@ -215,7 +215,7 @@ public class Runner extends JFrame
 
             public void open(File file)
             {
-                Runner.this.saveGameManager.open(file, Runner.this);
+                recentMenuSaveGameOpenAction(file);
             }
 
             public void save(boolean isSaveAs)
@@ -298,7 +298,7 @@ public class Runner extends JFrame
         game.addGoToSceneListener(this);
 
         game.getPlayer().add(this);
-        
+
         saveGameManager = new SaveGameManager(game, this);
     }
 
@@ -465,7 +465,8 @@ public class Runner extends JFrame
 
     private void openSceneLite(Scene sceneToOpen)
     {
-        //sceneTA.setText("[" + sceneToOpen.getId() + "]\n" + sceneToOpen.getText());
+        // sceneTA.setText("[" + sceneToOpen.getId() + "]\n" +
+        // sceneToOpen.getText());
         sceneTA.setText(sceneToOpen.getText());
         sceneTA.setCaretPosition(0);
 
@@ -772,5 +773,12 @@ public class Runner extends JFrame
         } catch (BadLocationException e) {
             throw new AdventureException(e);
         }
+    }
+
+    private void recentMenuSaveGameOpenAction(File file)
+    {
+        saveGameManager.open(file, Runner.this);
+        Player player = game.getPlayer();
+        int a = 1;
     }
 }

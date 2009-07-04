@@ -103,6 +103,16 @@ public class Skill implements Serializable
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Skill) {
+            Skill other = (Skill) obj;
+            return other.name.equals(name) && other.level == level;
+        }
+        return false;
+    }
+
+    @Override
     public String toString()
     {
         return "[Skill: name=" + name + ", level=" + level + "]";

@@ -69,6 +69,11 @@ public class Player extends Fighter
 
     public void addSkill(String name, int level)
     {
+        if (name.equals("Combat")) {
+            setCombatSkill(level);
+            return;
+        } 
+        
         Skill skill = new Skill(this, name, level);
         add(skill);
     }
@@ -109,7 +114,7 @@ public class Player extends Fighter
 
     public void addAttribute(String name, int value)
     {
-        attributes.put(name, value+"");
+        attributes.put(name, value + "");
         fire(new PlayerEvent(name, "Attribute " + name + " added with [" + value + "]"));
     }
 
@@ -151,7 +156,7 @@ public class Player extends Fighter
         } catch (Exception e) {
             throw new AdventureException(e);
         }
-        attributes.put(name, increasedValue+"");
+        attributes.put(name, increasedValue + "");
 
         fire(new PlayerEvent(name + " has now the value of " + increasedValue));
     }
