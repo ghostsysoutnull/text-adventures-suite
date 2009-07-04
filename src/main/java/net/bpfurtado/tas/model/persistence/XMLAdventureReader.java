@@ -101,7 +101,7 @@ public class XMLAdventureReader
         try {
             xmlDocument = xmlReader.read(file);
         } catch (DocumentException e) {
-            throw new AdventureReaderException("Error creating XML document", e);
+            throw new AdventureReaderException("Error reading XML document", e);
         }
     }
 
