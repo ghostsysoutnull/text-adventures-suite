@@ -72,8 +72,8 @@ public class Player extends Fighter
         if (name.equals("Combat")) {
             setCombatSkill(level);
             return;
-        } 
-        
+        }
+
         Skill skill = new Skill(this, name, level);
         add(skill);
     }
