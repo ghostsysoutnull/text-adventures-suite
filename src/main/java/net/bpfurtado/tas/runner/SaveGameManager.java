@@ -31,6 +31,7 @@ import java.util.Map.Entry;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEventListener;
@@ -161,7 +162,9 @@ public class SaveGameManager
 
             // creates a new gameImpl
             this.game = saveGameListener.open(new File(saveGame.getAdventureFilePath()));
-            game.open(saveGame); // uses an old reference.
+            Adventure adv = game.open(saveGame); // uses an old reference.
+            
+            saveGame.setAdventure(adv);
 
             Player player = game.getPlayer();
             player.add(playerEventListener);

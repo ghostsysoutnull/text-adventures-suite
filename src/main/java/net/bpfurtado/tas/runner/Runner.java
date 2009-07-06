@@ -115,6 +115,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private SaveGameManager saveGameManager;
 
+    private JMenuItem startAgainMnIt;
+
     public static Runner runAdventure(File adventureFile)
     {
         Runner r = new Runner();
@@ -300,7 +302,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         game.getPlayer().add(this);
 
         saveGameManager = new SaveGameManager(game, this);
-        
+
         return game;
     }
 
@@ -314,6 +316,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
         saveMnIt.setEnabled(true);
+        startAgainMnIt.setEnabled(true);
 
         fireOpenAdventureEvent(saveFile);
         return startGame();
@@ -324,7 +327,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         mainPanel.setVisible(true);
         Game createdGame = createGame(adventure);
         openSceneLite(adventure.getStart());
-        
+
         return createdGame;
     }
 
@@ -616,7 +619,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
         menuBar.add(advMenu);
 
-        JMenuItem startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
+        this.startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
+        startAgainMnIt.setEnabled(false);
         startAgainMnIt.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
@@ -783,11 +787,16 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void recentMenuSaveGameOpenAction(File file)
     {
-        saveGameManager.open(file, Runner.this);
+        SaveGame saveGame = getSaveGameManager().open(file, Runner.this);
+        adventure = saveGame.getAdventure();
+    }
 
-        Player player = game.getPlayer();
-        logger.debug("p.attrib=" + player.getAttributesEntrySet());
-
-        int a = 1; // /666 Error is here!
+    private SaveGameManager getSaveGameManager()
+    {
+        if (saveGameManager == null) {
+            game = new GameImpl(null);
+            saveGameManager = new SaveGameManager(game, this);
+        }
+        return saveGameManager;
     }
 }

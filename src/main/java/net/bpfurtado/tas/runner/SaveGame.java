@@ -24,6 +24,7 @@ package net.bpfurtado.tas.runner;
 
 import java.io.Serializable;
 
+import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Player;
 
 public class SaveGame implements Serializable
@@ -33,6 +34,8 @@ public class SaveGame implements Serializable
     private Player player;
     private int sceneId;
     private String adventureFilePath;
+
+    private Adventure adventure;
 
     public String getAdventureFilePath()
     {
@@ -47,10 +50,11 @@ public class SaveGame implements Serializable
     public SaveGame(Player player, int sceneId)
     {
         this.player = player;
-        
-        //Otherwise we get a ref to the Runner itself, through event listeners...
+
+        // Otherwise we get a ref to the Runner itself, through event
+        // listeners...
         this.player.clearEventListeners();
-        
+
         this.sceneId = sceneId;
     }
 
@@ -62,5 +66,15 @@ public class SaveGame implements Serializable
     public int getSceneId()
     {
         return sceneId;
+    }
+
+    public void setAdventure(Adventure adventure)
+    {
+        this.adventure = adventure;
+    }
+
+    public Adventure getAdventure()
+    {
+        return adventure;
     }
 }
