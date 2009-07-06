@@ -100,7 +100,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private JPanel mainPanel;
     private JTextArea logTA;
-    private JMenuItem saveMnIt;
+    private JMenuItem saveGameMnIt;
 
     private final JFileChooser fileChooser = new JFileChooser();
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
@@ -315,9 +315,9 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Conf.runner().save();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
-        saveMnIt.setEnabled(true);
+        saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
-
+        
         fireOpenAdventureEvent(saveFile);
         return startGame();
     }
@@ -592,13 +592,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveGameMenu.setMnemonic('G');
         menuBar.add(saveGameMenu);
 
-        this.saveMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu, new ActionListener()
+        this.saveGameMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu, new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
                 Runner.this.saveGameManager.save();
             }
         });
+        saveGameMnIt.setEnabled(false);
 
         Util.menuItem("Open Saved Game", 'O', KeyEvent.VK_O, "folder_table.png", saveGameMenu, new ActionListener()
         {
