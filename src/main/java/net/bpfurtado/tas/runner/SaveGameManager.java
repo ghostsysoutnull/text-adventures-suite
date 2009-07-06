@@ -23,11 +23,8 @@
 package net.bpfurtado.tas.runner;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Map.Entry;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
@@ -36,17 +33,9 @@ import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
-import net.bpfurtado.tas.model.persistence.AdventureReaderException;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.Node;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 public class SaveGameManager
 {
@@ -68,10 +57,10 @@ public class SaveGameManager
     File save()
     {
         SaveGame saveGame = buildSaveGame();
-        Document xml = createXML(saveGame);
+        Document xml = SaveGamePersister.createXML(saveGame);
         File file = buildSaveGameFile();
 
-        write(xml, file);
+        SaveGamePersister.write(xml, file, saveGameListener);
 
         saveGameListener.fireOpenSavedGameEvent(file);
 
@@ -97,62 +86,10 @@ public class SaveGameManager
         return saveGame;
     }
 
-    private Document createXML(SaveGame saveGame)
-    {
-        Document xml = DocumentHelper.createDocument();
-
-        Element root = xml.addElement("savegame");
-        root.addAttribute("sceneId", saveGame.getSceneId() + "");
-        root.addAttribute("adventureFilePath", saveGame.getAdventureFilePath());
-
-        Player player = saveGame.getPlayer();
-
-        Element xmlPlayer = root.addElement("player");
-        xmlPlayer.addAttribute("stamina", player.getStamina() + "");
-        xmlPlayer.addAttribute("damage", player.getDamage() + "");
-
-        Element skills = xmlPlayer.addElement("skills");
-        for (Skill sk : player.getSkills()) {
-            Element skill = skills.addElement("skill");
-            skill.addAttribute("name", sk.getName());
-            skill.addAttribute("level", sk.getLevel() + "");
-        }
-
-        Element attributes = xmlPlayer.addElement("attributes");
-        for (Entry<String, String> e : player.getAttributesEntrySet()) {
-            Element attribute = attributes.addElement("attribute");
-            attribute.addAttribute("key", e.getKey());
-            attribute.addAttribute("value", e.getValue());
-        }
-
-        return xml;
-    }
-
-    private void write(Document xml, File saveFile)
-    {
-        try {
-            saveGameListener.log("Saving game to file: [" + saveFile + "]...");
-
-            OutputFormat format = OutputFormat.createPrettyPrint();
-            format.setEncoding("ISO-8859-1");
-            format.setNewlines(true);
-            format.setLineSeparator(System.getProperty("line.separator"));
-            XMLWriter writer = new XMLWriter(new FileWriter(saveFile), format);
-
-            writer.write(xml);
-            writer.flush();
-            writer.close();
-
-            saveGameListener.log("Game saved!");
-        } catch (Exception e) {
-            throw new AdventureException("Error writing Save Game", e);
-        }
-    }
-
     SaveGame open(File saveGameFile, PlayerEventListener playerEventListener)
     {
         try {
-            SaveGame saveGame = read(saveGameFile);
+            SaveGame saveGame = SaveGamePersister.read(saveGameFile);
 
             Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
 
@@ -179,47 +116,5 @@ public class SaveGameManager
         } catch (Exception e) {
             throw new AdventureException(e);
         }
-    }
-
-    private SaveGame read(File saveGameFile)
-    {
-        try {
-            SAXReader xmlReader = new SAXReader();
-            Document xml = xmlReader.read(saveGameFile);
-
-            Element root = xml.getRootElement();
-
-            Node xmlPlayer = root.selectSingleNode("player");
-
-            Player player = new Player("noName", 0, integer(xmlPlayer, "stamina"));
-            player.setDamage(integer(xmlPlayer, "damage"));
-
-            List<Node> skills = xmlPlayer.selectNodes("skills/skill");
-            for (Node skill : skills) {
-                player.addSkill(skill.valueOf("@name"), integer(skill, "level"));
-            }
-
-            List<Node> attributes = xmlPlayer.selectNodes("attributes/attribute");
-            for (Node attribute : attributes) {
-                String key = attribute.valueOf("@key");
-                String val = attribute.valueOf("@value");
-                try {
-                    player.addAttribute(key, Integer.parseInt(val));
-                } catch (NumberFormatException e) {
-                    player.addAttribute(key, val);
-                }
-            }
-
-            SaveGame saveGame = new SaveGame(player, integer(root, "sceneId"));
-            saveGame.setAdventureFilePath(root.valueOf("@adventureFilePath"));
-            return saveGame;
-        } catch (DocumentException e) {
-            throw new AdventureReaderException("Error reading XML document", e);
-        }
-    }
-
-    private int integer(Node node, String attribute)
-    {
-        return Integer.parseInt(node.valueOf("@" + attribute));
     }
 }

@@ -1,10 +1,10 @@
 #Fat Jar Configuration File
-#Wed Jul 01 18:24:49 BRT 2009
+#Mon Jul 06 19:15:27 BRT 2009
 onejar.license.required=false
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=true
-jarname=text-adventures-suite_1.1.1.jar
+jarname=text-adventures-suite_1.2.jar
 manifest.mergeall=true
 manifest.mainclass=net.bpfurtado.tas.view.OpenningFrame
 manifest.file=<createnew>
