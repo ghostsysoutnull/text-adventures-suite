@@ -24,12 +24,13 @@ package net.bpfurtado.tas.runner;
 
 import java.io.File;
 
+import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Scene;
 
 interface SaveGameListener
 {
     void fireOpenSavedGameEvent(File f);
-    void open(File adventure);
+    Game open(File adventure);
     void openScene(Scene to, boolean execActions);
     void log(String msg);
 }

@@ -98,8 +98,9 @@ class MockSaveGameListener implements SaveGameListener
     {
     }
 
-    public void open(File adventure)
+    public Game open(File adventure)
     {
+        return null;
     }
 
     public void openScene(Scene to, boolean execActions)

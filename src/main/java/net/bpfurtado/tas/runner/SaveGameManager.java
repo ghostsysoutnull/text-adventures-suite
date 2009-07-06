@@ -37,6 +37,7 @@ import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.model.persistence.AdventureReaderException;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -50,15 +51,17 @@ public class SaveGameManager
 {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
 
+    private static final Logger logger = Logger.getLogger(SaveGameManager.class);
+
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
     private Game game;
-    private SaveGameListener listener;
+    private SaveGameListener saveGameListener;
 
     public SaveGameManager(Game game, SaveGameListener list)
     {
         this.game = game;
-        this.listener = list;
+        this.saveGameListener = list;
     }
 
     File save()
@@ -69,8 +72,8 @@ public class SaveGameManager
 
         write(xml, file);
 
-        listener.fireOpenSavedGameEvent(file);
-        
+        saveGameListener.fireOpenSavedGameEvent(file);
+
         return file;
     }
 
@@ -127,7 +130,7 @@ public class SaveGameManager
     private void write(Document xml, File saveFile)
     {
         try {
-            listener.log("Saving game to file: [" + saveFile + "]...");
+            saveGameListener.log("Saving game to file: [" + saveFile + "]...");
 
             OutputFormat format = OutputFormat.createPrettyPrint();
             format.setEncoding("ISO-8859-1");
@@ -139,7 +142,7 @@ public class SaveGameManager
             writer.flush();
             writer.close();
 
-            listener.log("Game saved!");
+            saveGameListener.log("Game saved!");
         } catch (Exception e) {
             throw new AdventureException("Error writing Save Game", e);
         }
@@ -156,20 +159,26 @@ public class SaveGameManager
                 s.setPlayer(saveGame.getPlayer());
             }
 
-            listener.open(new File(saveGame.getAdventureFilePath()));
-            game.open(saveGame);
-            game.getPlayer().add(playerEventListener);
-            listener.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
+            // creates a new gameImpl
+            this.game = saveGameListener.open(new File(saveGame.getAdventureFilePath()));
+            game.open(saveGame); // uses an old reference.
 
-            listener.fireOpenSavedGameEvent(saveGameFile);
-            
+            Player player = game.getPlayer();
+            player.add(playerEventListener);
+
+            logger.debug(player.getAttributesEntrySet());
+
+            saveGameListener.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
+
+            saveGameListener.fireOpenSavedGameEvent(saveGameFile);
+
             return saveGame;
         } catch (Exception e) {
             throw new AdventureException(e);
         }
     }
 
-    private SaveGame read(File saveGameFile) 
+    private SaveGame read(File saveGameFile)
     {
         try {
             SAXReader xmlReader = new SAXReader();

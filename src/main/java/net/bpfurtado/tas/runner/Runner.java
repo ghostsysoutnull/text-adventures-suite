@@ -291,7 +291,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         openScene(sceneWhereToStart);
     }
 
-    private void createGame(Adventure adventure)
+    private Game createGame(Adventure adventure)
     {
         game = new GameImpl(adventure);
         statsView.setGame(game);
@@ -300,9 +300,11 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         game.getPlayer().add(this);
 
         saveGameManager = new SaveGameManager(game, this);
+        
+        return game;
     }
 
-    public void open(File saveFile)
+    public Game open(File saveFile)
     {
         adventure = new XMLAdventureReader().read(saveFile);
 
@@ -314,14 +316,16 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveMnIt.setEnabled(true);
 
         fireOpenAdventureEvent(saveFile);
-        startGame();
+        return startGame();
     }
 
-    private void startGame()
+    private Game startGame()
     {
         mainPanel.setVisible(true);
-        createGame(adventure);
+        Game createdGame = createGame(adventure);
         openSceneLite(adventure.getStart());
+        
+        return createdGame;
     }
 
     /**
@@ -660,6 +664,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             File saveGameFile = fileChooser.getSelectedFile();
             logger.debug("Opening: " + saveGameFile.getName() + ".");
             saveGameManager.open(saveGameFile, this);
+            Player player = game.getPlayer();
+            int a = 0;
         }
     }
 
@@ -778,7 +784,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private void recentMenuSaveGameOpenAction(File file)
     {
         saveGameManager.open(file, Runner.this);
+
         Player player = game.getPlayer();
-        int a = 1;
+        logger.debug("p.attrib=" + player.getAttributesEntrySet());
+
+        int a = 1; // /666 Error is here!
     }
 }
