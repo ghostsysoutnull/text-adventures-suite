@@ -33,11 +33,15 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
 
 import net.bpfurtado.bsh.indenter.Indenter;
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.view.Util;
 
 public class CodePanelBuilder
@@ -59,6 +63,7 @@ public class CodePanelBuilder
         getTextArea().setFont(new Font("Courier New", 0, 14));
 
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        addCodeSnippetsPanel();
         panel.add(codeSTA.scrollPane);
 
         JPanel buttonsPn = new JPanel();
@@ -73,12 +78,68 @@ public class CodePanelBuilder
         panel.add(Box.createRigidArea(new Dimension(0, 5)));
     }
 
+    private void addCodeSnippetsPanel()
+    {
+        JPanel p = new JPanel();
+        final JComboBox cb = new JComboBox();
+        cb.addItem("player.setStamina(player.getStamina()+6);");
+        cb.addItem("player.setSkill(player.getSkill()-1);");
+        cb.addItem("player.setStamina(20);");
+        cb.addItem("player.setSkill(6);");
+        cb.addItem("player.incStamina(1);");
+        cb.addItem("player.decStamina(1);");
+        cb.addItem("player.incCombatSkill(2);");
+        cb.addItem("player.decCombatSkill(2);");
+        cb.addItem("player.incLuck(3);");
+        cb.addItem("player.decLuck(3);");
+        cb.addItem("player.incDamage(4);");
+        cb.addItem("player.decDamage(4);");
+        cb.addItem("player.skill(\"strengh\").inc(4);");
+        cb.addItem("player.skill(\"climb-walls\").dec(2);");
+        cb.addItem("player.addAttribute(\"long-sword\");");
+        cb.addItem("player.addAttribute(\"apples\", 3);");
+        cb.addItem("player.addAttribute(\"potion\", \"red\");");
+        cb.addItem("player.addAttribute(\"iron shield\");");
+        cb.addItem("player.removeAttribute(\"horse\");");
+        cb.addItem("player.addSkill(\"light-saber fight\", 9);");
+        cb.addItem("player.addSkill(\"climb walls\", 8);");
+        cb.addItem("if(player.has(\"retractable claws\"))");
+        cb.addItem("if(player.getIntValue(\"apple\")==1) { pathsToHide.add(2);");
+        cb.addItem("ammo = player.getIntValue(\"gun ammo\");");
+        cb.addItem("player.addAttribute(\"gun ammo\", ammo + 6);");
+        cb.addItem("player.incIntValue(\"coins\", 30);");
+        cb.addItem("player.incIntValue(\"coins\", 30);");
+        cb.addItem("n = player.getIntValue(\"health potion\");");
+        cb.addItem("player.addAttribute(\"health potion\", n-1);");
+        cb.addItem("player.decIntValue(\"stamina\", 6);");
+        cb.addItem("if ( player.getIntValue(\"cat statues\")==2 ) {");
+        cb.addItem("if ( player.getStamina() <= 0 ) { go=42;");
+
+        cb.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent ev)
+            {
+                try {
+                    String snippet = cb.getSelectedItem().toString() + "\n";
+                    textArea.getDocument().insertString(textArea.getCaretPosition(), snippet, null);
+                } catch (BadLocationException e) {
+                    throw new AdventureException(e);
+                }
+            }
+        });
+
+        p.add(new JLabel("Code snippets:"));
+        p.add(cb);
+        panel.add(p);
+    }
+
     private void addHelpBt(final IBuilder builder, JPanel buttonsPn)
     {
         JButton codeHelpBt = new JButton("Help and Code snippets", Util.getImage("help.png"));
         codeHelpBt.setMnemonic('H');
         codeHelpBt.setAlignmentX(JComponent.RIGHT_ALIGNMENT);
-        codeHelpBt.addActionListener(new ActionListener() {
+        codeHelpBt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 builder.showSceneCodeHelpDialog();
@@ -91,7 +152,8 @@ public class CodePanelBuilder
     {
         JButton trimSpacesBt = new JButton("Indent", Util.getImage("indent-icon.png"));
         trimSpacesBt.setMnemonic('i');
-        trimSpacesBt.addActionListener(new ActionListener() {
+        trimSpacesBt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 indentCodeAction(getTextArea());
