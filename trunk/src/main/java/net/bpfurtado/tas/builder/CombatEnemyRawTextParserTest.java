@@ -22,11 +22,10 @@
 
 package net.bpfurtado.tas.builder;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import junit.framework.Assert;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.model.combat.Fighter;
 
@@ -40,9 +39,9 @@ public class CombatEnemyRawTextParserTest
         String fighterRawText = "Skeleton Warrior III          \n   SKIll   11  sTAmina  \n \n 9 \n";
         Fighter fighter = new CombatEnemyRawTextParser().parse(fighterRawText);
 
-        assertEquals("Skeleton Warrior III", fighter.getName());
-        assertEquals(11, fighter.getCombatSkillLevel());
-        assertEquals(9, fighter.getStamina());
+        Assert.assertEquals("Skeleton Warrior III", fighter.getName());
+        Assert.assertEquals(Integer.valueOf(11), fighter.getCombatSkillLevel());
+        Assert.assertEquals(Integer.valueOf(9), fighter.getStamina());
     }
 }
 

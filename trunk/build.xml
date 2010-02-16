@@ -7,12 +7,42 @@
 	<property name="web" value="web" />
 	<property name="download.dir" value="${web}/download" />
 
-	<property name="target" value="target"/>
-	<property name="classes" value="${target}/classes"/>
+	<property name="target" value="C:\Users\Bruno\workspaces\eclipse-3.4\text-adventures-suite\target" />
+	<property name="classes" value="${target}/classes" />
 
 	<property name="jar.name" value="${target}/TextAdventuresSuite.jar" />
 
-	<target name="dist" depends="jar, sign-deps">
+	<property name="jarsigner.home" value="${user.home}/Documents/Backups/Atech_meusdocs/workspace-3.2/MultipleJarsSignerAntTask" />
+	<property name="javalibs.home" value="${user.home}/javalibs" />
+
+	<path id="antTaskSigner.path">
+		<pathelement path="${jarsigner.home}/target/MultipleJarsSignerAntTask-1.0-SNAPSHOT.jar" />
+		<pathelement path="${javalibs.home}/log4j-1.2.15/log4j-1.2.15.jar" />
+	</path>
+
+	<taskdef name="multi-sign" classname="br.atech.dis.multiplejarssigner.SignerTask" 
+		classpathref="antTaskSigner.path">
+	</taskdef>
+	
+	<property name="jws-lib.origin" value="lib"/>
+	<property name="jws-lib.target" value="${target}/jws-lib"/>
+	<property name="jarsign-temp.dir" value="${target}/tmp"/>
+
+	<target name="multi-sign-deps">
+		<multi-sign 
+			copyto="${jws-lib.target}" 
+			tempdir="${jarsign-temp.dir}" 
+			keystorepassword="${keystore.password}" 
+			keypassword="${tas.keypass}" 
+			keystorealias="tas">
+			
+			<fileset dir="${jws-lib.origin}">
+				<filename name="*.jar" />
+			</fileset>
+		</multi-sign>
+	</target>
+
+	<target name="dist" depends="jar, multi-sign-deps">
 	</target>
 
 	<target name="jar">
@@ -27,12 +57,16 @@
 		<signjar jar="${jar.name}" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
 	</target>
 
-	<target name="sign-deps">
-        <signjar jar="lib/bsh-2.0b4.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />
-        <signjar jar="lib/commons-validator-1.3.1.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />
-        <signjar jar="lib/dom4j-1.6.1.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />
-        <signjar jar="lib/jaxen-1.1-beta-9.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />
-        <signjar jar="lib/jaxen-1.1.1.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />
-        <signjar jar="lib/log4j-1.2.15.jar" alias="tas" storepass="${keystore.password}"  keypass="${tas.keypass}" />   
+	<target name="sign-deps.old">
+		<signjar jar="lib/bsh-2.0b4.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/commons-validator-1.3.1.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/dom4j-1.6.1.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/jaxen-1.1-beta-9.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/jaxen-1.1.1.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/log4j-1.2.15.jar" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/bpfurtado-bsh-indenter-0.0.1-SNAPSHOT" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/bpfurtado-commons-0.0.1-SNAPSHOT" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/commons-lang-2.4" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
+		<signjar jar="lib/forms-1.1.0" alias="tas" storepass="${keystore.password}" keypass="${tas.keypass}" />
 	</target>
 </project>
