@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -42,10 +43,13 @@ import net.bpfurtado.tas.view.Util;
 public class ImagePanelBuilder
 {
     private JPanel mainPanel;
+
     private JTextField imagePathTf;
+
     private JLabel imageLb;
 
     private ImageReceiver imageReceiver;
+
     private JPanel centralPn;
 
     public ImagePanelBuilder(ImageReceiver r, Scene s)
@@ -91,11 +95,18 @@ public class ImagePanelBuilder
 
     public void update(Scene currentScene)
     {
+        Icon image = null;
         if (currentScene.getImageFile() == null) {
-            this.imageLb = new JLabel(Util.getImage("chest.JPG"));
+            image = Util.getImage("chest.JPG");
         } else {
-            this.imageLb = new JLabel(new ImageIcon(currentScene.getImageFile().getAbsolutePath()));
+            if (!currentScene.getImageFile().exists()) {
+                image = Util.getImage("sceneImageNotFound.jpg");
+            } else {
+                image = new ImageIcon(currentScene.getImageFile().getAbsolutePath());
+            }
         }
+
+        this.imageLb = new JLabel(image);
         centralPn.removeAll();
         centralPn.add(imageLb);
     }

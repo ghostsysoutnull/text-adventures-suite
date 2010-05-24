@@ -90,27 +90,39 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private static final Logger logger = Logger.getLogger(Runner.class);
 
     private Game game;
+
     private Adventure adventure;
 
     private JPanel gamePanel;
+
     private JPanel scenesPn;
 
     private JLabel advName;
+
     private JTextArea sceneTA;
+
     private JPanel pathsPn;
+
     private JPanel endPn;
 
     private JPanel mainPanel;
+
     private JTextArea logTA;
+
     private JMenuItem saveGameMnIt;
 
     private final JFileChooser fileChooser = new JFileChooser();
+
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
+
     private RecentFilesMenuController recentAdventuresMenuController;
+
     private RecentFilesMenuController recentSavedGamesMenuController;
 
     private PlayerPanelController statsView;
+
     protected CombatFrame combatFrame;
+
     protected Object skillToTestFrame;
 
     private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
@@ -344,7 +356,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         /*
          * logger.debug("Going to " + scene.getText());
          * 
-         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText()); sceneTA.setCaretPosition(0);
+         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
+         * sceneTA.setCaretPosition(0);
          * 
          * if(scene.isEnd()) { gameOver(); return; }
          */
@@ -482,7 +495,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             imagePn.setVisible(false);
         } else {
             imagePn.removeAll();
-            ImageIcon img = new ImageIcon(s.getImageFile().getAbsolutePath());
+            
+            ImageIcon img = null;
+            if (!s.getImageFile().exists()) {
+                img = Util.getImage("sceneImageNotFound.jpg");
+            } else {
+                img = new ImageIcon(s.getImageFile().getAbsolutePath());
+            }
+            
             Rectangle b = getBounds();
             int w = (int) 550 + img.getIconWidth() + 5;
             int x = (int) b.getX();
