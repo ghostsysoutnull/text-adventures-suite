@@ -102,7 +102,7 @@ import org.apache.log4j.Logger;
  */
 public class Builder extends JFrame
     implements EntityPersistedOnFileOpenner, ScenesSource,
-               AdventureNeedsSavingController, IBuilder
+               AdventureNeedsSavingController, IBuilder, ImageReceiver
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
     private static final long serialVersionUID = -3424967248011145801L;
@@ -155,6 +155,7 @@ public class Builder extends JFrame
     private SceneTypesWidgets sceneTypesWidgets;
 
     private JButton playFromCurrentBt;
+    private ImagePanelBuilder imagePanelBuilder;
 
     public Builder()
     {
@@ -431,6 +432,7 @@ public class Builder extends JFrame
     {
         sceneTA.setText(currentScene.getText());
         codeTA.setText(currentScene.getCode() + "");
+        imagePanelBuilder.update(currentScene);
 
         sceneNameTF.setText(currentScene.getName());
         tagsTF.setText(currentScene.getTags());
@@ -609,6 +611,10 @@ public class Builder extends JFrame
 
         sceneTabs = new JTabbedPane();
         sceneTabs.addTab("Text", Util.getImage("script.gif"), sceneSTA.scrollPane);
+        
+        //111-666
+        this.imagePanelBuilder = new ImagePanelBuilder(this, currentScene);
+        sceneTabs.addTab("Image", imagePanelBuilder.getPanel());
 
         CodePanelBuilder panelBuilder = new CodePanelBuilder(this, getToolkit());
         codeTA = panelBuilder.getTextArea();
@@ -1367,6 +1373,13 @@ public class Builder extends JFrame
             currentScene.setType(type);
         }
         updateView();
+        markAsDirty();
+    }
+
+    @Override
+    public void fireNewImageSelectedAction(File f)
+    {
+        currentScene.setImageFile(f);
         markAsDirty();
     }
 }

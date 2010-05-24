@@ -22,6 +22,7 @@
 
 package net.bpfurtado.tas.model;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,6 +75,8 @@ public class Scene extends TextObject implements Comparable<Scene>
     private List<Scene> scenesFrom = new LinkedList<Scene>();
 
     private LinkedList<PathDepth> pathDepths = new LinkedList<PathDepth>();
+
+    private File imageFile;
 
     public List<PostCodeExecutionAction> executeActions(Game g)
     {
@@ -405,5 +408,15 @@ public class Scene extends TextObject implements Comparable<Scene>
     public void setSkillToTest(Skill skillToTest)
     {
         this.skillToTest = skillToTest;
+    }
+
+    public void setImageFile(File f)
+    {
+        this.imageFile = f;
+    }
+
+    public File getImageFile()
+    {
+        return imageFile;
     }
 }
