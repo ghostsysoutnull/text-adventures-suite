@@ -29,6 +29,7 @@ import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -45,6 +46,7 @@ import javax.swing.filechooser.FileFilter;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.model.Scene;
 
 import org.apache.log4j.Logger;
 
@@ -87,6 +89,17 @@ public class Util
         } catch (NullPointerException npe) {
             throw new AdventureException(imageName + " could no be loaded", npe);
         }
+    }
+
+    public static Icon imageFrom(Scene s)
+    {
+        ImageIcon img = null;
+        if (!s.getImageFile().exists()) {
+            img = Util.getImage("sceneImageNotFound.jpg");
+        } else {
+            img = new ImageIcon(s.getImageFile().getAbsolutePath());
+        }
+        return img;
     }
 
     public static JFileChooser createFileChooser(String initDir)
