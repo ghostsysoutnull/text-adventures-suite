@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -117,6 +118,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private SaveGameManager saveGameManager;
 
     private JMenuItem startAgainMnIt;
+
+    private JPanel imagePn;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -328,6 +331,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         mainPanel.setVisible(true);
         Game createdGame = createGame(adventure);
         openSceneLite(adventure.getStart());
+        updateImage(adventure.getStart());
 
         return createdGame;
     }
@@ -467,11 +471,26 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             pathsPn.add(skillToTestBt);
         }
 
-        if (to.getImageFile() != null) {
-            scenesPn.add(new JLabel(new ImageIcon(to.getImageFile().getAbsolutePath())));
-        }
+        updateImage(to);
 
         updateView();
+    }
+
+    private void updateImage(Scene s)
+    {
+        if (s.getImageFile() == null) {
+            imagePn.setVisible(false);
+        } else {
+            imagePn.removeAll();
+            ImageIcon img = new ImageIcon(s.getImageFile().getAbsolutePath());
+            Rectangle b = getBounds();
+            int w = (int) 550 + img.getIconWidth() + 5;
+            int x = (int) b.getX();
+            int y = (int) b.getY();
+            int h = (int) img.getIconHeight() + 185;
+            setBounds(new Rectangle(x, y, w, h < 460 ? 460 : h));
+            imagePn.add(new JLabel(img));
+        }
     }
 
     private void openSceneLite(Scene sceneToOpen)
@@ -513,6 +532,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     {
         gamePanel = new JPanel();
         gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.LINE_AXIS));
+
+        imagePn = new JPanel(); // 111
+        imagePn.setAlignmentX(LEFT_ALIGNMENT);
+        gamePanel.add(imagePn);
 
         scenesPn = new JPanel();
         scenesPn.setAlignmentX(LEFT_ALIGNMENT);
