@@ -95,7 +95,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private JLabel advName;
 
     private JTextArea sceneTA;
-
+    private JTextArea logTA;
+    
     private JPanel pathsPn;
     private JPanel endPn;
     private JPanel mainPanel;
@@ -104,22 +105,16 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private JMenuItem startAgainMnIt;
     private JMenuItem saveGameMnIt;
 
-    private JTextArea logTA;
-    
     protected CombatFrame combatFrame;
     protected Object skillToTestFrame;
 
     private final JFileChooser fileChooser = new JFileChooser();
 
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
-
+    private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
     private RecentFilesMenuController recentAdventuresMenuController;
     private RecentFilesMenuController recentSavedGamesMenuController;
-
     private PlayerPanelController statsView;
-
-    private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
-
     private SaveGameManager saveGameManager;
 
     public static Runner runAdventure(File adventureFile)
@@ -473,8 +468,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             pathsPn.add(skillToTestBt);
         }
 
-        updateImage(to);
-
         updateView();
     }
 
@@ -484,15 +477,21 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             imagePn.setVisible(false);
         } else {
             imagePn.removeAll();
-            
+
             Icon img = Util.imageFrom(s);
-            
+
             Rectangle b = getBounds();
-            int w = (int) 550 + img.getIconWidth() + 5;
+            double taW = sceneTA.getBounds().getWidth();
+            double statW = statsView.getPanel().getBounds().getWidth();
+            int imgW = img.getIconWidth();
+            
+            logger.debug("taW=" + taW + ", statW=" + statW + ", imgW=" + imgW);
+            
+            int w = (int) (taW + statW + imgW + 5); // 111
             int x = (int) b.getX();
             int y = (int) b.getY();
             int h = (int) img.getIconHeight() + 185;
-            setBounds(new Rectangle(x, y, w, h < 460 ? 460 : h));
+            setBounds(new Rectangle(x, y, w < 400 ? 400 : w, h < 460 ? 460 : h));
             imagePn.add(new JLabel(img));
         }
     }
@@ -519,6 +518,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             advName.setText(adventure.getName());
         } else {
             advName.setText(adventure.getName() + " [" + game.getCurrentScene().getId() + "]");
+            updateImage(game.getCurrentScene());
         }
         statsView.updateView();
 

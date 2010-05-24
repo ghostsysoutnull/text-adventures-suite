@@ -36,16 +36,43 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
+import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.view.Util;
 
 public class ImagePanelBuilder
 {
+    private static final Conf conf = Conf.builder();
+
+    private static final String SCENE_IMAGE_LAST_USED_FOLDER = "sceneImageLastUsedFolder";
+
+    private static final JFileChooser fc = new JFileChooser();
+    static {
+        fc.setFileFilter(new FileFilter()
+        {
+            @Override
+            public String getDescription()
+            {
+                return "Image";
+            }
+
+            @Override
+            public boolean accept(File f)
+            {
+                String n = f.getName().toLowerCase();
+                return f.isDirectory() || n.endsWith(".png") || n.endsWith(".jpg") || n.endsWith(".gif");
+            }
+        });
+    }
+
     private JPanel mainPanel;
+
     private JPanel centralPn;
-    
+
     private JTextField imagePathTf;
+
     private JLabel imageLb;
 
     private ImageReceiver imageReceiver;
@@ -63,13 +90,10 @@ public class ImagePanelBuilder
         {
             public void actionPerformed(ActionEvent e)
             {
-                JFileChooser fc = new JFileChooser();
-                fc.showOpenDialog(mainPanel);
-                File imageFile = fc.getSelectedFile();
-
-                updateImage(imageFile);
+                chooseImageButtonAction();
             }
         });
+
         top.add(chooseBt);
         mainPanel.add(top, BorderLayout.PAGE_START);
 
@@ -103,6 +127,21 @@ public class ImagePanelBuilder
         this.imageLb = new JLabel(image);
         centralPn.removeAll();
         centralPn.add(imageLb);
+    }
+
+    private void chooseImageButtonAction()
+    {
+        File lastFolder = new File(conf.get(SCENE_IMAGE_LAST_USED_FOLDER, System.getProperty("user.home")));
+        if (lastFolder.exists()) {
+            fc.setCurrentDirectory(lastFolder);
+        }
+
+        fc.showOpenDialog(mainPanel);
+        File imageFile = fc.getSelectedFile();
+        conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
+        conf.save();
+
+        updateImage(imageFile);
     }
 
     JPanel getPanel()
