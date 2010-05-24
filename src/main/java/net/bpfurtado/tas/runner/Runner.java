@@ -39,6 +39,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -317,7 +318,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
-        
+
         fireOpenAdventureEvent(saveFile);
         return startGame();
     }
@@ -339,8 +340,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         /*
          * logger.debug("Going to " + scene.getText());
          * 
-         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
-         * sceneTA.setCaretPosition(0);
+         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText()); sceneTA.setCaretPosition(0);
          * 
          * if(scene.isEnd()) { gameOver(); return; }
          */
@@ -465,6 +465,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 }
             });
             pathsPn.add(skillToTestBt);
+        }
+
+        if (to.getImageFile() != null) {
+            scenesPn.add(new JLabel(new ImageIcon(to.getImageFile().getAbsolutePath())));
         }
 
         updateView();
