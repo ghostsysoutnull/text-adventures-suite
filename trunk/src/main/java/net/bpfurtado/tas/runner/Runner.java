@@ -481,13 +481,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             Icon img = Util.imageFrom(s);
 
             Rectangle b = getBounds();
-            double taW = sceneTA.getBounds().getWidth();
-            double statW = statsView.getPanel().getBounds().getWidth();
-            int imgW = img.getIconWidth();
-            
-            logger.debug("taW=" + taW + ", statW=" + statW + ", imgW=" + imgW);
-            
-            int w = (int) (taW + statW + imgW + 5); // 111
+            int w = (int) ((double) 460 + statsView.getPanel().getBounds().getWidth() + img.getIconWidth() + 5); // 111
             int x = (int) b.getX();
             int y = (int) b.getY();
             int h = (int) img.getIconHeight() + 185;
