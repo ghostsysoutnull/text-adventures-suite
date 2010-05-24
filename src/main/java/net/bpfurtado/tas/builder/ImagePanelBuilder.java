@@ -43,14 +43,12 @@ import net.bpfurtado.tas.view.Util;
 public class ImagePanelBuilder
 {
     private JPanel mainPanel;
-
+    private JPanel centralPn;
+    
     private JTextField imagePathTf;
-
     private JLabel imageLb;
 
     private ImageReceiver imageReceiver;
-
-    private JPanel centralPn;
 
     public ImagePanelBuilder(ImageReceiver r, Scene s)
     {
@@ -99,11 +97,7 @@ public class ImagePanelBuilder
         if (currentScene.getImageFile() == null) {
             image = Util.getImage("chest.JPG");
         } else {
-            if (!currentScene.getImageFile().exists()) {
-                image = Util.getImage("sceneImageNotFound.jpg");
-            } else {
-                image = new ImageIcon(currentScene.getImageFile().getAbsolutePath());
-            }
+            image = Util.imageFrom(currentScene);
         }
 
         this.imageLb = new JLabel(image);

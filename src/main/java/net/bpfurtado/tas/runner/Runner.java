@@ -40,7 +40,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -67,7 +67,6 @@ import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
 import net.bpfurtado.tas.model.GoToSceneListener;
 import net.bpfurtado.tas.model.IPath;
-import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEvent;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Scene;
@@ -86,52 +85,42 @@ import org.apache.log4j.Logger;
 public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
-
     private static final Logger logger = Logger.getLogger(Runner.class);
 
     private Game game;
-
     private Adventure adventure;
 
     private JPanel gamePanel;
-
     private JPanel scenesPn;
-
     private JLabel advName;
 
     private JTextArea sceneTA;
 
     private JPanel pathsPn;
-
     private JPanel endPn;
-
     private JPanel mainPanel;
+    private JPanel imagePn;
+
+    private JMenuItem startAgainMnIt;
+    private JMenuItem saveGameMnIt;
 
     private JTextArea logTA;
-
-    private JMenuItem saveGameMnIt;
+    
+    protected CombatFrame combatFrame;
+    protected Object skillToTestFrame;
 
     private final JFileChooser fileChooser = new JFileChooser();
 
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
 
     private RecentFilesMenuController recentAdventuresMenuController;
-
     private RecentFilesMenuController recentSavedGamesMenuController;
 
     private PlayerPanelController statsView;
 
-    protected CombatFrame combatFrame;
-
-    protected Object skillToTestFrame;
-
     private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
 
     private SaveGameManager saveGameManager;
-
-    private JMenuItem startAgainMnIt;
-
-    private JPanel imagePn;
 
     public static Runner runAdventure(File adventureFile)
     {
@@ -496,12 +485,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         } else {
             imagePn.removeAll();
             
-            ImageIcon img = null;
-            if (!s.getImageFile().exists()) {
-                img = Util.getImage("sceneImageNotFound.jpg");
-            } else {
-                img = new ImageIcon(s.getImageFile().getAbsolutePath());
-            }
+            Icon img = Util.imageFrom(s);
             
             Rectangle b = getBounds();
             int w = (int) 550 + img.getIconWidth() + 5;
@@ -716,8 +700,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             File saveGameFile = fileChooser.getSelectedFile();
             logger.debug("Opening: " + saveGameFile.getName() + ".");
             saveGameManager.open(saveGameFile, this);
-            Player player = game.getPlayer();
-            int a = 0;
         }
     }
 
