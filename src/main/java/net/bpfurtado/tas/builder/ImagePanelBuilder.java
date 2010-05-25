@@ -26,6 +26,10 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -38,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.view.Util;
@@ -68,16 +73,14 @@ public class ImagePanelBuilder
     }
 
     private JPanel mainPanel;
-
     private JPanel centralPn;
 
     private JTextField imagePathTf;
-
     private JLabel imageLb;
 
     private ImageReceiver imageReceiver;
 
-    public ImagePanelBuilder(ImageReceiver r, Scene s)
+    public ImagePanelBuilder(String adventureName, ImageReceiver r, Scene s)
     {
         this.imageReceiver = r;
         mainPanel = new JPanel(new BorderLayout());
@@ -138,6 +141,19 @@ public class ImagePanelBuilder
 
         fc.showOpenDialog(mainPanel);
         File imageFile = fc.getSelectedFile();
+        
+        try {
+            InputStream in = new FileInputStream(imageFile);
+            byte[] data = new byte[in.available()];
+            OutputStream out = new FileOutputStream(Conf.getHome()+File.separator+"/workspaces/");
+            out.write(data);
+            out.flush();
+            out.close();
+            in.close();
+        } catch (Exception e) {
+            throw new AdventureException(e);
+        }
+        
         conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
         conf.save();
 
