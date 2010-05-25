@@ -613,7 +613,7 @@ public class Builder extends JFrame
         sceneTabs.addTab("Text", Util.getImage("script.gif"), sceneSTA.scrollPane);
         
         //111-666
-        this.imagePanelBuilder = new ImagePanelBuilder(this, currentScene);
+        this.imagePanelBuilder = new ImagePanelBuilder(adventure.getName(), this, currentScene);
         sceneTabs.addTab("Image", imagePanelBuilder.getPanel());
 
         CodePanelBuilder panelBuilder = new CodePanelBuilder(this, getToolkit());
