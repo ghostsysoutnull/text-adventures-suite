@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model;
 
@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import net.bpfurtado.tas.AdventureException;
 
@@ -39,7 +40,7 @@ import org.apache.log4j.Logger;
 public class Adventure
 {
     private static final Logger logger = Logger.getLogger(Adventure.class);
-    
+
     private String name;
 
     private Scene start;
@@ -48,6 +49,8 @@ public class Adventure
     private String assertions;
 
     private int scenesIdCounter = 1;
+
+    private String id = null;
 
     public Adventure()
     {
@@ -59,6 +62,8 @@ public class Adventure
         start.setIsStart();
 
         DepthManager.getInstance().setStart(start);
+
+        id = UUID.randomUUID().toString();
 
         addScene(start);
     }
@@ -100,7 +105,7 @@ public class Adventure
             newPath.setTo(p.getTo());
             orig.remove(p);
         }
-        
+
         IPath p = orig.createPath("to new scene...");
         p.setTo(newScene);
         return newScene;
@@ -194,5 +199,15 @@ public class Adventure
     public void setAssertions(String assertions)
     {
         this.assertions = assertions;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
     }
 }

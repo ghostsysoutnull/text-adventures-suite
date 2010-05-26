@@ -77,6 +77,7 @@ public class XMLAdventureReader
     private void init()
     {
         adventure.setName(((Node) xmlDocument.selectNodes("/adventure/name").iterator().next()).getText());
+        adventure.setId(((Node) xmlDocument.selectNodes("/adventure/id").iterator().next()).getText());
         
         Node assertionsNode = xmlDocument.selectSingleNode("/adventure/assertions");
 		// to be compatible with old project files

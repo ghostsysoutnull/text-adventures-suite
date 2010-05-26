@@ -70,6 +70,7 @@ public class XMLAdventureWriter
         Element root = doc.addElement("adventure");
         root.addAttribute("startScene", adventure.getStart().getId() + "");
         root.addElement("name").setText(adventure.getName());
+        root.addElement("id").setText(adventure.getId());
 
         Element assertions = root.addElement("assertions");
         assertions.addCDATA(adventure.getAssertions());
