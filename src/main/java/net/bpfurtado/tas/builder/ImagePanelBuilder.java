@@ -47,8 +47,11 @@ import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.view.Util;
 
+import org.apache.log4j.Logger;
+
 public class ImagePanelBuilder
 {
+    private static final Logger logger = Logger.getLogger(ImagePanelBuilder.class);
     private static final Conf conf = Conf.builder();
 
     private static final String SCENE_IMAGE_LAST_USED_FOLDER = "sceneImageLastUsedFolder";
@@ -80,11 +83,32 @@ public class ImagePanelBuilder
 
     private ImageReceiver imageReceiver;
 
-    public ImagePanelBuilder(String adventureName, ImageReceiver r, Scene s)
+    public ImagePanelBuilder(ImageReceiver receiver, Scene scene)
     {
-        this.imageReceiver = r;
-        mainPanel = new JPanel(new BorderLayout());
+        this.imageReceiver = receiver;
 
+        mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(createTopPanel(), BorderLayout.PAGE_START);
+
+        this.centralPn = createCentralPanel(scene);
+        mainPanel.add(new JScrollPane(centralPn), BorderLayout.CENTER);
+    }
+
+    private JPanel createCentralPanel(Scene s)
+    {
+        JPanel centralPn = new JPanel();
+        centralPn.setBorder(BorderFactory.createRaisedBevelBorder());
+        if (s != null) {
+            update(s);
+        } else {
+            this.imageLb = new JLabel(Util.getImage("chest.JPG"));
+        }
+        centralPn.add(imageLb);
+        return centralPn;
+    }
+
+    private JPanel createTopPanel()
+    {
         JPanel top = new JPanel();
         this.imagePathTf = new JTextField(35);
         top.add(imagePathTf);
@@ -93,22 +117,12 @@ public class ImagePanelBuilder
         {
             public void actionPerformed(ActionEvent e)
             {
-                chooseImageButtonAction();
+                chooseImageButtonAction(imageReceiver.getWorkspaceId());
             }
         });
 
         top.add(chooseBt);
-        mainPanel.add(top, BorderLayout.PAGE_START);
-
-        centralPn = new JPanel();
-        centralPn.setBorder(BorderFactory.createRaisedBevelBorder());
-        if (s != null) {
-            update(s);
-        } else {
-            this.imageLb = new JLabel(Util.getImage("chest.JPG"));
-        }
-        centralPn.add(imageLb);
-        mainPanel.add(new JScrollPane(centralPn), BorderLayout.CENTER);
+        return top;
     }
 
     protected void updateImage(File imageFile)
@@ -132,7 +146,7 @@ public class ImagePanelBuilder
         centralPn.add(imageLb);
     }
 
-    private void chooseImageButtonAction()
+    private void chooseImageButtonAction(String workspaceId)
     {
         File lastFolder = new File(conf.get(SCENE_IMAGE_LAST_USED_FOLDER, System.getProperty("user.home")));
         if (lastFolder.exists()) {
@@ -141,23 +155,45 @@ public class ImagePanelBuilder
 
         fc.showOpenDialog(mainPanel);
         File imageFile = fc.getSelectedFile();
-        
+
+        File newImageFile = copyImageToWorkspace(imageFile, workspaceId);
+
+        conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
+        conf.save();
+
+        updateImage(newImageFile);
+    }
+
+    private File copyImageToWorkspace(File imageFile, String workspaceId)
+    {
         try {
             InputStream in = new FileInputStream(imageFile);
+            File wsDir = new File(Conf.getHome() + File.separator + "workspaces");
+            if (!wsDir.exists()) {
+                wsDir.mkdirs();
+            }
+
+            File wDir = new File(wsDir + File.separator + workspaceId);
+            if (!wDir.exists()) {
+                wDir.mkdirs();
+            }
+            File copyOfImageFile = new File(wDir.getAbsolutePath() + File.separator + imageFile.getName());
+            copyOfImageFile.createNewFile();
+
             byte[] data = new byte[in.available()];
-            OutputStream out = new FileOutputStream(Conf.getHome()+File.separator+"/workspaces/");
+            in.read(data);
+            
+            OutputStream out = new FileOutputStream(copyOfImageFile);
             out.write(data);
             out.flush();
             out.close();
             in.close();
+            logger.debug("Saved image file [" + copyOfImageFile + "]");
+            
+            return copyOfImageFile;
         } catch (Exception e) {
             throw new AdventureException(e);
         }
-        
-        conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
-        conf.save();
-
-        updateImage(imageFile);
     }
 
     JPanel getPanel()

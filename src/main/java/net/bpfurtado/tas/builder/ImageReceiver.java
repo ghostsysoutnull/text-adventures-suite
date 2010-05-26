@@ -27,4 +27,5 @@ import java.io.File;
 public interface ImageReceiver
 {
     void fireNewImageSelectedAction(File f);
+    String getWorkspaceId();
 }
