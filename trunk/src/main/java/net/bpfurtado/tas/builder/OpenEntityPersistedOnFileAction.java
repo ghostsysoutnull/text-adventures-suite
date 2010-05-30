@@ -24,7 +24,6 @@ package net.bpfurtado.tas.builder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.JFrame;
 
@@ -45,13 +44,13 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
 
     private EntityPersistedOnFileOpenner entityOpenner;
 
-    private File fileName;
+    private Workspace workspace;
 
-    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, File fileName)
+    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, Workspace fileName)
     {
         this.frame = frame;
         this.entityOpenner = entityOpenner;
-        this.fileName = fileName;
+        this.workspace = fileName;
     }
 
     public void actionPerformed(ActionEvent e)
@@ -63,6 +62,6 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
             else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
                 entityOpenner.save(false);
         }
-        entityOpenner.open(fileName);
+        entityOpenner.open(workspace);
     }
 }

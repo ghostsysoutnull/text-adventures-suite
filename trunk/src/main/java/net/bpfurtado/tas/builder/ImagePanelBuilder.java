@@ -26,10 +26,6 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -39,10 +35,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileFilter;
 
-import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.view.Util;
@@ -51,9 +45,9 @@ import org.apache.log4j.Logger;
 
 public class ImagePanelBuilder
 {
+    @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(ImagePanelBuilder.class);
     private static final Conf conf = Conf.builder();
-
     private static final String SCENE_IMAGE_LAST_USED_FOLDER = "sceneImageLastUsedFolder";
 
     private static final JFileChooser fc = new JFileChooser();
@@ -78,14 +72,13 @@ public class ImagePanelBuilder
     private JPanel mainPanel;
     private JPanel centralPn;
 
-    private JTextField imagePathTf;
     private JLabel imageLb;
 
     private ImageReceiver imageReceiver;
 
-    public ImagePanelBuilder(ImageReceiver receiver, Scene scene)
+    public ImagePanelBuilder(ImageReceiver imageReceiver, Scene scene)
     {
-        this.imageReceiver = receiver;
+        this.imageReceiver = imageReceiver;
 
         mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(createTopPanel(), BorderLayout.PAGE_START);
@@ -94,12 +87,50 @@ public class ImagePanelBuilder
         mainPanel.add(new JScrollPane(centralPn), BorderLayout.CENTER);
     }
 
-    private JPanel createCentralPanel(Scene s)
+    protected void updateImage(String imageId)
+    {
+        imageLb.setIcon(new ImageIcon(imageReceiver.getWorkspace().imagePathFrom(imageId)));
+        imageReceiver.fireNewImageSelectedAction(imageId);
+    }
+
+    public void update(Scene currentScene)
+    {
+        Icon image = null;
+        if (currentScene.getImageId() == null) {
+            image = Util.getImage("chest.JPG");
+        } else {
+            image = imageReceiver.getWorkspace().imageFrom(currentScene);
+        }
+
+        this.imageLb = new JLabel(image);
+        centralPn.removeAll();
+        centralPn.add(imageLb);
+    }
+
+    private void chooseImageButtonAction(Workspace workspace)
+    {
+        File lastFolder = new File(conf.get(SCENE_IMAGE_LAST_USED_FOLDER, System.getProperty("user.home")));
+        if (lastFolder.exists()) {
+            fc.setCurrentDirectory(lastFolder);
+        }
+
+        fc.showOpenDialog(mainPanel);
+        File imageFile = fc.getSelectedFile();
+
+        String imageId = imageReceiver.getWorkspace().copy(imageFile);
+
+        conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
+        conf.save();
+
+        updateImage(imageId);
+    }
+
+    private JPanel createCentralPanel(Scene scene)
     {
         JPanel centralPn = new JPanel();
         centralPn.setBorder(BorderFactory.createRaisedBevelBorder());
-        if (s != null) {
-            update(s);
+        if (scene != null) {
+            update(scene);
         } else {
             this.imageLb = new JLabel(Util.getImage("chest.JPG"));
         }
@@ -110,90 +141,17 @@ public class ImagePanelBuilder
     private JPanel createTopPanel()
     {
         JPanel top = new JPanel();
-        this.imagePathTf = new JTextField(35);
-        top.add(imagePathTf);
         JButton chooseBt = new JButton("Choose...");
         chooseBt.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)
             {
-                chooseImageButtonAction(imageReceiver.getWorkspaceId());
+                chooseImageButtonAction(imageReceiver.getWorkspace());
             }
         });
 
         top.add(chooseBt);
         return top;
-    }
-
-    protected void updateImage(File imageFile)
-    {
-        imagePathTf.setText(imageFile.getAbsolutePath());
-        imageLb.setIcon(new ImageIcon(imageFile.getAbsolutePath()));
-        imageReceiver.fireNewImageSelectedAction(imageFile);
-    }
-
-    public void update(Scene currentScene)
-    {
-        Icon image = null;
-        if (currentScene.getImageFile() == null) {
-            image = Util.getImage("chest.JPG");
-        } else {
-            image = Util.imageFrom(currentScene);
-        }
-
-        this.imageLb = new JLabel(image);
-        centralPn.removeAll();
-        centralPn.add(imageLb);
-    }
-
-    private void chooseImageButtonAction(String workspaceId)
-    {
-        File lastFolder = new File(conf.get(SCENE_IMAGE_LAST_USED_FOLDER, System.getProperty("user.home")));
-        if (lastFolder.exists()) {
-            fc.setCurrentDirectory(lastFolder);
-        }
-
-        fc.showOpenDialog(mainPanel);
-        File imageFile = fc.getSelectedFile();
-
-        File newImageFile = copyImageToWorkspace(imageFile, workspaceId);
-
-        conf.set(SCENE_IMAGE_LAST_USED_FOLDER, imageFile.getParentFile().getAbsolutePath());
-        conf.save();
-
-        updateImage(newImageFile);
-    }
-
-    private File copyImageToWorkspace(File imageFile, String workspaceId)
-    {
-        try {
-            InputStream in = new FileInputStream(imageFile);
-            File wsDir = new File(Conf.getHome() + File.separator + "workspaces");
-            if (!wsDir.exists()) {
-                wsDir.mkdirs();
-            }
-
-            File wDir = new File(wsDir + File.separator + workspaceId);
-            if (!wDir.exists()) {
-                wDir.mkdirs();
-            }
-            File copyOfImageFile = new File(wDir.getAbsolutePath() + File.separator + imageFile.getName());
-            copyOfImageFile.createNewFile();
-
-            byte[] data = new byte[in.available()];
-            in.read(data);
-            
-            OutputStream out = new FileOutputStream(copyOfImageFile);
-            out.write(data);
-            out.flush();
-            out.close();
-            in.close();
-            logger.debug("Saved image file [" + copyOfImageFile + "]");
-            
-            return copyOfImageFile;
-        } catch (Exception e) {
-            throw new AdventureException(e);
-        }
     }
 
     JPanel getPanel()

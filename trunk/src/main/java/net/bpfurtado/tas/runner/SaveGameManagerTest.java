@@ -26,6 +26,7 @@ import static junit.framework.Assert.assertEquals;
 
 import java.io.File;
 
+import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
@@ -89,20 +90,23 @@ class MockPlayerEventListener implements PlayerEventListener
 
 class MockSaveGameListener implements SaveGameListener
 {
-
-    public void fireOpenSavedGameEvent(File f)
+    @Override
+    public void fireOpenSavedGameEvent(Workspace workspace)
     {
     }
 
-    public void log(String msg)
-    {
-    }
-
-    public Game open(File adventure)
+    @Override
+    public Game open(String workspaceId)
     {
         return null;
     }
 
+    @Override
+    public void log(String msg)
+    {
+    }
+
+    @Override
     public void openScene(Scene to, boolean execActions)
     {
     }

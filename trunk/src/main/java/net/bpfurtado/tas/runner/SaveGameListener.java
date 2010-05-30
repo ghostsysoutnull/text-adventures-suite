@@ -22,15 +22,14 @@
 
 package net.bpfurtado.tas.runner;
 
-import java.io.File;
-
+import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Scene;
 
 interface SaveGameListener
 {
-    void fireOpenSavedGameEvent(File f);
-    Game open(File adventure);
+    void fireOpenSavedGameEvent(Workspace workspace);
+    Game open(String workspaceId);
     void openScene(Scene to, boolean execActions);
     void log(String msg);
 }

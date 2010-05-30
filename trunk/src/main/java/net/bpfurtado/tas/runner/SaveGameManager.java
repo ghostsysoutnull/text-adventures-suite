@@ -62,7 +62,8 @@ public class SaveGameManager
 
         SaveGamePersister.write(xml, file, saveGameListener);
 
-        saveGameListener.fireOpenSavedGameEvent(file);
+        //FIXME solve line bellow
+        //saveGameListener.fireOpenSavedGameEvent(file);
 
         return file;
     }
@@ -82,7 +83,7 @@ public class SaveGameManager
     private SaveGame buildSaveGame()
     {
         SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
-        saveGame.setAdventureFilePath(Conf.runner().get("lastAdventure"));
+        saveGame.setWorkspaceId(Conf.runner().get("lastWorkspaceId"));
         return saveGame;
     }
 
@@ -98,11 +99,9 @@ public class SaveGameManager
             }
 
             // creates a new gameImpl
-            this.game = saveGameListener.open(new File(saveGame.getAdventureFilePath()));
-            Adventure adv = game.open(saveGame); // uses an old reference.
+            this.game = saveGameListener.open(saveGame.getWorkspace().getId());
+            Adventure adv = saveGame.getWorkspace().getAdventure();
             
-            saveGame.setAdventure(adv);
-
             Player player = game.getPlayer();
             player.add(playerEventListener);
 
@@ -110,7 +109,8 @@ public class SaveGameManager
 
             saveGameListener.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
 
-            saveGameListener.fireOpenSavedGameEvent(saveGameFile);
+            //FIXME: solve line bellow
+            //saveGameListener.fireOpenSavedGameEvent(saveGameFile);
 
             return saveGame;
         } catch (Exception e) {

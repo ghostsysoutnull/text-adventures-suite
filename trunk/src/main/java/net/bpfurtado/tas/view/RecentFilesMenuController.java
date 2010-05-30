@@ -42,19 +42,23 @@ import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.builder.OpenEntityPersistedOnFileAction;
+import net.bpfurtado.tas.builder.Workspace;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author Bruno Patini Furtado
  */
 public class RecentFilesMenuController implements EntityPersistedOnFileOpenActionListener
 {
+    private static final Logger logger = Logger.getLogger(RecentFilesMenuController.class);
     private static final int MAX_ENTRIES_IN_RECENT_LIST = 10;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
 
     private JMenu openRecentMenu;
 
-    private LinkedList<File> recentFiles = new LinkedList<File>();
+    private LinkedList<Workspace> recentFiles = new LinkedList<Workspace>();
     private LinkedList<JMenuItem> menuItems = new LinkedList<JMenuItem>();
 
     private EntityPersistedOnFileOpenner entityOpenner;
@@ -76,9 +80,9 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         return openRecentMenu;
     }
 
-    public void fileOpenedAction(File file)
+    public void fileOpenedAction(Workspace workspace)
     {
-        addToRecent(file);
+        addToRecent(workspace);
         openRecentMenu.setEnabled(true);
     }
 
@@ -95,11 +99,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
             }
 
             BufferedReader reader = new BufferedReader(new FileReader(historyFile));
-            for (String filePath = reader.readLine(); filePath != null; filePath = reader.readLine()) {
-                File file = new File(filePath);
-                if (file.exists()) {
-                    addToRecent(file);
-                }
+            for (String workspaceId = reader.readLine(); workspaceId != null; workspaceId = reader.readLine()) {
+                addToRecent(Workspace.loadFrom(workspaceId));
             }
             reader.close();
 
@@ -108,29 +109,25 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
             }
 
         } catch (Exception e) {
-            throw new AdventureException(e);
+            //throw new AdventureException(e);
+            logger.debug(e.getMessage(), e);
         }
     }
 
-    private void addToRecent(File recentFile)
+    private void addToRecent(Workspace workspace)
     {
-        if (recentFiles.contains(recentFile)) {
+        if (recentFiles.contains(workspace)) {
             for (JMenuItem item : menuItems) {
-                if (item.getText().equals(recentFile.getName()) 
-                 || item.getText().startsWith("<html>" + recentFile.getName() + " <")) 
-                {
+                if (item.getText().equals(workspace.getId()) || item.getText().startsWith("<html>" + workspace.getId() + " <")) {
                     openRecentMenu.remove(item);
                     menuItems.remove(item);
-                    recentFiles.remove(recentFile);
+                    recentFiles.remove(workspace);
 
-                    item.setText("<html>" + recentFile.getName() + 
-                            " <DEFAULT_FONT size=-2 color=blue><b><i>" + 
-                            sdf.format(new Date()) + 
-                            "</i></b></DEFAULT_FONT> </html>");
+                    item.setText("<html>" + workspace.getId() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
 
                     openRecentMenu.add(item, 0);
                     menuItems.add(0, item);
-                    recentFiles.addFirst(recentFile);
+                    recentFiles.addFirst(workspace);
 
                     openRecentMenu.setEnabled(true);
 
@@ -145,12 +142,12 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         if (recentFiles.size() == MAX_ENTRIES_IN_RECENT_LIST) {
             recentFiles.removeLast();
         }
-        recentFiles.addFirst(recentFile);
+        recentFiles.addFirst(workspace);
 
         if (menuItems.size() == MAX_ENTRIES_IN_RECENT_LIST) {
             openRecentMenu.remove(menuItems.removeLast());
         }
-        menuItems.addFirst(buildRecentMenuItem(recentFile));
+        menuItems.addFirst(buildRecentMenuItem(workspace));
 
         saveRecentEntriesFile();
     }
@@ -160,8 +157,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(historyFile));
             Collections.reverse(recentFiles);
-            for (File f : recentFiles) {
-                writer.println(f.getAbsolutePath());
+            for (Workspace w : recentFiles) {
+                writer.println(w.getId());
             }
             writer.flush();
             writer.close();
@@ -171,9 +168,9 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         }
     }
 
-    private JMenuItem buildRecentMenuItem(File recentFile)
+    private JMenuItem buildRecentMenuItem(Workspace recentFile)
     {
-        JMenuItem menuItem = new JMenuItem(recentFile.getName());
+        JMenuItem menuItem = new JMenuItem(recentFile.getId());
         menuItem.addActionListener(new OpenEntityPersistedOnFileAction(parentFrame, entityOpenner, recentFile));
         openRecentMenu.add(menuItem, 0);
 

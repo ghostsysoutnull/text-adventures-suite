@@ -25,9 +25,14 @@
 	<category name="org.apache.log4j.xml">
 		<priority value="info" />
 	</category>
-	<category name="net.bpfurtado.tas.builder.ImagePanelBuilder">
+    <category name="net.bpfurtado.tas.builder.ImagePanelBuilder">
         <priority value="debug" />
     </category>
+    
+    <category name="net.bpfurtado.tas.builder.Workspace">
+        <priority value="debug" />
+    </category>
+    
 	<root>
 		<priority value="debug" />
 		<appender-ref ref="STDOUT" />

@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import net.bpfurtado.tas.AdventureException;
 
@@ -50,8 +49,6 @@ public class Adventure
 
     private int scenesIdCounter = 1;
 
-    private String id = null;
-
     public Adventure()
     {
         start = createScene(0, false);
@@ -62,8 +59,6 @@ public class Adventure
         start.setIsStart();
 
         DepthManager.getInstance().setStart(start);
-
-        id = UUID.randomUUID().toString();
 
         addScene(start);
     }
@@ -199,15 +194,5 @@ public class Adventure
     public void setAssertions(String assertions)
     {
         this.assertions = assertions;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId(String id)
-    {
-        this.id = id;
     }
 }

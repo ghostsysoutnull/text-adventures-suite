@@ -30,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EventObject;
@@ -52,6 +51,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
+import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.DepthManager;
 import net.bpfurtado.tas.model.IPath;
 import net.bpfurtado.tas.model.Scene;
@@ -400,7 +400,8 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         Util.showComponent(panel);
     }
 
-    public void fileOpenedAction(File file)
+    @Override
+    public void fileOpenedAction(Workspace workspace)
     {
         depthLists.clear();
     }
