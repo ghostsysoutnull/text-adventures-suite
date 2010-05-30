@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Tue Jul 07 23:14:11 BRT 2009
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=true
+jarname=text-adventures-suite_1.2.1.jar
+manifest.mergeall=true
+manifest.mainclass=net.bpfurtado.tas.view.OpenningFrame
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<jar|junit.jar>
+includes=

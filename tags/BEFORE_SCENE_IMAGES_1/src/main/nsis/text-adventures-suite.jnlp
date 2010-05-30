@@ -1,0 +1,49 @@
+<jnlp
+    spec="1.5+"                                                                  
+    codebase="http://bpfurtado.net/tas/download"
+    href="text-adventures-suite.jnlp">
+    <!--
+    codebase="file:///C:/Users/Bruno/workspaces/eclipse-3.3/text-adventure-suite/web/download"
+    href="text-adventures-suite.jnlp">
+    -->
+    
+    <information>                   
+        <title>Text Adventures Suite</title>
+        <vendor>Forgotten Ages, Inc.</vendor>
+        <homepage href="http://bpfurtado.net/tas"/>
+        <description>Text Adventures Suite</description>
+        <description kind="short">Text Adventures Suite</description>
+        <!--
+        <icon href="images/swingset2.jpg"/>
+        <icon kind="splash" href="images/splash.gif"/>
+        -->
+        <offline-allowed/>
+        <!--
+        <association mime-type="application-x/text-adventure-project" extensions="adv.xml">
+        -->                                          
+        <shortcut online="false">
+            <desktop/>
+            <menu submenu="Forgotten Ages - Apps"/>
+        </shortcut>
+    </information>
+    <!--
+    <information os="linux">   
+        <title> SwingSet2 Demo on Linux </title>
+        <homepage href="docs/linuxhelp.html">
+    </information>
+    -->
+    <security>
+        <all-permissions/>
+    </security>
+    <resources>
+        <j2se version="1.5.0+" java-vm-args=""/>
+        <jar href="TextAdventuresSuite.jar"/>
+        <jar href="lib/bsh-2.0b4.jar"/>
+        <jar href="lib/commons-validator-1.3.1.jar"/>
+        <jar href="lib/dom4j-1.6.1.jar"/>
+        <jar href="lib/jaxen-1.1-beta-9.jar"/>
+        <jar href="lib/jaxen-1.1.1.jar"/>
+        <jar href="lib/log4j-1.2.15.jar"/>
+    </resources>
+    <application-desc main-class="net.bpfurtado.adventure.view.OpenningFrame"/>
+</jnlp> 

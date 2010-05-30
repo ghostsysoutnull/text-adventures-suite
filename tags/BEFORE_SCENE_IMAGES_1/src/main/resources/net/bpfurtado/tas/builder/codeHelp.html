@@ -1,0 +1,142 @@
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+
+<h1>Scene Code Programming</h1>
+It is possible to add much more interactivity to your Text Adventure by adding Beanshell scripts to be executed when openning a new scene.
+
+<h2>What is beanshell?</h2>
+Beanshell [http://www.beanshell.org] is simpler way to program in Java.
+You can for example have a code like this:<br></br>
+<br></br>
+
+<h3>To create 'Scene Actions'</h3>
+The tab named 'Actions' has code that is executed everytime the scene is openned. The tab name 'Assertions' has code that is executed <strong>every time</strong> some Scene is openned.<br></br>
+<br></br>
+The following code would go well on some Scene Action code:
+<ul>
+    <li>
+        <strong>Set</strong> main attributes:
+        <pre>
+        player.setStamina(player.getStamina()+6);<br></br>
+        player.setSkill(player.getSkill()-1);<br></br>
+        player.setStamina(20);<br></br>
+        player.setSkill(6);<br></br>
+        </pre>
+    </li>
+    <li>
+        <strong>Update</strong> main attributes (dec &amp; inc operations are available for Stamina, Luck, Skill and Damage):
+        <pre>
+        player.incStamina(1);<br></br>
+        player.decStamina(1);<br></br>
+        player.incCombatSkill(2);<br></br>
+        player.decCombatSkill(2);<br></br>
+        player.incLuck(3);<br></br>
+        player.decLuck(3);<br></br>
+        player.incDamage(4);<br></br>
+        player.decDamage(4);
+        </pre>
+    </li>
+    <li>
+        <strong>Update Skills</strong>:
+        <pre>
+        player.skill("strengh").inc(4);<br></br>
+        player.skill("climb-walls").dec(2);
+        </pre>
+    </li>
+    <li>
+        <strong>Add</strong> attributes:
+        <pre>
+        player.addAttribute("long-sword");<br></br>
+        player.addAttribute("apples", 3);<br></br>
+        player.addAttribute("potion", "red");
+        </pre>
+    </li>
+    <li>
+        <strong>Remove</strong> attributes:
+        <pre>
+        player.addAttribute("iron shield");<br></br>
+        player.removeAttribute("horse");
+        </pre>
+    </li>
+    <li>
+        <strong>Add Skills</strong> to be tested:
+        <pre>
+        player.addSkill("light-saber fight", 9);<br></br>
+        player.addSkill("climb walls", 8);
+        </pre>
+    </li>
+    <li>
+        <strong>Test if</strong> the player <strong>has</strong> some attribute:
+        <pre>
+        if(player.has("retractable claws")) {<br></br>
+            pathsToHide.add(3); //Hide the 'climb the dungeon wall' path.<br></br>
+        }
+        </pre>
+    </li>
+    <li>
+        Check some attribute value and <strong>Hide a scene path</strong>:
+        <pre>
+        if(player.getIntValue("apple")==1) {<br></br>
+            pathsToHide.add(2);<br></br>
+        }
+        </pre>
+    </li>
+    <li>
+        <strong>Increase</strong> some attribute int value:
+        <pre>
+        ammo = player.getIntValue("gun ammo");<br></br>
+        player.addAttribute("gun ammo", ammo + 6);
+        </pre>
+        Or
+        <pre>
+        player.incIntValue("coins", 30);
+        </pre>
+        Or
+        <pre>
+        player.incIntValue("coins", 30);
+        </pre>
+    </li>
+    <li>
+        <strong>Decrease</strong> some attribute int value:
+        <pre>
+        n = player.getIntValue("health potion");<br></br>
+        player.addAttribute("health potion", n-1);
+        </pre>
+        Or
+        <pre>
+        player.decIntValue("stamina", 6);
+        </pre>
+    </li>
+    <li>
+        <strong>Change the scene text</strong> based on some attribute value:
+        <pre>
+        if ( player.getIntValue("cat statues")==2 ) {<br></br>
+            text="yet 2 cat statues?";<br></br>
+        } else {<br></br>
+            text = "no 2 anymore... but " +  player.getIntValue("cat statues");<br></br>
+        }
+        </pre>
+    </li>
+</ul>
+
+<h3>To define 'Adventure Assertions'</h3>
+And the following code would go well on the Adventure Assertions code:<br></br>
+<ul>
+    <li>
+        <strong>Redirect the player to some scene</strong> based on some attribute value:
+        <pre>
+        if ( player.getStamina() &lt;= 0 ) {<br></br>
+            go=42; //Some 'end of adventure' scene.<br></br>
+        }
+        </pre>
+    </li>
+</ul>
+
+<h2>More Help?</h2>
+Please, any help or suggestion mail to [tas@bpfurtado.net].
+I'll be more than happy to hear you.
+</body>
+</html>
