@@ -49,7 +49,7 @@ public class SaveGamePersister
 
         Element root = xml.addElement("savegame");
         root.addAttribute("sceneId", saveGame.getSceneId() + "");
-        root.addAttribute("adventureFilePath", saveGame.getAdventureFilePath());
+        root.addAttribute("workspaceId", saveGame.getWorkspace().getId());
 
         Player player = saveGame.getPlayer();
 
@@ -104,7 +104,7 @@ public class SaveGamePersister
             }
 
             SaveGame saveGame = new SaveGame(player, integer(root, "sceneId"));
-            saveGame.setAdventureFilePath(root.valueOf("@adventureFilePath"));
+            saveGame.setWorkspaceId(root.valueOf("@workspaceId"));
             return saveGame;
         } catch (DocumentException e) {
             throw new AdventureReaderException("Error reading XML document", e);

@@ -24,7 +24,7 @@ package net.bpfurtado.tas.runner;
 
 import java.io.Serializable;
 
-import net.bpfurtado.tas.model.Adventure;
+import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.Player;
 
 public class SaveGame implements Serializable
@@ -33,19 +33,11 @@ public class SaveGame implements Serializable
 
     private Player player;
     private int sceneId;
-    private String adventureFilePath;
-
-    private Adventure adventure;
-
-    public String getAdventureFilePath()
-    {
-        return adventureFilePath;
-    }
-
-    public void setAdventureFilePath(String adventureFile)
-    {
-        this.adventureFilePath = adventureFile;
-    }
+    
+    //TODO the id or the object!
+    private String workspaceId;
+    //TODO the id or the object!
+    private Workspace workspace;
 
     public SaveGame(Player player, int sceneId)
     {
@@ -68,13 +60,23 @@ public class SaveGame implements Serializable
         return sceneId;
     }
 
-    public void setAdventure(Adventure adventure)
+    public Workspace getWorkspace()
     {
-        this.adventure = adventure;
+        return workspace;
     }
 
-    public Adventure getAdventure()
+    public void setWorkspace(Workspace workspace)
     {
-        return adventure;
+        this.workspace = workspace;
+    }
+
+    public String getWorkspaceId()
+    {
+        return workspaceId;
+    }
+
+    public void setWorkspaceId(String workspaceId)
+    {
+        this.workspaceId = workspaceId;
     }
 }

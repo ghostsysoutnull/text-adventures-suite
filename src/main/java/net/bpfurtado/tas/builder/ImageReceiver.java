@@ -22,10 +22,12 @@
 
 package net.bpfurtado.tas.builder;
 
-import java.io.File;
 
+/**
+ * Consider renaming to WorkspaceHolder
+ */
 public interface ImageReceiver
 {
-    void fireNewImageSelectedAction(File f);
-    String getWorkspaceId();
+    void fireNewImageSelectedAction(String imageId);
+    Workspace getWorkspace();
 }

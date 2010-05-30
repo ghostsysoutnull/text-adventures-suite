@@ -22,14 +22,14 @@
 
 package net.bpfurtado.tas;
 
-import java.io.File;
+import net.bpfurtado.tas.builder.Workspace;
 
 /**
  * @author Bruno Patini Furtado
  */
 public interface EntityPersistedOnFileOpenner 
 {
-    void open(File file);
+    void open(Workspace workspace);
     void save(boolean isSaveAs);
 
     boolean isDirty();

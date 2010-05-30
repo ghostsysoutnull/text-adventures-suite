@@ -77,7 +77,7 @@ public class XMLAdventureReader
     private void init()
     {
         adventure.setName(((Node) xmlDocument.selectNodes("/adventure/name").iterator().next()).getText());
-        adventure.setId(((Node) xmlDocument.selectNodes("/adventure/id").iterator().next()).getText());
+        //adventure.setId(((Node) xmlDocument.selectNodes("/adventure/id").iterator().next()).getText());
         
         Node assertionsNode = xmlDocument.selectSingleNode("/adventure/assertions");
 		// to be compatible with old project files
@@ -136,7 +136,7 @@ public class XMLAdventureReader
         } else {
             s = adventure.createScene(id, Boolean.valueOf(n.valueOf("@isEnd")));
         }
-        s.setImageFile(new File(n.valueOf("@imageFilePath")));
+        s.setImageId(n.valueOf("@imageId"));
         s.setName(n.valueOf("@name"));
         s.setTags(n.valueOf("@tags"));
         s.setText(n.selectSingleNode("./text").getText());

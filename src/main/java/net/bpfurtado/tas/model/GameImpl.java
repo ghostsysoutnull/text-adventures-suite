@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
 import net.bpfurtado.tas.runner.CodeExecutionAnalyser;
 import net.bpfurtado.tas.runner.PostCodeExecutionAction;
 import net.bpfurtado.tas.runner.SaveGame;
@@ -79,7 +78,7 @@ public class GameImpl implements Game
 
     public Adventure open(SaveGame saveGame)
     {
-        this.adventure = new XMLAdventureReader().read(saveGame.getAdventureFilePath());
+        //this.adventure = new XMLAdventureReader().read(saveGame.getAdventureFilePath());
         this.player = saveGame.getPlayer();
         
         return adventure;

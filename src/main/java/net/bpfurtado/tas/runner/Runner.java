@@ -62,6 +62,7 @@ import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
+import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
@@ -73,7 +74,6 @@ import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.model.SkillTestListener;
 import net.bpfurtado.tas.model.combat.EndOfCombatListener;
-import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
 import net.bpfurtado.tas.runner.combat.CombatFrame;
 import net.bpfurtado.tas.view.ErrorFrame;
 import net.bpfurtado.tas.view.RecentFilesMenuController;
@@ -89,6 +89,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private Game game;
     private Adventure adventure;
+    private Workspace workspace;
 
     private JPanel gamePanel;
     private JPanel scenesPn;
@@ -96,7 +97,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private JTextArea sceneTA;
     private JTextArea logTA;
-    
+
     private JPanel pathsPn;
     private JPanel endPn;
     private JPanel mainPanel;
@@ -114,13 +115,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
     private RecentFilesMenuController recentAdventuresMenuController;
     private RecentFilesMenuController recentSavedGamesMenuController;
+
     private PlayerPanelController statsView;
     private SaveGameManager saveGameManager;
 
-    public static Runner runAdventure(File adventureFile)
+    public static Runner runAdventure(Workspace workspace)
     {
         Runner r = new Runner();
-        r.open(adventureFile);
+        r.open(workspace);
         return r;
     }
 
@@ -153,10 +155,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         if (!Conf.runner().is("openLastAdventureOnStart", false))
             return;
 
-        File advFile = new File(Conf.runner().get("lastAdventure"));
-        if (advFile.exists()) {
-            open(advFile);
-        }
+        this.workspace = Workspace.loadFrom(Conf.runner().get("lastWorkspaceId"));
+        open(workspace);
     }
 
     private void init()
@@ -186,9 +186,9 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 return Runner.this.isDirty();
             }
 
-            public void open(File file)
+            public void open(Workspace workspace)
             {
-                Runner.this.open(file);
+                Runner.this.open(workspace);
             }
 
             public void save(boolean isSaveAs)
@@ -197,42 +197,42 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             }
         };
         recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
-
-        EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
-        {
-            public String getApplicationName()
-            {
-                return Runner.this.getApplicationName();
-            }
-
-            public boolean hasAnOpenEntity()
-            {
-                return false;
-            }
-
-            public boolean isDirty()
-            {
-                return false;
-            }
-
-            public void open(File file)
-            {
-                recentMenuSaveGameOpenAction(file);
-            }
-
-            public void save(boolean isSaveAs)
-            {
-                Runner.this.saveGameManager.save();
-            }
-        };
-
-        recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
-
+        //
+        // EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
+        // {
+        // public String getApplicationName()
+        // {
+        // return Runner.this.getApplicationName();
+        // }
+        //
+        // public boolean hasAnOpenEntity()
+        // {
+        // return false;
+        // }
+        //
+        // public boolean isDirty()
+        // {
+        // return false;
+        // }
+        //
+        // public void open(Workspace w)
+        // {
+        // recentMenuSaveGameOpenAction(w);
+        // }
+        //
+        // public void save(boolean isSaveAs)
+        // {
+        // Runner.this.saveGameManager.save();
+        // }
+        // };
+        //
+        // recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
+        //
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
-
-        this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
-        openSavedGamesListener.add(recentSavedGamesMenuController);
+        //
+        // this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        // openSavedGamesListener.add(recentSavedGamesMenuController);
     }
 
     private void initView()
@@ -306,22 +306,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         return game;
     }
 
-    public Game open(File saveFile)
-    {
-        adventure = new XMLAdventureReader().read(saveFile);
-
-        Conf.runner().set("lastOpenDir", saveFile.getParentFile().getAbsolutePath());
-        Conf.runner().set("lastAdventure", saveFile.getAbsolutePath());
-        Conf.runner().save();
-
-        setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
-        saveGameMnIt.setEnabled(true);
-        startAgainMnIt.setEnabled(true);
-
-        fireOpenAdventureEvent(saveFile);
-        return startGame();
-    }
-
     private Game startGame()
     {
         mainPanel.setVisible(true);
@@ -340,8 +324,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         /*
          * logger.debug("Going to " + scene.getText());
          * 
-         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText());
-         * sceneTA.setCaretPosition(0);
+         * sceneTA.setText("[" + scene.getId() + "]\n" + scene.getText()); sceneTA.setCaretPosition(0);
          * 
          * if(scene.isEnd()) { gameOver(); return; }
          */
@@ -471,14 +454,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         updateView();
     }
 
-    private void updateImage(Scene s)
+    private void updateImage(Scene scene)
     {
-        if (s.getImageFile() == null) {
+        if (scene.getImageId() == null) {
             imagePn.setVisible(false);
         } else {
             imagePn.removeAll();
 
-            Icon img = Util.imageFrom(s);
+            Icon img = workspace.imageFrom(scene);
 
             Rectangle b = getBounds();
             int w = (int) ((double) 460 + statsView.getPanel().getBounds().getWidth() + img.getIconWidth() + 5); // 111
@@ -487,6 +470,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             int h = (int) img.getIconHeight() + 185;
             setBounds(new Rectangle(x, y, w < 400 ? 400 : w, h < 460 ? 460 : h));
             imagePn.add(new JLabel(img));
+            imagePn.setVisible(true);
         }
     }
 
@@ -519,7 +503,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Util.showComponent(mainPanel);
     }
 
-    private void fireOpenAdventureEvent(File adventureFile)
+    private void fireOpenAdventureEvent(Workspace adventureFile)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
             listener.fileOpenedAction(adventureFile);
@@ -635,7 +619,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         });
 
         saveGameMenu.add(new JSeparator());
-        saveGameMenu.add(recentSavedGamesMenuController.getOpenRecentMenu());
+        // saveGameMenu.add(recentSavedGamesMenuController.getOpenRecentMenu());
     }
 
     private void menuAdv(JMenuBar menuBar)
@@ -669,7 +653,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         });
         advMenu.add(openMnIt);
 
-        advMenu.add(recentAdventuresMenuController.getOpenRecentMenu());
+        // advMenu.add(recentAdventuresMenuController.getOpenRecentMenu());
         advMenu.add(new JSeparator());
 
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
@@ -697,13 +681,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
     }
 
-    public void fireOpenSavedGameEvent(File saveGameFile)
-    {
-        for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
-            listener.fileOpenedAction(saveGameFile);
-        }
-    }
-
     private void startAgain()
     {
         gamePanel.remove(endPn);
@@ -723,19 +700,20 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void openMenuAction()
     {
-        if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (answer == JOptionPane.NO_OPTION)
-                return;
-        }
-
-        fileChooser.setCurrentDirectory(new File(Conf.runner().get("lastOpenDir")));
-        int returnVal = fileChooser.showOpenDialog(Runner.this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File adventureFile = fileChooser.getSelectedFile();
-            System.out.println("Opening: " + adventureFile.getName() + ".");
-            open(adventureFile);
-        }
+        // if (adventure != null) {
+        // int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // if (answer == JOptionPane.NO_OPTION)
+        // return;
+        // }
+        //
+        // fileChooser.setCurrentDirectory(new File(Conf.runner().get("lastOpenDir")));
+        // int returnVal = fileChooser.showOpenDialog(Runner.this);
+        // if (returnVal == JFileChooser.APPROVE_OPTION) {
+        // File adventureFile = fileChooser.getSelectedFile();
+        // System.out.println("Opening: " + adventureFile.getName() + ".");
+        // open(adventureFile);
+        // }
+        logger.debug("Not working now...");
     }
 
     public static void main(String[] args)
@@ -809,18 +787,50 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
     }
 
-    private void recentMenuSaveGameOpenAction(File file)
+    // private void recentMenuSaveGameOpenAction(Workspace w)
+    // {
+    // SaveGame saveGame = getSaveGameManager().open(w, Runner.this);
+    // adventure = saveGame.getWorkspace().getAdventure();
+    // }
+    //
+    // private SaveGameManager getSaveGameManager()
+    // {
+    // if (saveGameManager == null) {
+    // game = new GameImpl(null);
+    // saveGameManager = new SaveGameManager(game, this);
+    // }
+    // return saveGameManager;
+    // }
+
+    public void fireOpenSavedGameEvent(Workspace workspace)
     {
-        SaveGame saveGame = getSaveGameManager().open(file, Runner.this);
-        adventure = saveGame.getAdventure();
+        for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
+            listener.fileOpenedAction(workspace);
+        }
     }
 
-    private SaveGameManager getSaveGameManager()
+    public Game open(Workspace workspace)
     {
-        if (saveGameManager == null) {
-            game = new GameImpl(null);
-            saveGameManager = new SaveGameManager(game, this);
-        }
-        return saveGameManager;
+        // adventure = new XMLAdventureReader().read(saveFile);
+        this.workspace = workspace;
+        adventure = workspace.getAdventure();
+
+        // Conf.runner().set("lastOpenDir", saveFile.getParentFile().getAbsolutePath());
+        // Conf.runner().set("lastAdventure", saveFile.getAbsolutePath());
+        // Conf.runner().save();
+
+        setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
+        saveGameMnIt.setEnabled(true);
+        startAgainMnIt.setEnabled(true);
+
+        fireOpenAdventureEvent(workspace);
+        return startGame();
+    }
+
+    @Override
+    public Game open(String workspaceId)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

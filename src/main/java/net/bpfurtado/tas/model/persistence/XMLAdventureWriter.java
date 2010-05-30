@@ -70,7 +70,7 @@ public class XMLAdventureWriter
         Element root = doc.addElement("adventure");
         root.addAttribute("startScene", adventure.getStart().getId() + "");
         root.addElement("name").setText(adventure.getName());
-        root.addElement("id").setText(adventure.getId());
+        //root.addElement("id").setText(adventure.getId());
 
         Element assertions = root.addElement("assertions");
         assertions.addCDATA(adventure.getAssertions());
@@ -97,7 +97,7 @@ public class XMLAdventureWriter
                 addAttribute("isEnd",s.isEnd()+"").
                 addAttribute("name", s.getName()).
                 addAttribute("tags", s.getTags()).
-                addAttribute("imageFilePath", s.getImageFile() == null ? "" : s.getImageFile().getAbsolutePath()).
+                addAttribute("imageId", s.getImageId() == null ? "" : s.getImageId()).
                 addAttribute("from", idsOfFromScenes.toString());
             
             if(s.getType().equals(SceneType.combat)) {
