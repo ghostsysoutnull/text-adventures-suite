@@ -68,6 +68,7 @@ import javax.swing.text.BadLocationException;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.combat.BuilderCombatPanelManager;
 import net.bpfurtado.tas.builder.depth.DepthScenesFrame;
 import net.bpfurtado.tas.builder.scenespanel.ChooseSceneDialog;

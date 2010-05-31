@@ -26,7 +26,7 @@ import static junit.framework.Assert.assertEquals;
 
 import java.io.File;
 
-import net.bpfurtado.tas.builder.Workspace;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;

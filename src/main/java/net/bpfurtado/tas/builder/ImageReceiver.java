@@ -22,6 +22,8 @@
 
 package net.bpfurtado.tas.builder;
 
+import net.bpfurtado.tas.Workspace;
+
 
 /**
  * Consider renaming to WorkspaceHolder

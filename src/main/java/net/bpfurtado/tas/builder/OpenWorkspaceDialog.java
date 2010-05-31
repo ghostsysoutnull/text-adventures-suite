@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.view.Util;
 
 public class OpenWorkspaceDialog extends JDialog

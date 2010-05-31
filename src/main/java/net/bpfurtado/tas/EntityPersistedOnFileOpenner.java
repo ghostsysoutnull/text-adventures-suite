@@ -22,7 +22,6 @@
 
 package net.bpfurtado.tas;
 
-import net.bpfurtado.tas.builder.Workspace;
 
 /**
  * @author Bruno Patini Furtado
