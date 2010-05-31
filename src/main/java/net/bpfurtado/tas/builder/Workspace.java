@@ -27,6 +27,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.swing.Icon;
@@ -110,7 +112,7 @@ public class Workspace
         return workspaceHome;
     }
 
-    private static String getWorkspacesHome()
+    public static String getWorkspacesHome()
     {
         String path = Conf.getHome() + sep + "builder" + sep + "workspaces";
         File ws = new File(path);
@@ -192,5 +194,17 @@ public class Workspace
             img = new ImageIcon(f.getAbsolutePath());
         }
         return img;
+    }
+    
+    public static List<Workspace> listAll()
+    {
+        List<Workspace> ws = new LinkedList<Workspace>();
+        File workspacesHomeFolder = new File(Workspace.getWorkspacesHome());
+        for (File f : workspacesHomeFolder.listFiles()) {
+            if (f.isDirectory()) {
+                ws.add(Workspace.loadFrom(f.getName()));
+            }
+        }
+        return ws;
     }
 }

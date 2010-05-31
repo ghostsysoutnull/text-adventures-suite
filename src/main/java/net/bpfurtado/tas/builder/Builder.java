@@ -100,39 +100,59 @@ import org.apache.log4j.Logger;
 public class Builder extends JFrame implements EntityPersistedOnFileOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder, ImageReceiver
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
+
     private static final long serialVersionUID = -3424967248011145801L;
 
     public static final Font FONT = new Font("Tahoma", 0, 14);
 
     private static final String TAB_TITLE_COMBAT = "Combat";
+
     private static final String TAB_TITLE_SKILL_TEST = "Skill Test";
 
     private Adventure adventure;
+
     private Scene currentScene;
 
     private JPanel mainPanel;
+
     private JPanel mainPathsPane;
+
     private JPanel pathsPane;
+
     private JPanel pathsBtsPane;
 
     private JTextField adventureNameTF;
+
     private JTextField sceneNameTF;
+
     private JTextField tagsTF;
+
     private JTextArea sceneTA;
+
     private JTextArea codeTA;
+
     private JTextArea assertionsTA;
+
     private JTabbedPane sceneTabs;
 
     private JButton playBt;
+
     private JButton newPathBt;
+
     private JButton saveBt;
+
     private JButton goBackToSceneFromBt;
+
     private JComboBox backToFromScenesCb;
 
     private JMenuItem saveMnIt;
+
     private JMenuItem saveAsMnIt;
+
     private JMenuItem playMnIt;
+
     private JMenuItem playFromCurrentMnIt;
+
     private JMenuItem byDepthMnIt;
 
     private int lastSceneListIndex = -1;
@@ -140,15 +160,19 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     private RandomPathNameGenerator randomPathNameGenerator = new RandomPathNameGenerator();
 
     private List<PathView> pathViews = new LinkedList<PathView>();
+
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
+
     private ScenesList scenesList = null;
 
     private RecentFilesMenuController recentMenuController;
 
     boolean isDirty = false;
+
     private SceneTypesWidgets sceneTypesWidgets;
 
     private JButton playFromCurrentBt;
+
     private ImagePanelBuilder imagePanelBuilder;
 
     public Builder()
@@ -377,7 +401,10 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     public void switchTo(Scene sceneToSwitch)
     {
         /**
-         * Se for o inicio de uma nova aventura então nao temos ainda uma actualScene então não devemos salvar. Se setarmos a scene start para a actual agora a mesma será salva com os dados da gui vazios pois o updateView ainda não foi feito.
+         * Se for o inicio de uma nova aventura então nao temos ainda uma
+         * actualScene então não devemos salvar. Se setarmos a scene start
+         * para a actual agora a mesma será salva com os dados da gui vazios
+         * pois o updateView ainda não foi feito.
          */
         if (currentScene != null) {
             save(currentScene);
@@ -962,9 +989,13 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     static class PathView
     {
         JLabel orderLb;
+
         JTextField textField;
+
         JButton createSceneBt;
+
         JButton chooseSceneBt;
+
         JButton deleteSceneBt;
 
         IPath path;
@@ -1090,19 +1121,30 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     private void openAdventureMenuAction()
     {
         // if (isDirty) {
-        // int answer = Util.showSaveDialog(this, "Do you want to save it before openning another adventure?");
+        // int answer = Util.showSaveDialog(this,
+        // "Do you want to save it before openning another adventure?");
         // if (answer == Util.SAVE_DIALOG_OPT_CANCEL)
         // return;
         // else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
         // saveAdventureMenuAction(false);
         // }
         //
-        // JFileChooser fileChooser = createFileChooserWithDirFromConfigItem("lastOpenDir");
-        // if (fileChooser.showOpenDialog(Builder.this) == JFileChooser.APPROVE_OPTION) {
+        // JFileChooser fileChooser =
+        // createFileChooserWithDirFromConfigItem("lastOpenDir");
+        // if (fileChooser.showOpenDialog(Builder.this) ==
+        // JFileChooser.APPROVE_OPTION) {
         // saveFile = fileChooser.getSelectedFile();
         // open(saveFile);
         // }
-        logger.debug("not working now...");
+
+        System.out.println("0-here");
+        OpenWorkspaceDialog dialog = new OpenWorkspaceDialog(this);
+        Workspace chosenWorkspace = dialog.getWorkspace();
+        System.out.println("1-here");
+        if (chosenWorkspace != null) {
+            System.out.println("open");
+            open(chosenWorkspace);
+        }
     }
 
     private JFileChooser createFileChooserWithDirFromConfigItem(String key)
@@ -1200,11 +1242,16 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
 
         // boolean wasNewSaveFile = false;
         // if (saveFile == null || isSaveAs) {
-        // JFileChooser fileChooser = createFileChooserWithDirFromConfigItem("lastSaveDir");
-        // if (fileChooser.showSaveDialog(Builder.this) == JFileChooser.APPROVE_OPTION) {
+        // JFileChooser fileChooser =
+        // createFileChooserWithDirFromConfigItem("lastSaveDir");
+        // if (fileChooser.showSaveDialog(Builder.this) ==
+        // JFileChooser.APPROVE_OPTION) {
         // saveFile = fileChooser.getSelectedFile();
         // if (saveFile.exists()) {
-        // int answer = JOptionPane.showConfirmDialog(Builder.this, "This file already exists!\n" + "Do you want to overwrite it?", "File already exists", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // int answer = JOptionPane.showConfirmDialog(Builder.this,
+        // "This file already exists!\n" + "Do you want to overwrite it?",
+        // "File already exists", JOptionPane.YES_NO_OPTION,
+        // JOptionPane.QUESTION_MESSAGE);
         // if (answer == JOptionPane.NO_OPTION) {
         // return;
         // }
@@ -1287,7 +1334,8 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
         }
 
         /**
-         * Not called inside the method updateView since it needs only to be invoked once.
+         * Not called inside the method updateView since it needs only to be
+         * invoked once.
          */
         scenesList.prepareView(adventure.getStart());
     }
@@ -1319,7 +1367,8 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     }
 
     /**
-     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na jlist de cenas pois o updateView refaz o modelo da jlist.
+     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na
+     * jlist de cenas pois o updateView refaz o modelo da jlist.
      */
     public void switchTo(Scene selectedScene, int selectedSceneIdx)
     {
