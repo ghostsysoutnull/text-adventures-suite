@@ -196,7 +196,7 @@ public class OpenWorkspaceDialog extends JDialog
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.setBounds(150, 150, 336, 200);
                 f.setVisible(true);
-                OpenWorkspaceDialog2 dia = new OpenWorkspaceDialog2(f);
+                OpenWorkspaceDialog dia = new OpenWorkspaceDialog(f);
                 Workspace w = dia.getWorkspace();
                 System.out.println(w.getAdventure().getName());
             }

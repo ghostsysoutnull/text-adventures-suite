@@ -47,7 +47,6 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -1110,12 +1109,6 @@ public class Builder extends JFrame
         if (chosenWorkspace != null) {
             open(chosenWorkspace);
         }
-    }
-
-    private JFileChooser createFileChooserWithDirFromConfigItem(String key)
-    {
-        JFileChooser fileChooser = Util.createFileChooser(Conf.builder().get(key, System.getProperty("user.home")));
-        return fileChooser;
     }
 
     private void byDepthMenuAction()
