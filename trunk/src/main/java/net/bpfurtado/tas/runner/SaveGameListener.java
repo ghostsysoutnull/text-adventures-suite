@@ -22,7 +22,7 @@
 
 package net.bpfurtado.tas.runner;
 
-import net.bpfurtado.tas.builder.Workspace;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Scene;
 

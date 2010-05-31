@@ -50,8 +50,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
-import net.bpfurtado.tas.builder.Workspace;
 import net.bpfurtado.tas.model.DepthManager;
 import net.bpfurtado.tas.model.IPath;
 import net.bpfurtado.tas.model.Scene;

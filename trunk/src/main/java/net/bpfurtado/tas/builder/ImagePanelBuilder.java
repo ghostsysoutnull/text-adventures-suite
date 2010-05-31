@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileFilter;
 
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.view.Util;
 

@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */
 
-package net.bpfurtado.tas.builder;
+package net.bpfurtado.tas;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,8 +34,6 @@ import java.util.UUID;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-import net.bpfurtado.tas.AdventureException;
-import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.model.persistence.XMLAdventureReader;

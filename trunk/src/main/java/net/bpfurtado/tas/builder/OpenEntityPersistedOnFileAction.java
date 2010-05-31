@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;

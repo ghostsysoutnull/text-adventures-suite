@@ -24,7 +24,7 @@ package net.bpfurtado.tas.runner;
 
 import java.io.Serializable;
 
-import net.bpfurtado.tas.builder.Workspace;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Player;
 
 public class SaveGame implements Serializable

@@ -40,9 +40,9 @@ import javax.swing.JMenuItem;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.builder.OpenEntityPersistedOnFileAction;
-import net.bpfurtado.tas.builder.Workspace;
 
 import org.apache.log4j.Logger;
 
