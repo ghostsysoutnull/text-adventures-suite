@@ -81,7 +81,9 @@ public class Workspace
 
     public void save()
     {
-        XMLAdventureWriter writter = new XMLAdventureWriter(adventure, buildAdventureFile());
+        File f = buildAdventureFile();
+        logger.debug("Saving to [" + f + "]");
+        XMLAdventureWriter writter = new XMLAdventureWriter(adventure, f);
         writter.write();
     }
 
@@ -195,13 +197,14 @@ public class Workspace
         }
         return img;
     }
-    
+
     public static List<Workspace> listAll()
     {
         List<Workspace> ws = new LinkedList<Workspace>();
         File workspacesHomeFolder = new File(Workspace.getWorkspacesHome());
         for (File f : workspacesHomeFolder.listFiles()) {
             if (f.isDirectory()) {
+                logger.debug("Reading [" + f + "]...");
                 ws.add(Workspace.loadFrom(f.getName()));
             }
         }

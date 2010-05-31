@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on May 31, 2010 1:28:13 PM
+ * Created on 31/05/2010 18:48:49
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -25,6 +25,8 @@ package net.bpfurtado.tas.builder;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,27 +40,30 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import net.bpfurtado.tas.view.Util;
+
 public class OpenWorkspaceDialog extends JDialog
 {
-    private static final long serialVersionUID = -1955279929109799753L;
-
+    private static final long serialVersionUID = -6728322169763109479L;
     private Workspace workspace;
 
     public OpenWorkspaceDialog(JFrame parent)
     {
-        super(parent, true);
-        initView();
+        initView(parent);
     }
 
-    private void initView()
+    private void initView(JFrame parent)
     {
         setTitle("Choose a Workspace");
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         setDefaultLookAndFeelDecorated(true);
-        setBounds(200, 200, 336, 200);
-        setVisible(true);
+        Util.centerPosition(parent, this, 336, 200);
+        setModal(true);
+        setModalityType(ModalityType.TOOLKIT_MODAL);
 
         widgets();
+
+        setVisible(true);
     }
 
     private void widgets()
@@ -68,23 +73,39 @@ public class OpenWorkspaceDialog extends JDialog
 
         final JList list = new JList(new WorkspacesListModel());
         list.setBorder(BorderFactory.createTitledBorder("Workspaces"));
+        list.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyTyped(KeyEvent e)
+            {
+                selectedWorkspaceAction(list);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e)
+            {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+            }
+        });
         main.add(new JScrollPane(list), BorderLayout.CENTER);
 
         JPanel buttonsPn = new JPanel();
-        
+
         JButton chooseBt = new JButton("Choose");
         chooseBt.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent arg0)
             {
-                WorkspaceHolder holder = (WorkspaceHolder) list.getSelectedValue();
-                OpenWorkspaceDialog.this.workspace = holder.getWorkspace();
-                dispose();
+                selectedWorkspaceAction(list);
             }
         });
         buttonsPn.add(chooseBt, BorderLayout.PAGE_END);
-        
+
         JButton cancelBt = new JButton("Cancel");
         cancelBt.addActionListener(new ActionListener()
         {
@@ -95,13 +116,28 @@ public class OpenWorkspaceDialog extends JDialog
             }
         });
         buttonsPn.add(cancelBt, BorderLayout.PAGE_END);
-        
+
         main.add(buttonsPn, BorderLayout.PAGE_END);
+
+        list.setSelectedIndex(0);
+        list.requestFocusInWindow();
 
         add(main);
     }
 
-    class WorkspacesListModel extends AbstractListModel
+    private void selectedWorkspaceAction(final JList list)
+    {
+        WorkspaceHolder holder = (WorkspaceHolder) list.getSelectedValue();
+        OpenWorkspaceDialog.this.workspace = holder.getWorkspace();
+        dispose();
+    }
+
+    public Workspace getWorkspace()
+    {
+        return workspace;
+    }
+
+    private static class WorkspacesListModel extends AbstractListModel
     {
         private static final long serialVersionUID = -8167581289776094824L;
 
@@ -160,13 +196,10 @@ public class OpenWorkspaceDialog extends JDialog
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 f.setBounds(150, 150, 336, 200);
                 f.setVisible(true);
-                new OpenWorkspaceDialog(f);
+                OpenWorkspaceDialog2 dia = new OpenWorkspaceDialog2(f);
+                Workspace w = dia.getWorkspace();
+                System.out.println(w.getAdventure().getName());
             }
         });
-    }
-
-    public Workspace getWorkspace()
-    {
-        return workspace;
     }
 }
