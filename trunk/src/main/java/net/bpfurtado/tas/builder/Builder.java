@@ -177,7 +177,7 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
             Conf.builder().set(confKey, openLastAdventureOnStart);
         }
 
-        workspace = Workspace.loadFrom(Conf.builder().get("lastWorkspaceId"));
+        workspace = Workspace.loadFrom(Conf.builder().get("lastWorkspaceId")); // 222
         open(workspace);
     }
 
@@ -1198,15 +1198,26 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     {
         logger.debug("Saving..."); // 111
 
-        /*
-         * boolean wasNewSaveFile = false; if (saveFile == null || isSaveAs) { JFileChooser fileChooser = createFileChooserWithDirFromConfigItem("lastSaveDir"); if (fileChooser.showSaveDialog(Builder.this) == JFileChooser.APPROVE_OPTION) { saveFile = fileChooser.getSelectedFile(); if (saveFile.exists()) { int answer = JOptionPane.showConfirmDialog( Builder.this, "This file already exists!\n" + "Do you want to overwrite it?", "File already exists", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE); if (answer == JOptionPane.NO_OPTION) { return; } } wasNewSaveFile = true; } }
-         */
+        // boolean wasNewSaveFile = false;
+        // if (saveFile == null || isSaveAs) {
+        // JFileChooser fileChooser = createFileChooserWithDirFromConfigItem("lastSaveDir");
+        // if (fileChooser.showSaveDialog(Builder.this) == JFileChooser.APPROVE_OPTION) {
+        // saveFile = fileChooser.getSelectedFile();
+        // if (saveFile.exists()) {
+        // int answer = JOptionPane.showConfirmDialog(Builder.this, "This file already exists!\n" + "Do you want to overwrite it?", "File already exists", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        // if (answer == JOptionPane.NO_OPTION) {
+        // return;
+        // }
+        // }
+        // wasNewSaveFile = true;
+        // }
+        // }
 
         save(currentScene);
 
         workspace.save();
 
-        // updateConfWithLastAdventureFile(saveFile);
+        updateConfWithLastAdventureFile();
 
         updateTitle();
 
