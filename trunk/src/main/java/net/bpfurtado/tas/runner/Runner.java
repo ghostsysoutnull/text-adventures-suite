@@ -82,7 +82,8 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
+public class Runner extends JFrame 
+    implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
     private static final Logger logger = Logger.getLogger(Runner.class);
@@ -503,10 +504,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Util.showComponent(mainPanel);
     }
 
-    private void fireOpenAdventureEvent(Workspace adventureFile)
+    private void fireOpenAdventureEvent(Workspace workspace)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
-            listener.fileOpenedAction(adventureFile);
+            listener.fileOpenedAction(workspace);
         }
     }
 
