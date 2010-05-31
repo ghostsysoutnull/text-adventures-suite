@@ -114,7 +114,7 @@ public class Workspace
 
     public static String getWorkspacesHome()
     {
-        String path = Conf.getHome() + sep + "builder" + sep + "workspaces";
+        String path = Conf.getHome() + sep + "workspaces";
         File ws = new File(path);
         if (!ws.exists()) {
             ws.mkdirs();
