@@ -156,8 +156,7 @@ public class Runner extends JFrame
         if (!Conf.runner().is("openLastAdventureOnStart", false))
             return;
 
-        this.workspace = Workspace.loadFrom(Conf.runner().get("lastWorkspaceId"));
-        open(workspace);
+        open(Conf.runner().get("lastWorkspaceId"));
     }
 
     private void init()
@@ -198,6 +197,7 @@ public class Runner extends JFrame
             }
         };
         recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
+        
         //
         // EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
         // {
@@ -810,28 +810,22 @@ public class Runner extends JFrame
         }
     }
 
-    public Game open(Workspace workspace)
+    @Override
+    public Game open(String workspaceId)
     {
-        // adventure = new XMLAdventureReader().read(saveFile);
-        this.workspace = workspace;
-        adventure = workspace.getAdventure();
+        Workspace w = Workspace.loadFrom(workspaceId);
+        return open(w);
+    }
 
-        // Conf.runner().set("lastOpenDir", saveFile.getParentFile().getAbsolutePath());
-        // Conf.runner().set("lastAdventure", saveFile.getAbsolutePath());
-        // Conf.runner().save();
+    private Game open(Workspace w)
+    {
+        adventure = w.getAdventure();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
 
-        fireOpenAdventureEvent(workspace);
+        fireOpenAdventureEvent(w);
         return startGame();
-    }
-
-    @Override
-    public Game open(String workspaceId)
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 }

@@ -39,10 +39,8 @@ import org.dom4j.Document;
 
 public class SaveGameManager
 {
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
-
     private static final Logger logger = Logger.getLogger(SaveGameManager.class);
-
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
     private Game game;
@@ -83,7 +81,7 @@ public class SaveGameManager
     private SaveGame buildSaveGame()
     {
         SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
-        saveGame.setWorkspaceId(Conf.runner().get("lastWorkspaceId"));
+        saveGame.setWorkspaceId(Conf.runner().get("lastWorkspaceId")); //999
         return saveGame;
     }
 
