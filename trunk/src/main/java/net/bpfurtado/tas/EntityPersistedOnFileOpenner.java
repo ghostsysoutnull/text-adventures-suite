@@ -22,7 +22,6 @@
 
 package net.bpfurtado.tas;
 
-
 /**
  * @author Bruno Patini Furtado
  */

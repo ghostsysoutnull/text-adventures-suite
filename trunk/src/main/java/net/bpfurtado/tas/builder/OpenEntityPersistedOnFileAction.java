@@ -47,11 +47,11 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
 
     private Workspace workspace;
 
-    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, Workspace fileName)
+    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, Workspace workspace)
     {
         this.frame = frame;
         this.entityOpenner = entityOpenner;
-        this.workspace = fileName;
+        this.workspace = workspace;
     }
 
     public void actionPerformed(ActionEvent e)
