@@ -378,10 +378,7 @@ public class Builder extends JFrame
     public void switchTo(Scene sceneToSwitch)
     {
         /**
-         * Se for o inicio de uma nova aventura então nao temos ainda uma
-         * actualScene então não devemos salvar. Se setarmos a scene start
-         * para a actual agora a mesma será salva com os dados da gui vazios
-         * pois o updateView ainda não foi feito.
+         * Se for o inicio de uma nova aventura então nao temos ainda uma actualScene então não devemos salvar. Se setarmos a scene start para a actual agora a mesma será salva com os dados da gui vazios pois o updateView ainda não foi feito.
          */
         if (currentScene != null) {
             save(currentScene);
@@ -1104,7 +1101,7 @@ public class Builder extends JFrame
             else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
                 saveAdventureMenuAction(false);
         }
-     
+
         OpenWorkspaceDialog dialog = new OpenWorkspaceDialog(this);
         Workspace chosenWorkspace = dialog.getWorkspace();
         if (chosenWorkspace != null) {
@@ -1161,10 +1158,15 @@ public class Builder extends JFrame
         });
     }
 
+    public void openEntityPersisted(String workspaceId)
+    {
+        open(Workspace.loadFrom(workspaceId));
+    }
+
     public void open(Workspace workspace)
     {
         this.workspace = workspace;
-        
+
         DepthManager.getInstance().reset();
 
         adventure = workspace.getAdventure();
@@ -1293,8 +1295,7 @@ public class Builder extends JFrame
         }
 
         /**
-         * Not called inside the method updateView since it needs only to be
-         * invoked once.
+         * Not called inside the method updateView since it needs only to be invoked once.
          */
         scenesList.prepareView(adventure.getStart());
     }
@@ -1326,8 +1327,7 @@ public class Builder extends JFrame
     }
 
     /**
-     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na
-     * jlist de cenas pois o updateView refaz o modelo da jlist.
+     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na jlist de cenas pois o updateView refaz o modelo da jlist.
      */
     public void switchTo(Scene selectedScene, int selectedSceneIdx)
     {

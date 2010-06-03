@@ -186,9 +186,9 @@ public class Runner extends JFrame
                 return Runner.this.isDirty();
             }
 
-            public void open(Workspace workspace)
+            public void openEntityPersisted(String workspaceId)
             {
-                Runner.this.open(workspace);
+                Runner.this.open(Workspace.loadFrom(workspaceId));
             }
 
             public void save(boolean isSaveAs)
