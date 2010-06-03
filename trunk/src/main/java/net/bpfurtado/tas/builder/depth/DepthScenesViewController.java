@@ -277,7 +277,7 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
 		bar.setValue(to.equals(ScrollTo.last) ? bar.getMaximum() : bar.getMinimum());
 	}
 
-    private Collection mountListToStart(int depthNumber)
+    private Collection<Scene> mountListToStart(int depthNumber)
     {
         Collection<Scene> nextDepthScenes = DepthManager.getInstance().getScenesFromDepth(depthNumber);
 
