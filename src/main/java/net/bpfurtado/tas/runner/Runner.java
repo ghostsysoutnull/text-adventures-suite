@@ -59,10 +59,12 @@ import javax.swing.text.Document;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.ConfigurationItemNotFoundException;
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
+import net.bpfurtado.tas.builder.OpenWorkspaceDialog;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.GameImpl;
@@ -151,12 +153,14 @@ public class Runner extends JFrame
 
     private void openLastAdventure()
     {
-        logger.debug("START");
-
         if (!Conf.runner().is("openLastAdventureOnStart", false))
             return;
 
-        open(Conf.runner().get("lastWorkspaceId"));
+        try {
+            open(Conf.runner().get("lastWorkspaceId"));
+        } catch (ConfigurationItemNotFoundException e) {
+            //does nothing indeed
+        }
     }
 
     private void init()
@@ -164,7 +168,7 @@ public class Runner extends JFrame
         buildRecentMenus();
         initView();
 
-        // openLastAdventure();
+        openLastAdventure();
     }
 
     private void buildRecentMenus()
@@ -232,9 +236,8 @@ public class Runner extends JFrame
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
 
-        // TODO
-        // this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
-        // openSavedGamesListener.add(recentSavedGamesMenuController);
+        this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openSavedGamesListener.add(recentSavedGamesMenuController);
     }
 
     private void recentMenuSaveGameOpenAction(String id)
@@ -636,7 +639,7 @@ public class Runner extends JFrame
         });
 
         saveGameMenu.add(new JSeparator());
-        // saveGameMenu.add(recentSavedGamesMenuController.getOpenRecentMenu());
+        saveGameMenu.add(recentSavedGamesMenuController.getOpenRecentMenu());
     }
 
     private void menuAdv(JMenuBar menuBar)
@@ -670,7 +673,7 @@ public class Runner extends JFrame
         });
         advMenu.add(openMnIt);
 
-        // advMenu.add(recentAdventuresMenuController.getOpenRecentMenu());
+        advMenu.add(recentAdventuresMenuController.getOpenRecentMenu());
         advMenu.add(new JSeparator());
 
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
@@ -717,20 +720,38 @@ public class Runner extends JFrame
 
     private void openMenuAction()
     {
-        // if (adventure != null) {
-        // int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        // if (answer == JOptionPane.NO_OPTION)
-        // return;
-        // }
-        //
-        // fileChooser.setCurrentDirectory(new File(Conf.runner().get("lastOpenDir")));
-        // int returnVal = fileChooser.showOpenDialog(Runner.this);
-        // if (returnVal == JFileChooser.APPROVE_OPTION) {
-        // File adventureFile = fileChooser.getSelectedFile();
-        // System.out.println("Opening: " + adventureFile.getName() + ".");
-        // open(adventureFile);
-        // }
-        logger.debug("Not working now...");
+        if (adventure != null) {
+            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (answer == JOptionPane.NO_OPTION)
+                return;
+        }
+
+        OpenWorkspaceDialog dialog = new OpenWorkspaceDialog(this);
+        Workspace chosenWorkspace = dialog.getWorkspace();
+        if (chosenWorkspace != null) {
+            open(chosenWorkspace);
+        }
+    }
+
+    @Override
+    public Game open(String workspaceId)
+    {
+        Workspace w = Workspace.loadFrom(workspaceId);
+        Conf.runner().set("lastWorkspaceId", workspaceId);
+        return open(w);
+    }
+
+    private Game open(Workspace w)
+    {
+        this.workspace = w;
+        adventure = w.getAdventure();
+
+        setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
+        saveGameMnIt.setEnabled(true);
+        startAgainMnIt.setEnabled(true);
+
+        fireOpenAdventureEvent(w);
+        return startGame();
     }
 
     public static void main(String[] args)
@@ -810,24 +831,5 @@ public class Runner extends JFrame
         for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
             listener.fileOpenedAction(workspace);
         }
-    }
-
-    @Override
-    public Game open(String workspaceId)
-    {
-        Workspace w = Workspace.loadFrom(workspaceId);
-        return open(w);
-    }
-
-    private Game open(Workspace w)
-    {
-        adventure = w.getAdventure();
-
-        setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
-        saveGameMnIt.setEnabled(true);
-        startAgainMnIt.setEnabled(true);
-
-        fireOpenAdventureEvent(w);
-        return startGame();
     }
 }
