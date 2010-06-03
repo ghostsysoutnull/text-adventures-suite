@@ -197,43 +197,59 @@ public class Runner extends JFrame
             }
         };
         recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
-        
-        //
-        // EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
-        // {
-        // public String getApplicationName()
-        // {
-        // return Runner.this.getApplicationName();
-        // }
-        //
-        // public boolean hasAnOpenEntity()
-        // {
-        // return false;
-        // }
-        //
-        // public boolean isDirty()
-        // {
-        // return false;
-        // }
-        //
-        // public void open(Workspace w)
-        // {
-        // recentMenuSaveGameOpenAction(w);
-        // }
-        //
-        // public void save(boolean isSaveAs)
-        // {
-        // Runner.this.saveGameManager.save();
-        // }
-        // };
-        //
-        // recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
-        //
+
+        EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
+        {
+            public String getApplicationName()
+            {
+                return Runner.this.getApplicationName();
+            }
+
+            public boolean hasAnOpenEntity()
+            {
+                return false;
+            }
+
+            public boolean isDirty()
+            {
+                return false;
+            }
+
+            @Override
+            public void openEntityPersisted(String id)
+            {
+                recentMenuSaveGameOpenAction(id);
+            }
+
+            public void save(boolean isSaveAs)
+            {
+                Runner.this.saveGameManager.save();
+            }
+        };
+
+        recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
+
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
-        //
+
+        // TODO
         // this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         // openSavedGamesListener.add(recentSavedGamesMenuController);
+    }
+
+    private void recentMenuSaveGameOpenAction(String id)
+    {
+        SaveGame saveGame = getSaveGameManager().open(id, Runner.this);
+        adventure = saveGame.getWorkspace().getAdventure();
+    }
+
+    private SaveGameManager getSaveGameManager()
+    {
+        if (saveGameManager == null) {
+            game = new GameImpl(null);
+            saveGameManager = new SaveGameManager(game, this);
+        }
+        return saveGameManager;
     }
 
     private void initView()
@@ -678,7 +694,7 @@ public class Runner extends JFrame
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File saveGameFile = fileChooser.getSelectedFile();
             logger.debug("Opening: " + saveGameFile.getName() + ".");
-            saveGameManager.open(saveGameFile, this);
+            saveGameManager.open(saveGameFile.getAbsolutePath(), this);
         }
     }
 
@@ -788,20 +804,6 @@ public class Runner extends JFrame
         }
     }
 
-    // private void recentMenuSaveGameOpenAction(Workspace w)
-    // {
-    // SaveGame saveGame = getSaveGameManager().open(w, Runner.this);
-    // adventure = saveGame.getWorkspace().getAdventure();
-    // }
-    //
-    // private SaveGameManager getSaveGameManager()
-    // {
-    // if (saveGameManager == null) {
-    // game = new GameImpl(null);
-    // saveGameManager = new SaveGameManager(game, this);
-    // }
-    // return saveGameManager;
-    // }
 
     public void fireOpenSavedGameEvent(Workspace workspace)
     {

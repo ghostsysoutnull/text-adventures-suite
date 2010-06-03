@@ -85,9 +85,11 @@ public class SaveGameManager
         return saveGame;
     }
 
-    SaveGame open(File saveGameFile, PlayerEventListener playerEventListener)
+    SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener)
     {
         try {
+            File saveGameFile = new File(saveGameFilePath);
+            
             SaveGame saveGame = SaveGamePersister.read(saveGameFile);
 
             Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());

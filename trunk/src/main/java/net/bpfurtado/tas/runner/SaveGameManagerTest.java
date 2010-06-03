@@ -63,9 +63,8 @@ public class SaveGameManagerTest
         MockSaveGameListener mock = new MockSaveGameListener();
         SaveGameManager m = new SaveGameManager(game, mock);
         File file = m.save();
-        System.out.println(file);
 
-        SaveGame other = m.open(file, new MockPlayerEventListener());
+        SaveGame other = m.open(file.getAbsolutePath(), new MockPlayerEventListener());
 
         Player op = other.getPlayer();
         assertEquals(p.getAttribute("gold"), op.getAttribute("gold"));
