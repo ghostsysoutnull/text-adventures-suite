@@ -45,6 +45,9 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
 
     private EntityPersistedOnFileOpenner entityOpenner;
 
+    /**
+     * TODO decide to keep the instance or just the id
+     */
     private Workspace workspace;
 
     public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, Workspace workspace)
@@ -63,6 +66,6 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
             else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
                 entityOpenner.save(false);
         }
-        entityOpenner.open(workspace);
+        entityOpenner.openEntityPersisted(workspace.getId());
     }
 }

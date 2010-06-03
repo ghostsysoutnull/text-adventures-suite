@@ -27,7 +27,7 @@ package net.bpfurtado.tas;
  */
 public interface EntityPersistedOnFileOpenner 
 {
-    void open(Workspace workspace);
+    void openEntityPersisted(String id);
     void save(boolean isSaveAs);
 
     boolean isDirty();
