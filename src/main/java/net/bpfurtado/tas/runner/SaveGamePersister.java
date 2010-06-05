@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import net.bpfurtado.tas.AdventureException;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.model.persistence.AdventureReaderException;
@@ -103,8 +104,8 @@ public class SaveGamePersister
                 }
             }
 
-            SaveGame saveGame = new SaveGame(player, integer(root, "sceneId"));
-            saveGame.setWorkspaceId(root.valueOf("@workspaceId"));
+            Workspace workspace = Workspace.loadFrom(root.valueOf("@workspaceId"));
+            SaveGame saveGame = new SaveGame(workspace, player, integer(root, "sceneId"));
             return saveGame;
         } catch (DocumentException e) {
             throw new AdventureReaderException("Error reading XML document", e);

@@ -28,6 +28,7 @@ import java.util.Date;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Player;
@@ -45,9 +46,11 @@ public class SaveGameManager
 
     private Game game;
     private SaveGameListener saveGameListener;
-
-    public SaveGameManager(Game game, SaveGameListener list)
+    private Workspace workspace;
+    
+    public SaveGameManager(Workspace workspace, Game game, SaveGameListener list)
     {
+        this.workspace = workspace;
         this.game = game;
         this.saveGameListener = list;
     }
@@ -80,9 +83,7 @@ public class SaveGameManager
 
     private SaveGame buildSaveGame()
     {
-        SaveGame saveGame = new SaveGame(game.getPlayer(), game.getCurrentScene().getId());
-        saveGame.setWorkspaceId(Conf.runner().get("lastWorkspaceId")); //999
-        return saveGame;
+        return new SaveGame(workspace, game.getPlayer(), game.getCurrentScene().getId());
     }
 
     SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener)
