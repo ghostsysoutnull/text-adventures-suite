@@ -45,6 +45,9 @@ public class SaveGameManagerTest
     {
         Adventure a = new Adventure();
         a.setName("SaveGameManagerTest");
+        
+        Workspace workspace = Workspace.createWith(a);
+        
         Game game = new GameImpl(a);
         game.setCurrentScene(new Scene(1337));
 
@@ -61,7 +64,7 @@ public class SaveGameManagerTest
         p.addSkill("swim", 8);
 
         MockSaveGameListener mock = new MockSaveGameListener();
-        SaveGameManager m = new SaveGameManager(game, mock);
+        SaveGameManager m = new SaveGameManager(workspace, game, mock);
         File file = m.save();
 
         SaveGame other = m.open(file.getAbsolutePath(), new MockPlayerEventListener());

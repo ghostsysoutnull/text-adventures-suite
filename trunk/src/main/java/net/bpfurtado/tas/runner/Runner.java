@@ -249,8 +249,8 @@ public class Runner extends JFrame
     private SaveGameManager getSaveGameManager()
     {
         if (saveGameManager == null) {
-            game = new GameImpl(null);
-            saveGameManager = new SaveGameManager(game, this);
+            this.game = new GameImpl(null);
+            this.saveGameManager = new SaveGameManager(workspace, game, this);
         }
         return saveGameManager;
     }
@@ -321,7 +321,7 @@ public class Runner extends JFrame
 
         game.getPlayer().add(this);
 
-        saveGameManager = new SaveGameManager(game, this);
+        saveGameManager = new SaveGameManager(workspace, game, this);
 
         return game;
     }
@@ -744,6 +744,8 @@ public class Runner extends JFrame
     private Game open(Workspace w)
     {
         this.workspace = w;
+        Conf.runner().set("lastWorkspaceId", w.getId());
+        
         adventure = w.getAdventure();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");

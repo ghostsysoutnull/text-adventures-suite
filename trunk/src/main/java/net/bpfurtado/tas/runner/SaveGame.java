@@ -34,13 +34,11 @@ public class SaveGame implements Serializable
     private Player player;
     private int sceneId;
     
-    //TODO the id or the object!
-    private String workspaceId;
-    //TODO the id or the object!
     private Workspace workspace;
 
-    public SaveGame(Player player, int sceneId)
+    public SaveGame(Workspace workspace, Player player, int sceneId)
     {
+        this.workspace = workspace;
         this.player = player;
 
         // Otherwise we get a ref to the Runner itself, through event
@@ -68,15 +66,5 @@ public class SaveGame implements Serializable
     public void setWorkspace(Workspace workspace)
     {
         this.workspace = workspace;
-    }
-
-    public String getWorkspaceId()
-    {
-        return workspaceId;
-    }
-
-    public void setWorkspaceId(String workspaceId)
-    {
-        this.workspaceId = workspaceId;
     }
 }
