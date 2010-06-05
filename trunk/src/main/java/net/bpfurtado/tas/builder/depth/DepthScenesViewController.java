@@ -50,7 +50,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import net.bpfurtado.tas.Workspace;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.model.DepthManager;
 import net.bpfurtado.tas.model.IPath;
@@ -401,7 +401,7 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     }
 
     @Override
-    public void fileOpenedAction(Workspace workspace)
+    public void fileOpenedAction(EntityPersistedOnFileOpenAction e)
     {
         depthLists.clear();
     }
