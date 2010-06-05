@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
-import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
@@ -48,13 +47,13 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
     /**
      * TODO decide to keep the instance or just the id
      */
-    private Workspace workspace;
+    private EntityPersistedOnFileOpenAction persistedOnFileOpenAction;
 
-    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, Workspace workspace)
+    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, EntityPersistedOnFileOpenAction persistedOnFileOpenAction)
     {
         this.frame = frame;
         this.entityOpenner = entityOpenner;
-        this.workspace = workspace;
+        this.persistedOnFileOpenAction = persistedOnFileOpenAction;
     }
 
     public void actionPerformed(ActionEvent e)
@@ -66,6 +65,6 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
             else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
                 entityOpenner.save(false);
         }
-        entityOpenner.openEntityPersisted(workspace.getId());
+        entityOpenner.openEntityPersisted(persistedOnFileOpenAction.getId());
     }
 }

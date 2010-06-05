@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 28/06/2009 15:44:38
+ * Created on 04/06/2010 23:05:10
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -22,7 +22,9 @@
 
 package net.bpfurtado.tas.builder;
 
-public interface EntityPersistedOnFileOpenActionListener
+public interface EntityPersistedOnFileOpenAction
 {
-    void fileOpenedAction(EntityPersistedOnFileOpenAction e);
+    String getMenuItemText();
+
+    String getId();
 }

@@ -34,6 +34,7 @@ import java.util.UUID;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Scene;
 import net.bpfurtado.tas.model.persistence.XMLAdventureReader;
@@ -42,7 +43,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Workspace
+public class Workspace implements EntityPersistedOnFileOpenAction
 {
     private static final Logger logger = Logger.getLogger(Workspace.class);
     private static final String sep = File.separator;
@@ -194,6 +195,12 @@ public class Workspace
             img = new ImageIcon(f.getAbsolutePath());
         }
         return img;
+    }
+    
+    @Override
+    public String getMenuItemText()
+    {
+        return adventure.getName();
     }
 
     public static List<Workspace> listAll()

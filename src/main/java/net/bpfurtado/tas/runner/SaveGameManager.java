@@ -64,7 +64,7 @@ public class SaveGameManager
         SaveGamePersister.write(xml, file, saveGameListener);
 
         //FIXME solve line bellow
-        //saveGameListener.fireOpenSavedGameEvent(file);
+        saveGameListener.fireOpenSavedGameEvent(workspace);
 
         return file;
     }
