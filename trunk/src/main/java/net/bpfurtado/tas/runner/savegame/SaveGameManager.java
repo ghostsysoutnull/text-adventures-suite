@@ -29,7 +29,6 @@ import java.util.Date;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.Workspace;
-import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.Game;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.PlayerEventListener;
@@ -41,18 +40,18 @@ import org.dom4j.Document;
 public class SaveGameManager
 {
     private static final Logger logger = Logger.getLogger(SaveGameManager.class);
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_hhmmss");
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-hh_mm_ss");
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
     private Game game;
-    private SaveGameListener saveGameListener;
+    private SaveGameListener runner;
     private Workspace workspace;
     
     public SaveGameManager(Workspace workspace, Game game, SaveGameListener list)
     {
         this.workspace = workspace;
         this.game = game;
-        this.saveGameListener = list;
+        this.runner = list;
     }
 
     public File save()
@@ -61,10 +60,10 @@ public class SaveGameManager
         Document xml = SaveGamePersister.createXML(saveGame);
         File file = buildSaveGameFile();
 
-        SaveGamePersister.write(xml, file, saveGameListener);
+        SaveGamePersister.write(xml, file, runner);
 
         //FIXME solve line bellow
-        saveGameListener.fireOpenSavedGameEvent(saveGame);
+        runner.fireOpenSavedGameEvent(saveGame);
 
         return file;
     }
@@ -86,7 +85,7 @@ public class SaveGameManager
         return new SaveGame(workspace, game.getPlayer(), game.getCurrentScene().getId());
     }
 
-    public SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener)
+    public SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener) //999
     {
         try {
             File saveGameFile = new File(saveGameFilePath);
@@ -99,22 +98,16 @@ public class SaveGameManager
                 s.setPlayer(saveGame.getPlayer());
             }
 
-            // creates a new gameImpl
-            
-            //FIXME
-            this.game = saveGameListener.openSaveGame(saveGame.getWorkspace().getId());
-            Adventure adv = saveGame.getWorkspace().getAdventure();
+            // creates a new gameImpl // FIXME
+            this.game = runner.gameFrom(saveGame.getWorkspace().getId());
             
             Player player = game.getPlayer();
             player.add(playerEventListener);
 
-            logger.debug(player.getAttributesEntrySet());
-
-            saveGameListener.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
+            runner.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
 
             //FIXME: solve line bellow
-            //saveGameListener.fireOpenSavedGameEvent(saveGameFile);
-
+            runner.fireOpenSavedGameEvent(saveGame);
             return saveGame;
         } catch (Exception e) {
             throw new AdventureException(e);

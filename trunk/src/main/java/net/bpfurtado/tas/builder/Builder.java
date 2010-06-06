@@ -1188,7 +1188,7 @@ public class Builder extends JFrame
     private void fireOpenAdventureEvent(Workspace workspace)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
-            listener.fileOpenedAction(workspace);
+            listener.fireEntityOpenedAction(workspace);
         }
     }
 

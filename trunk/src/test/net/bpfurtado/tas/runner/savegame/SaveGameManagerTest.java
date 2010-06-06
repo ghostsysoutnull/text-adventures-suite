@@ -93,7 +93,7 @@ class MockPlayerEventListener implements PlayerEventListener
 class MockSaveGameListener implements SaveGameListener
 {
     @Override
-    public Game openSaveGame(String workspaceId)
+    public Game gameFrom(String workspaceId)
     {
         return null;
     }
