@@ -24,5 +24,5 @@ package net.bpfurtado.tas.builder;
 
 public interface EntityPersistedOnFileOpenActionListener
 {
-    void fileOpenedAction(EntityPersistedOnFileOpenAction e);
+    void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e);
 }

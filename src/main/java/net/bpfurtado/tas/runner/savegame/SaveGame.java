@@ -23,29 +23,41 @@
 package net.bpfurtado.tas.runner.savegame;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 import net.bpfurtado.tas.Workspace;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.model.Player;
 
-public class SaveGame implements Serializable
+public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
 {
     private static final long serialVersionUID = 6976207148524442036L;
 
+    private String id = null;
+
     private Player player;
     private int sceneId;
-    
+
     private Workspace workspace;
 
     public SaveGame(Workspace workspace, Player player, int sceneId)
     {
         this.workspace = workspace;
         this.player = player;
+        this.id = UUID.randomUUID().toString();
 
         // Otherwise we get a ref to the Runner itself, through event
         // listeners...
         this.player.clearEventListeners();
 
         this.sceneId = sceneId;
+    }
+
+    @Override
+    public String getMenuItemText()
+    {
+        // FIXME use timestamp, etc
+        return workspace.getAdventure().getName() + " SAVE GAME";
     }
 
     public Player getPlayer()
@@ -66,5 +78,10 @@ public class SaveGame implements Serializable
     public void setWorkspace(Workspace workspace)
     {
         this.workspace = workspace;
+    }
+
+    public String getId()
+    {
+        return id;
     }
 }

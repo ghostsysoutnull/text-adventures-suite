@@ -127,7 +127,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     public static Runner runAdventure(Workspace workspace)
     {
         Runner r = new Runner();
-        r.open(workspace);
+        r.gameFrom(workspace);
         return r;
     }
 
@@ -159,7 +159,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             return;
 
         try {
-            open(Workspace.loadFrom(Conf.runner().get("lastWorkspaceId")));
+            gameFrom(Workspace.loadFrom(Conf.runner().get("lastWorkspaceId")));
         } catch (ConfigurationItemNotFoundException e) {
             // does nothing indeed
         }
@@ -194,7 +194,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
             public void openEntityPersisted(String workspaceId)
             {
-                Runner.this.open(Workspace.loadFrom(workspaceId));
+                Runner.this.gameFrom(Workspace.loadFrom(workspaceId));
             }
 
             public void save(boolean isSaveAs)
@@ -313,29 +313,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         this.adventure = adventure;
         createGame(adventure);
         openScene(sceneWhereToStart);
-    }
-
-    private Game createGame(Adventure adventure)
-    {
-        game = new GameImpl(adventure);
-        statsView.setGame(game);
-        game.addGoToSceneListener(this);
-
-        game.getPlayer().add(this);
-
-        saveGameManager = new SaveGameManager(workspace, game, this);
-
-        return game;
-    }
-
-    private Game startGame()
-    {
-        mainPanel.setVisible(true);
-        Game createdGame = createGame(adventure);
-        openSceneLite(adventure.getStart());
-        updateImage(adventure.getStart());
-
-        return createdGame;
     }
 
     /**
@@ -528,7 +505,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private void fireOpenAdventureEvent(Workspace workspace)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
-            listener.fileOpenedAction(workspace);
+            listener.fireEntityOpenedAction(workspace);
         }
     }
 
@@ -731,31 +708,55 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         OpenWorkspaceDialog dialog = new OpenWorkspaceDialog(this);
         Workspace chosenWorkspace = dialog.getWorkspace();
         if (chosenWorkspace != null) {
-            open(chosenWorkspace);
+            gameFrom(chosenWorkspace);
         }
     }
 
     @Override
-    public Game openSaveGame(String workspaceId)
+    public Game gameFrom(String workspaceId)
     {
-        Workspace w = Workspace.loadFrom(workspaceId);
+        Workspace workspace = Workspace.loadFrom(workspaceId);
         Conf.runner().set("lastWorkspaceId", workspaceId);
-        return open(w);
+        return gameFrom(workspace);
     }
 
-    private Game open(Workspace w)
+    private Game gameFrom(Workspace workspace)
     {
-        this.workspace = w;
-        Conf.runner().set("lastWorkspaceId", w.getId());
+        this.workspace = workspace;
 
-        adventure = w.getAdventure();
+        adventure = workspace.getAdventure();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
 
-        fireOpenAdventureEvent(w);
+        fireOpenAdventureEvent(workspace);
+        
         return startGame();
+    }
+    
+    private Game startGame()
+    {
+        mainPanel.setVisible(true);
+        Game createdGame = createGame(adventure);
+        openSceneLite(adventure.getStart());
+        updateImage(adventure.getStart());
+
+        return createdGame;
+    }
+    
+    private Game createGame(Adventure adventure)
+    {
+        game = new GameImpl(adventure);
+        statsView.setGame(game);
+        game.addGoToSceneListener(this);
+
+        //FIXME ERROR 666 here, if it's a saved game being loaded, then we do not create a new player
+        game.getPlayer().add(this);
+
+        saveGameManager = new SaveGameManager(workspace, game, this);
+
+        return game;
     }
 
     public static void main(String[] args)
@@ -830,13 +831,13 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     }
 
     /**
-     * TODO FIX ME  
+     * FIXME  
      */
     @Override
     public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
-            listener.fileOpenedAction(workspace);
+            listener.fireEntityOpenedAction(saveGame);
         }
     }
 }

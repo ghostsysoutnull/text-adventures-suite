@@ -80,7 +80,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         return openRecentMenu;
     }
 
-    public void fileOpenedAction(EntityPersistedOnFileOpenAction e) //111
+    public void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e) //111
     {
         addToRecent(e);
         openRecentMenu.setEnabled(true);

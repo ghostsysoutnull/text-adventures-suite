@@ -401,7 +401,7 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     }
 
     @Override
-    public void fileOpenedAction(EntityPersistedOnFileOpenAction e)
+    public void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e)
     {
         depthLists.clear();
     }
