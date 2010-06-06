@@ -27,7 +27,7 @@ import java.util.List;
 
 import net.bpfurtado.tas.runner.CodeExecutionAnalyser;
 import net.bpfurtado.tas.runner.PostCodeExecutionAction;
-import net.bpfurtado.tas.runner.SaveGame;
+import net.bpfurtado.tas.runner.savegame.SaveGame;
 
 /**
  * @author Bruno Patini Furtado

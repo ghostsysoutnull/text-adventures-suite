@@ -1,6 +1,6 @@
 /**                                                                           
  * Created by Bruno Patini Furtado [http://bpfurtado.livejournal.com]         
- * Created on 27/06/2009 21:11:50
+ * Created on 02/07/2009 19:15:32
  *                                                                            
  * This file is part of the Text Adventures Suite.                            
  *                                                                            
@@ -18,53 +18,17 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */
+ */ 
 
-package net.bpfurtado.tas.runner;
+package net.bpfurtado.tas.runner.savegame;
 
-import java.io.Serializable;
+import net.bpfurtado.tas.model.Game;
+import net.bpfurtado.tas.model.Scene;
 
-import net.bpfurtado.tas.Workspace;
-import net.bpfurtado.tas.model.Player;
-
-public class SaveGame implements Serializable
+public interface SaveGameListener
 {
-    private static final long serialVersionUID = 6976207148524442036L;
-
-    private Player player;
-    private int sceneId;
-    
-    private Workspace workspace;
-
-    public SaveGame(Workspace workspace, Player player, int sceneId)
-    {
-        this.workspace = workspace;
-        this.player = player;
-
-        // Otherwise we get a ref to the Runner itself, through event
-        // listeners...
-        this.player.clearEventListeners();
-
-        this.sceneId = sceneId;
-    }
-
-    public Player getPlayer()
-    {
-        return player;
-    }
-
-    public int getSceneId()
-    {
-        return sceneId;
-    }
-
-    public Workspace getWorkspace()
-    {
-        return workspace;
-    }
-
-    public void setWorkspace(Workspace workspace)
-    {
-        this.workspace = workspace;
-    }
+    void fireOpenSavedGameEvent(SaveGame saveGame);
+    Game openSaveGame(String saveGameId);
+    void openScene(Scene to, boolean execActions);
+    void log(String msg);
 }

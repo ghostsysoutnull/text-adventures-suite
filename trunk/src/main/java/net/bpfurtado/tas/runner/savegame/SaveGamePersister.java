@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */
 
-package net.bpfurtado.tas.runner;
+package net.bpfurtado.tas.runner.savegame;
 
 import java.io.File;
 import java.io.FileWriter;
