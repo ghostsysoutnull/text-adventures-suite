@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import net.bpfurtado.tas.view.recentmenu.EntityPersistedOnFileOpenner;
+
 import org.apache.log4j.Logger;
 
 public class Conf

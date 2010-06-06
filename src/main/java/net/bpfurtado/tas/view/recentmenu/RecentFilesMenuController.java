@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */
 
-package net.bpfurtado.tas.view;
+package net.bpfurtado.tas.view.recentmenu;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -39,10 +39,9 @@ import javax.swing.JMenuItem;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
-import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
-import net.bpfurtado.tas.builder.OpenEntityPersistedOnFileAction;
+import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
@@ -58,7 +57,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
 
     private JMenu openRecentMenu;
 
-    private LinkedList<EntityPersistedOnFileOpenAction> recentFiles = new LinkedList<EntityPersistedOnFileOpenAction>();
+    private LinkedList<EntityPersistedOnFileOpenAction> recentEntitiesPersisted = new LinkedList<EntityPersistedOnFileOpenAction>();
     private LinkedList<JMenuItem> menuItems = new LinkedList<JMenuItem>();
 
     private EntityPersistedOnFileOpenner entityOpenner;
@@ -80,6 +79,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         return openRecentMenu;
     }
 
+    @Override
     public void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e) //111
     {
         addToRecent(e);
@@ -104,7 +104,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
             }
             reader.close();
 
-            if (!recentFiles.isEmpty()) {
+            if (!recentEntitiesPersisted.isEmpty()) {
                 openRecentMenu.setEnabled(true);
             }
 
@@ -114,20 +114,20 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         }
     }
 
-    private void addToRecent(EntityPersistedOnFileOpenAction e)
+    private void addToRecent(EntityPersistedOnFileOpenAction entityPersisted)
     {
-        if (recentFiles.contains(e)) {
+        if (recentEntitiesPersisted.contains(entityPersisted)) {
             for (JMenuItem item : menuItems) {
-                if (item.getText().equals(e) || item.getText().startsWith("<html>" + e.getId() + " <")) {
+                if (item.getText().equals(entityPersisted) || item.getText().startsWith("<html>" + entityPersisted.getMenuItemText() + " <")) {
                     openRecentMenu.remove(item);
                     menuItems.remove(item);
-                    recentFiles.remove(e);
+                    recentEntitiesPersisted.remove(entityPersisted);
 
-                    item.setText("<html>" + e.getId() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
+                    item.setText("<html>" + entityPersisted.getMenuItemText() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
 
                     openRecentMenu.add(item, 0);
                     menuItems.add(0, item);
-                    recentFiles.addFirst(e);
+                    recentEntitiesPersisted.addFirst(entityPersisted);
 
                     openRecentMenu.setEnabled(true);
 
@@ -139,15 +139,15 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
             throw new AdventureException("Should have found a menu item");
         }
 
-        if (recentFiles.size() == MAX_ENTRIES_IN_RECENT_LIST) {
-            recentFiles.removeLast();
+        if (recentEntitiesPersisted.size() == MAX_ENTRIES_IN_RECENT_LIST) {
+            recentEntitiesPersisted.removeLast();
         }
-        recentFiles.addFirst(e);
+        recentEntitiesPersisted.addFirst(entityPersisted);
 
         if (menuItems.size() == MAX_ENTRIES_IN_RECENT_LIST) {
             openRecentMenu.remove(menuItems.removeLast());
         }
-        menuItems.addFirst(buildRecentMenuItem(e));
+        menuItems.addFirst(buildRecentMenuItem(entityPersisted));
 
         saveRecentEntriesFile();
     }
@@ -156,13 +156,13 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     {
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(historyFile));
-            Collections.reverse(recentFiles);
-            for (EntityPersistedOnFileOpenAction w : recentFiles) {
+            Collections.reverse(recentEntitiesPersisted);
+            for (EntityPersistedOnFileOpenAction w : recentEntitiesPersisted) {
                 writer.println(w.getId());
             }
             writer.flush();
             writer.close();
-            Collections.reverse(recentFiles);
+            Collections.reverse(recentEntitiesPersisted);
         } catch (IOException ioe) {
             throw new AdventureException(ioe);
         }
@@ -170,7 +170,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
 
     private JMenuItem buildRecentMenuItem(EntityPersistedOnFileOpenAction recentFile)
     {
-        JMenuItem menuItem = new JMenuItem(recentFile.getId());
+        JMenuItem menuItem = new JMenuItem(recentFile.getMenuItemText());
         menuItem.addActionListener(new OpenEntityPersistedOnFileAction(parentFrame, entityOpenner, recentFile));
         openRecentMenu.add(menuItem, 0);
 

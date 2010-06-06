@@ -67,7 +67,6 @@ import javax.swing.text.BadLocationException;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
-import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.combat.BuilderCombatPanelManager;
 import net.bpfurtado.tas.builder.depth.DepthScenesFrame;
@@ -87,10 +86,11 @@ import net.bpfurtado.tas.model.combat.Fighter;
 import net.bpfurtado.tas.model.persistence.AdventureReaderException;
 import net.bpfurtado.tas.runner.Runner;
 import net.bpfurtado.tas.view.HelpDialog;
-import net.bpfurtado.tas.view.RecentFilesMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
+import net.bpfurtado.tas.view.recentmenu.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
 
 import org.apache.log4j.Logger;
 
