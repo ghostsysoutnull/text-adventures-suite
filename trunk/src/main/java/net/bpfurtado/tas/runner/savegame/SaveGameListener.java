@@ -28,7 +28,9 @@ import net.bpfurtado.tas.model.Scene;
 public interface SaveGameListener
 {
     void fireOpenSavedGameEvent(SaveGame saveGame);
+    
     Game gameFrom(String saveGameId);
+    
     void openScene(Scene to, boolean execActions);
     void log(String msg);
 }

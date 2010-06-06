@@ -35,6 +35,8 @@ public interface Game
     void execPostCodeActions();
 
     Player getPlayer();
+    void setPlayer(Player player);
+    
     void addGoToSceneListener(GoToSceneListener goToSceneListener);
 
 	void setCurrentScene(Scene scene);

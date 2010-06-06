@@ -177,4 +177,9 @@ public class GameImpl implements Game
     {
         return adventure;
     }
+
+    public void setPlayer(Player player)
+    {
+        this.player = player;
+    }
 }

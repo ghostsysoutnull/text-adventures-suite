@@ -117,7 +117,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private final JFileChooser fileChooser = new JFileChooser();
 
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
-    private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListener;
+    private List<EntityPersistedOnFileOpenActionListener> recentOpennedMenus;
     private RecentFilesMenuController recentAdventuresMenuController;
     private RecentFilesMenuController recentSavedGamesMenuController;
 
@@ -238,8 +238,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
 
-        this.openSavedGamesListener = new LinkedList<EntityPersistedOnFileOpenActionListener>();
-        openSavedGamesListener.add(recentSavedGamesMenuController);
+        this.recentOpennedMenus = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        recentOpennedMenus.add(recentSavedGamesMenuController);
     }
 
     private void recentMenuSaveGameOpenAction(String id)
@@ -711,6 +711,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             gameFrom(chosenWorkspace);
         }
     }
+    
+    @Override
+    public void fireOpenSavedGameEvent(SaveGame saveGame)
+    {
+        for (EntityPersistedOnFileOpenActionListener menu : recentOpennedMenus) {
+            menu.fireEntityOpenedAction(saveGame);
+        }
+    }
 
     @Override
     public Game gameFrom(String workspaceId)
@@ -827,17 +835,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             logTA.setCaretPosition(doc.getLength());
         } catch (BadLocationException e) {
             throw new AdventureException(e);
-        }
-    }
-
-    /**
-     * FIXME  
-     */
-    @Override
-    public void fireOpenSavedGameEvent(SaveGame saveGame)
-    {
-        for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
-            listener.fireEntityOpenedAction(saveGame);
         }
     }
 }
