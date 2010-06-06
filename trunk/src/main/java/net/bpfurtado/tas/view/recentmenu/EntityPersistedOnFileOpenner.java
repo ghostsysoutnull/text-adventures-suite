@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */                                                                           
 
-package net.bpfurtado.tas;
+package net.bpfurtado.tas.view.recentmenu;
 
 /**
  * @author Bruno Patini Furtado

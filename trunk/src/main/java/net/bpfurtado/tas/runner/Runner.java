@@ -60,7 +60,6 @@ import javax.swing.text.Document;
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.ConfigurationItemNotFoundException;
-import net.bpfurtado.tas.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.Builder;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
@@ -81,9 +80,10 @@ import net.bpfurtado.tas.runner.savegame.SaveGame;
 import net.bpfurtado.tas.runner.savegame.SaveGameListener;
 import net.bpfurtado.tas.runner.savegame.SaveGameManager;
 import net.bpfurtado.tas.view.ErrorFrame;
-import net.bpfurtado.tas.view.RecentFilesMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
 import net.bpfurtado.tas.view.Util;
+import net.bpfurtado.tas.view.recentmenu.EntityPersistedOnFileOpenner;
+import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
 
 import org.apache.log4j.Logger;
 
