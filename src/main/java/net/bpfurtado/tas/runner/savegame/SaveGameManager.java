@@ -100,13 +100,14 @@ public class SaveGameManager
 
             // creates a new gameImpl // FIXME
             this.game = runner.gameFrom(saveGame.getWorkspace().getId());
+            this.game.setPlayer(saveGame.getPlayer());
             
             Player player = game.getPlayer();
             player.add(playerEventListener);
 
             runner.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
 
-            //FIXME: solve line bellow
+            //FIXME: solve line bellow - Update the Runner last save games menu
             runner.fireOpenSavedGameEvent(saveGame);
             return saveGame;
         } catch (Exception e) {
