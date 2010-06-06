@@ -77,6 +77,9 @@ import net.bpfurtado.tas.model.Skill;
 import net.bpfurtado.tas.model.SkillTestListener;
 import net.bpfurtado.tas.model.combat.EndOfCombatListener;
 import net.bpfurtado.tas.runner.combat.CombatFrame;
+import net.bpfurtado.tas.runner.savegame.SaveGame;
+import net.bpfurtado.tas.runner.savegame.SaveGameListener;
+import net.bpfurtado.tas.runner.savegame.SaveGameManager;
 import net.bpfurtado.tas.view.ErrorFrame;
 import net.bpfurtado.tas.view.RecentFilesMenuController;
 import net.bpfurtado.tas.view.SettingsUtil;
@@ -84,8 +87,7 @@ import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame 
-    implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
+public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
     private static final Logger logger = Logger.getLogger(Runner.class);
@@ -157,9 +159,9 @@ public class Runner extends JFrame
             return;
 
         try {
-            open(Conf.runner().get("lastWorkspaceId"));
+            open(Workspace.loadFrom(Conf.runner().get("lastWorkspaceId")));
         } catch (ConfigurationItemNotFoundException e) {
-            //does nothing indeed
+            // does nothing indeed
         }
     }
 
@@ -734,7 +736,7 @@ public class Runner extends JFrame
     }
 
     @Override
-    public Game open(String workspaceId)
+    public Game openSaveGame(String workspaceId)
     {
         Workspace w = Workspace.loadFrom(workspaceId);
         Conf.runner().set("lastWorkspaceId", workspaceId);
@@ -745,7 +747,7 @@ public class Runner extends JFrame
     {
         this.workspace = w;
         Conf.runner().set("lastWorkspaceId", w.getId());
-        
+
         adventure = w.getAdventure();
 
         setTitle(adventure.getName() + " - Runner - Text Adventures Suite");
@@ -827,8 +829,11 @@ public class Runner extends JFrame
         }
     }
 
-
-    public void fireOpenSavedGameEvent(Workspace workspace)
+    /**
+     * TODO FIX ME  
+     */
+    @Override
+    public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openSavedGamesListener) {
             listener.fileOpenedAction(workspace);

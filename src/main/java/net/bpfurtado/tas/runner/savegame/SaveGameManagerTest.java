@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */
 
-package net.bpfurtado.tas.runner;
+package net.bpfurtado.tas.runner.savegame;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -93,12 +93,7 @@ class MockPlayerEventListener implements PlayerEventListener
 class MockSaveGameListener implements SaveGameListener
 {
     @Override
-    public void fireOpenSavedGameEvent(Workspace workspace)
-    {
-    }
-
-    @Override
-    public Game open(String workspaceId)
+    public Game openSaveGame(String workspaceId)
     {
         return null;
     }
@@ -110,6 +105,12 @@ class MockSaveGameListener implements SaveGameListener
 
     @Override
     public void openScene(Scene to, boolean execActions)
+    {
+    }
+
+
+    @Override
+    public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
     }
 }

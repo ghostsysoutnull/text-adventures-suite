@@ -24,7 +24,7 @@ package net.bpfurtado.tas.model;
 
 import java.util.Collection;
 
-import net.bpfurtado.tas.runner.SaveGame;
+import net.bpfurtado.tas.runner.savegame.SaveGame;
 
 /**
  * @author Bruno Patini Furtado

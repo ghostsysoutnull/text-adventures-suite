@@ -20,7 +20,7 @@
  * Project page: http://code.google.com/p/text-adventures-suite/              
  */
 
-package net.bpfurtado.tas.runner;
+package net.bpfurtado.tas.runner.savegame;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -55,7 +55,7 @@ public class SaveGameManager
         this.saveGameListener = list;
     }
 
-    File save()
+    public File save()
     {
         SaveGame saveGame = buildSaveGame();
         Document xml = SaveGamePersister.createXML(saveGame);
@@ -64,7 +64,7 @@ public class SaveGameManager
         SaveGamePersister.write(xml, file, saveGameListener);
 
         //FIXME solve line bellow
-        saveGameListener.fireOpenSavedGameEvent(workspace);
+        saveGameListener.fireOpenSavedGameEvent(saveGame);
 
         return file;
     }
@@ -86,7 +86,7 @@ public class SaveGameManager
         return new SaveGame(workspace, game.getPlayer(), game.getCurrentScene().getId());
     }
 
-    SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener)
+    public SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener)
     {
         try {
             File saveGameFile = new File(saveGameFilePath);
@@ -100,7 +100,9 @@ public class SaveGameManager
             }
 
             // creates a new gameImpl
-            this.game = saveGameListener.open(saveGame.getWorkspace().getId());
+            
+            //FIXME
+            this.game = saveGameListener.openSaveGame(saveGame.getWorkspace().getId());
             Adventure adv = saveGame.getWorkspace().getAdventure();
             
             Player player = game.getPlayer();
