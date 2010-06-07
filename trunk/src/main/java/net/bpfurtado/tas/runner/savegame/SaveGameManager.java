@@ -107,7 +107,6 @@ public class SaveGameManager
 
             runner.openScene(game.getAdventure().getScene(saveGame.getSceneId()), DONT_EXEC_SCENE_ACTIONS);
 
-            //FIXME: solve line bellow - Update the Runner last save games menu
             runner.fireOpenSavedGameEvent(saveGame);
             return saveGame;
         } catch (Exception e) {
