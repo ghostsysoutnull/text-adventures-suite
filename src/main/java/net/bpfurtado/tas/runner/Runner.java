@@ -62,6 +62,7 @@ import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.ConfigurationItemNotFoundException;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.Builder;
+import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
 import net.bpfurtado.tas.builder.OpenWorkspaceDialog;
 import net.bpfurtado.tas.model.Adventure;
@@ -502,10 +503,10 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Util.showComponent(mainPanel);
     }
 
-    private void fireOpenAdventureEvent(Workspace workspace)
+    private void fireOpenAdventureEvent(EntityPersistedOnFileOpenAction entity)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
-            listener.fireEntityOpenedAction(workspace);
+            listener.fireEntityOpenedAction(entity);
         }
     }
 
@@ -711,7 +712,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             gameFrom(chosenWorkspace);
         }
     }
-    
+
     @Override
     public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
@@ -721,14 +722,13 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     }
 
     @Override
-    public Game gameFrom(String workspaceId)
+    public Game gameFrom(SaveGame saveGame)
     {
-        Workspace workspace = Workspace.loadFrom(workspaceId);
-        Conf.runner().set("lastWorkspaceId", workspaceId);
-        return gameFrom(workspace);
+        Conf.runner().set("lastWorkspaceId", saveGame.getWorkspace().getId());
+        return gameFrom(saveGame.getWorkspace(), saveGame);
     }
 
-    private Game gameFrom(Workspace workspace)
+    private Game gameFrom(Workspace workspace, EntityPersistedOnFileOpenAction entityPersistedOnFileOpen)
     {
         this.workspace = workspace;
 
@@ -738,11 +738,16 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
 
-        fireOpenAdventureEvent(workspace);
-        
+        fireOpenAdventureEvent(entityPersistedOnFileOpen);
+
         return startGame();
     }
     
+    private Game gameFrom(Workspace workspace)
+    {
+        return gameFrom(workspace, workspace);
+    }
+
     private Game startGame()
     {
         mainPanel.setVisible(true);
@@ -752,7 +757,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
         return createdGame;
     }
-    
+
     private Game createGame(Adventure adventure)
     {
         game = new GameImpl(adventure);

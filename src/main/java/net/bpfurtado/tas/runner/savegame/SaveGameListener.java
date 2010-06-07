@@ -29,7 +29,7 @@ public interface SaveGameListener
 {
     void fireOpenSavedGameEvent(SaveGame saveGame);
     
-    Game gameFrom(String saveGameId);
+    Game gameFrom(SaveGame saveGame);
     
     void openScene(Scene to, boolean execActions);
     void log(String msg);

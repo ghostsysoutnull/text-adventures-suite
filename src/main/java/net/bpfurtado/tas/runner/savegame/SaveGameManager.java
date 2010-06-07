@@ -99,7 +99,7 @@ public class SaveGameManager
             }
 
             // creates a new gameImpl // FIXME 666 should send saveGame instead of workspace
-            this.game = runner.gameFrom(saveGame.getWorkspace().getId());
+            this.game = runner.gameFrom(saveGame);
             this.game.setPlayer(saveGame.getPlayer());
             
             Player player = game.getPlayer();
