@@ -50,6 +50,7 @@ public class SaveGamePersister
 
         Element root = xml.addElement("savegame");
         root.addAttribute("sceneId", saveGame.getSceneId() + "");
+        root.addAttribute("creation", saveGame.getCreationAsString());
         root.addAttribute("workspaceId", saveGame.getWorkspace().getId());
 
         Player player = saveGame.getPlayer();
@@ -105,7 +106,7 @@ public class SaveGamePersister
             }
 
             Workspace workspace = Workspace.loadFrom(root.valueOf("@workspaceId"));
-            SaveGame saveGame = new SaveGame(workspace, player, integer(root, "sceneId"));
+            SaveGame saveGame = new SaveGame(workspace, player, integer(root, "sceneId"), root.valueOf("@creation"));
             saveGame.setFile(saveGameFile);
             return saveGame;
         } catch (DocumentException e) {

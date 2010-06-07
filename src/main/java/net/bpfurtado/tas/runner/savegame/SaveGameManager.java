@@ -23,8 +23,6 @@
 package net.bpfurtado.tas.runner.savegame;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
@@ -42,7 +40,6 @@ public class SaveGameManager
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(SaveGameManager.class);
     
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-hh_mm_ss");
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
     private Game game;
@@ -60,7 +57,7 @@ public class SaveGameManager
     {
         SaveGame saveGame = buildSaveGame();
         Document xml = SaveGamePersister.createXML(saveGame);
-        File file = buildSaveGameFile();
+        File file = buildSaveGameFile(saveGame);
         saveGame.setFile(file);
 
         SaveGamePersister.write(xml, file, runner);
@@ -71,12 +68,12 @@ public class SaveGameManager
         return file;
     }
 
-    private File buildSaveGameFile()
+    private File buildSaveGameFile(SaveGame saveGame)
     {
         File savedGamesFolder = Conf.getSavedGamesFolder();
 
         String saveGameName = savedGamesFolder.getAbsolutePath() + File.separator + game.getAdventure().getName();
-        saveGameName += "#" + sdf.format(new Date());
+        saveGameName += "#" + saveGame.getCreationAsString();
         saveGameName = saveGameName.replaceAll(" ", "") + ".saveGame.tas";
 
         File saveGameFile = new File(saveGameName);
@@ -101,7 +98,7 @@ public class SaveGameManager
                 s.setPlayer(saveGame.getPlayer());
             }
 
-            // creates a new gameImpl // FIXME
+            // creates a new gameImpl // FIXME 666 should send saveGame instead of workspace
             this.game = runner.gameFrom(saveGame.getWorkspace().getId());
             this.game.setPlayer(saveGame.getPlayer());
             

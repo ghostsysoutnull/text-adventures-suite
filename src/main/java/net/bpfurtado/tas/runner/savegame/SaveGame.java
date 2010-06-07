@@ -24,7 +24,11 @@ package net.bpfurtado.tas.runner.savegame;
 
 import java.io.File;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.model.Player;
@@ -32,31 +36,57 @@ import net.bpfurtado.tas.model.Player;
 public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
 {
     private static final long serialVersionUID = 6976207148524442036L;
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-hh_mm_ss");
 
     private Player player;
     private int sceneId;
 
     private Workspace workspace;
-    
-    private File file;
 
+    private File file;
+    private Date creation = new Date();
+    
     public SaveGame(Workspace workspace, Player player, int sceneId)
     {
         this.workspace = workspace;
         this.player = player;
-
-        // Otherwise we get a ref to the Runner itself, through event
-        // listeners...
+        
+        // Otherwise we get a ref to the Runner itself, through event listeners...
         this.player.clearEventListeners();
 
         this.sceneId = sceneId;
     }
 
+    public SaveGame(Workspace workspace, Player player, int sceneId, String creationStr)
+    {
+        this(workspace, player, sceneId);
+        try {
+            this.creation = sdf.parse(creationStr);
+        } catch (ParseException e) {
+            throw new AdventureException("Could not parse Save Game creation field [" + creationStr + "]", e);
+        }
+    }
+
     @Override
     public String getMenuItemText()
     {
-        // FIXME use timestamp, etc
-        return workspace.getAdventure().getName() + " SAVE GAME";
+        return workspace.getAdventure().getName() + "__" + getCreationAsString();
+    }
+
+    @Override
+    public String getId()
+    {
+        return file.getAbsolutePath();
+    }
+
+    public String getCreationAsString()
+    {
+        return sdf.format(creation);
+    }
+
+    public void setFile(File file)
+    {
+        this.file = file;
     }
 
     public Player getPlayer()
@@ -77,16 +107,5 @@ public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
     public void setWorkspace(Workspace workspace)
     {
         this.workspace = workspace;
-    }
-
-    @Override
-    public String getId()
-    {
-        return file.getAbsolutePath();
-    }
-
-    public void setFile(File file)
-    {
-        this.file = file;
     }
 }
