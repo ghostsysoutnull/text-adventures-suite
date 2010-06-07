@@ -39,8 +39,10 @@ import javax.swing.JMenuItem;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
+import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenActionListener;
+import net.bpfurtado.tas.runner.savegame.SaveGamePersister;
 import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
@@ -51,6 +53,7 @@ import org.apache.log4j.Logger;
 public class RecentFilesMenuController implements EntityPersistedOnFileOpenActionListener
 {
     private static final Logger logger = Logger.getLogger(RecentFilesMenuController.class);
+
     private static final int MAX_ENTRIES_IN_RECENT_LIST = 10;
 
     private static SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
@@ -58,9 +61,11 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     private JMenu openRecentMenu;
 
     private LinkedList<EntityPersistedOnFileOpenAction> recentEntitiesPersisted = new LinkedList<EntityPersistedOnFileOpenAction>();
+
     private LinkedList<JMenuItem> menuItems = new LinkedList<JMenuItem>();
 
     private EntityPersistedOnFileOpenner entityOpenner;
+
     private File historyFile;
 
     private JFrame parentFrame;
@@ -80,7 +85,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     }
 
     @Override
-    public void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e) //111
+    public void fireEntityOpenedAction(EntityPersistedOnFileOpenAction e) // 111
     {
         addToRecent(e);
         openRecentMenu.setEnabled(true);
@@ -100,7 +105,13 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
 
             BufferedReader reader = new BufferedReader(new FileReader(historyFile));
             for (String id = reader.readLine(); id != null; id = reader.readLine()) {
-                //addToRecent(id); // FIXME 666
+                logger.debug("id [" + id + "] histFile=" + historyFile);
+                // addToRecent(id); // FIXME 666
+                if (historyFile.getAbsolutePath().contains("SavedGames")) {
+                    addToRecent(SaveGamePersister.read(new File(id)));
+                } else if (historyFile.getAbsolutePath().contains("Adventures")) {
+                    addToRecent(Workspace.loadFrom(id));
+                }
             }
             reader.close();
 
@@ -109,7 +120,6 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
             }
 
         } catch (Exception e) {
-            //throw new AdventureException(e);
             logger.debug(e.getMessage(), e);
         }
     }
@@ -123,8 +133,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
                     menuItems.remove(item);
                     recentEntitiesPersisted.remove(entityPersisted);
 
-                    item.setText("<html>" + entityPersisted.getMenuItemText() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
-
+                    //item.setText("<html>" + entityPersisted.getMenuItemText() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
+                    item.setText(entityPersisted.getMenuItemText());
                     openRecentMenu.add(item, 0);
                     menuItems.add(0, item);
                     recentEntitiesPersisted.addFirst(entityPersisted);
@@ -155,9 +165,14 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     private void saveRecentEntriesFile()
     {
         try {
+            if(historyFile.getAbsolutePath().contains("Adv")) {
+                int a=0;
+                a++;
+            }
             PrintWriter writer = new PrintWriter(new FileWriter(historyFile));
             Collections.reverse(recentEntitiesPersisted);
             for (EntityPersistedOnFileOpenAction entityPersisted : recentEntitiesPersisted) {
+                logger.debug("txt=[" + entityPersisted.getMenuItemText() + "], id=[" + entityPersisted.getId() + "]");
                 writer.println(entityPersisted.getId());
             }
             writer.flush();

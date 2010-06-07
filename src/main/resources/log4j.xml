@@ -25,7 +25,7 @@
 	<category name="org.apache.log4j.xml">
 		<priority value="info" />
 	</category>
-    <category name="net.bpfurtado.tas.builder.ImagePanelBuilder">
+    <category name="net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController">
         <priority value="debug" />
     </category>
     
