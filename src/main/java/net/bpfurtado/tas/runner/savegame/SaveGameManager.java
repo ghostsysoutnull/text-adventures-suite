@@ -39,7 +39,9 @@ import org.dom4j.Document;
 
 public class SaveGameManager
 {
+    @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(SaveGameManager.class);
+    
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd-hh_mm_ss");
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
@@ -59,6 +61,7 @@ public class SaveGameManager
         SaveGame saveGame = buildSaveGame();
         Document xml = SaveGamePersister.createXML(saveGame);
         File file = buildSaveGameFile();
+        saveGame.setFile(file);
 
         SaveGamePersister.write(xml, file, runner);
 

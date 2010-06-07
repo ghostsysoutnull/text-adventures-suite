@@ -157,8 +157,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(historyFile));
             Collections.reverse(recentEntitiesPersisted);
-            for (EntityPersistedOnFileOpenAction w : recentEntitiesPersisted) {
-                writer.println(w.getId());
+            for (EntityPersistedOnFileOpenAction entityPersisted : recentEntitiesPersisted) {
+                writer.println(entityPersisted.getId());
             }
             writer.flush();
             writer.close();

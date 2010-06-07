@@ -22,8 +22,8 @@
 
 package net.bpfurtado.tas.runner.savegame;
 
+import java.io.File;
 import java.io.Serializable;
-import java.util.UUID;
 
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.EntityPersistedOnFileOpenAction;
@@ -33,18 +33,17 @@ public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
 {
     private static final long serialVersionUID = 6976207148524442036L;
 
-    private String id = null;
-
     private Player player;
     private int sceneId;
 
     private Workspace workspace;
+    
+    private File file;
 
     public SaveGame(Workspace workspace, Player player, int sceneId)
     {
         this.workspace = workspace;
         this.player = player;
-        this.id = UUID.randomUUID().toString();
 
         // Otherwise we get a ref to the Runner itself, through event
         // listeners...
@@ -80,8 +79,14 @@ public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
         this.workspace = workspace;
     }
 
+    @Override
     public String getId()
     {
-        return id;
+        return file.getAbsolutePath();
+    }
+
+    public void setFile(File file)
+    {
+        this.file = file;
     }
 }

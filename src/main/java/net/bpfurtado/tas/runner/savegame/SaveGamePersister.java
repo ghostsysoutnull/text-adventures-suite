@@ -106,6 +106,7 @@ public class SaveGamePersister
 
             Workspace workspace = Workspace.loadFrom(root.valueOf("@workspaceId"));
             SaveGame saveGame = new SaveGame(workspace, player, integer(root, "sceneId"));
+            saveGame.setFile(saveGameFile);
             return saveGame;
         } catch (DocumentException e) {
             throw new AdventureReaderException("Error reading XML document", e);
