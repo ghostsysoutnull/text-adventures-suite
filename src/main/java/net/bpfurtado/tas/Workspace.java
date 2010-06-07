@@ -215,4 +215,20 @@ public class Workspace implements EntityPersistedOnFileOpenAction
         }
         return ws;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Workspace) {
+            Workspace other = (Workspace) obj;
+            return id.equals(other.id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return id.hashCode();
+    }
 }
