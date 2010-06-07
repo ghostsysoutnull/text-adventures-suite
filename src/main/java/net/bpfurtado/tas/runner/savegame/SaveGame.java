@@ -45,12 +45,12 @@ public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
 
     private File file;
     private Date creation = new Date();
-    
+
     public SaveGame(Workspace workspace, Player player, int sceneId)
     {
         this.workspace = workspace;
         this.player = player;
-        
+
         // Otherwise we get a ref to the Runner itself, through event listeners...
         this.player.clearEventListeners();
 
@@ -107,5 +107,21 @@ public class SaveGame implements Serializable, EntityPersistedOnFileOpenAction
     public void setWorkspace(Workspace workspace)
     {
         this.workspace = workspace;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof SaveGame) {
+            SaveGame other = (SaveGame) obj;
+            return other.creation.equals(creation);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return creation.hashCode();
     }
 }
