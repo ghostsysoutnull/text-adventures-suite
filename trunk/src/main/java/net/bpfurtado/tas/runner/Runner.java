@@ -118,7 +118,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private final JFileChooser fileChooser = new JFileChooser();
 
     private List<EntityPersistedOnFileOpenActionListener> openAdventureListeners;
-    private List<EntityPersistedOnFileOpenActionListener> recentOpennedMenus;
+    private List<EntityPersistedOnFileOpenActionListener> openSavedGamesListeners;
     private RecentFilesMenuController recentAdventuresMenuController;
     private RecentFilesMenuController recentSavedGamesMenuController;
 
@@ -204,7 +204,9 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             }
         };
         recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
-
+        openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openAdventureListeners.add(recentAdventuresMenuController);
+        
         EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
         {
             public String getApplicationName()
@@ -225,7 +227,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             @Override
             public void openEntityPersisted(String id)
             {
-                recentMenuSaveGameOpenAction(id);
+                SaveGame saveGame = getSaveGameManager().open(id, Runner.this);
+                adventure = saveGame.getWorkspace().getAdventure();
             }
 
             public void save(boolean isSaveAs)
@@ -233,20 +236,17 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
                 Runner.this.saveGameManager.save();
             }
         };
-
         recentSavedGamesMenuController = new RecentFilesMenuController(savedGamesOpenner, this, "recentSavedGames.txt");
-
-        openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
-        openAdventureListeners.add(recentAdventuresMenuController);
-
-        this.recentOpennedMenus = new LinkedList<EntityPersistedOnFileOpenActionListener>();
-        recentOpennedMenus.add(recentSavedGamesMenuController);
+        openSavedGamesListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
+        openSavedGamesListeners.add(recentSavedGamesMenuController);
     }
-
-    private void recentMenuSaveGameOpenAction(String id)
+    
+    @Override
+    public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
-        SaveGame saveGame = getSaveGameManager().open(id, Runner.this);
-        adventure = saveGame.getWorkspace().getAdventure();
+        for (EntityPersistedOnFileOpenActionListener menu : openSavedGamesListeners) {
+            menu.fireEntityOpenedAction(saveGame);
+        }
     }
 
     private SaveGameManager getSaveGameManager()
@@ -503,13 +503,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Util.showComponent(mainPanel);
     }
 
-    private void fireOpenAdventureEvent(EntityPersistedOnFileOpenAction entity)
-    {
-        for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
-            listener.fireEntityOpenedAction(entity);
-        }
-    }
-
     private JPanel createGamePanel()
     {
         gamePanel = new JPanel();
@@ -713,21 +706,9 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
     }
 
-    @Override
-    public void fireOpenSavedGameEvent(SaveGame saveGame)
-    {
-        for (EntityPersistedOnFileOpenActionListener menu : recentOpennedMenus) {
-            menu.fireEntityOpenedAction(saveGame);
-        }
-    }
 
-    @Override
-    public Game gameFrom(SaveGame saveGame)
-    {
-        Conf.runner().set("lastWorkspaceId", saveGame.getWorkspace().getId());
-        return gameFrom(saveGame.getWorkspace(), saveGame);
-    }
 
+    //FIXME assinatura errada, de acordo com a entidade deve ser fired o openAdventure and* openSaveGame 
     private Game gameFrom(Workspace workspace, EntityPersistedOnFileOpenAction entityPersistedOnFileOpen)
     {
         this.workspace = workspace;
@@ -738,14 +719,30 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
 
+        //FIXME 666 abrindo por saveGame... fire no SaveGame e na Adventure...
+        //E qdo envio workspace, workspace?
         fireOpenAdventureEvent(entityPersistedOnFileOpen);
 
         return startGame();
     }
     
+    @Override
+    public Game gameFrom(SaveGame saveGame)
+    {
+        Conf.runner().set("lastWorkspaceId", saveGame.getWorkspace().getId());
+        return gameFrom(saveGame.getWorkspace(), saveGame);
+    }
+    
     private Game gameFrom(Workspace workspace)
     {
         return gameFrom(workspace, workspace);
+    }
+    
+    private void fireOpenAdventureEvent(EntityPersistedOnFileOpenAction entity)
+    {
+        for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
+            listener.fireEntityOpenedAction(entity);
+        }
     }
 
     private Game startGame()
