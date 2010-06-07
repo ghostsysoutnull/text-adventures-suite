@@ -759,7 +759,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         statsView.setGame(game);
         game.addGoToSceneListener(this);
 
-        //FIXME ERROR 666 here, if it's a saved game being loaded, then we do not create a new player
         game.getPlayer().add(this);
 
         saveGameManager = new SaveGameManager(workspace, game, this);
