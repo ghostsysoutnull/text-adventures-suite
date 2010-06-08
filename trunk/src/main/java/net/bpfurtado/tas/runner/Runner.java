@@ -706,9 +706,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
     }
 
-
-
-    //FIXME assinatura errada, de acordo com a entidade deve ser fired o openAdventure and* openSaveGame 
+    //FIXME assinatura errada, de acordo com a entidade deve ser fired o openAdventure (and* openSaveGame) 
     private Game gameFrom(Workspace workspace, EntityPersistedOnFileOpenAction entityPersistedOnFileOpen)
     {
         this.workspace = workspace;
@@ -720,7 +718,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         startAgainMnIt.setEnabled(true);
 
         //FIXME 666 abrindo por saveGame... fire no SaveGame e na Adventure...
-        //E qdo envio workspace, workspace?
+        //E qdo envio (workspace, workspace)?
         fireOpenAdventureEvent(entityPersistedOnFileOpen);
 
         return startGame();
