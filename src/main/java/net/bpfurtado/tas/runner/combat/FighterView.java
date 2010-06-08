@@ -35,6 +35,7 @@ import net.bpfurtado.tas.model.combat.AttackResult;
 import net.bpfurtado.tas.model.combat.AttackResultListener;
 import net.bpfurtado.tas.model.combat.AttackResultType;
 import net.bpfurtado.tas.model.combat.Fighter;
+import net.bpfurtado.tas.view.Util;
 
 import org.apache.log4j.Logger;
 
@@ -68,6 +69,7 @@ public class FighterView implements AttackResultListener
 
 	private void widgets(Fighter f)
 	{
+	    
 		panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
 		panel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -82,6 +84,17 @@ public class FighterView implements AttackResultListener
 		space(panel);
 
 		this.diceLb = line(panel, "");
+		
+        JPanel m = new JPanel();
+        m.setLayout(new BoxLayout(m, BoxLayout.PAGE_AXIS));
+		m.add(panel);
+		
+		JPanel s
+		JLabel label = new JLabel(Util.getImage("small_skull.jpg"));
+        label.setBorder(createEmptyBorder(9, 9, 9, 9));
+		m.add(label);
+		
+		panel = m;
 	}
 
 	private JLabel line(JPanel p, String string)
