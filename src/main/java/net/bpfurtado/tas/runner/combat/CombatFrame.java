@@ -30,7 +30,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -43,9 +42,8 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.Timer;
 
-import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.combat.AttackResult;
 import net.bpfurtado.tas.model.combat.AttackResultListener;
@@ -62,24 +60,33 @@ public class CombatFrame extends JDialog implements AttackResultListener
     private static final Logger logger = Logger.getLogger(CombatFrame.class);
 
     private static final long serialVersionUID = -3354524968137077741L;
+
     private static final Font DEFAULT_FONT = new Font("Tahoma", 1, 14);
 
     private int round = 1;
 
     private Combat combat;
+
     private Fighter player;
 
     private LinkedList<Fighter> enemies = new LinkedList<Fighter>();
+
     private Fighter currentEnemy;
 
     private EndOfCombatListener endOfCombatListener;
 
     private JButton fightBt;
+
     private JButton tilDeathBt;
+
     private JPanel mainPn;
+
     private JPanel buttonsPn;
+
     private JList attackResultsList;
+
     private DefaultListModel attackResultsListModel;
+
     private JFrame invokerFrame;
 
     public CombatFrame(EndOfCombatListener listener, Fighter p, Combat c, JFrame invokerFrame)
@@ -89,7 +96,10 @@ public class CombatFrame extends JDialog implements AttackResultListener
         this.combat = c;
         this.invokerFrame = invokerFrame;
 
-        /** Creating copies not to mess with the Builder, if the Runner starts from it. */
+        /**
+         * Creating copies not to mess with the Builder, if the Runner starts
+         * from it.
+         */
         for (Fighter f : c.getEnemies()) {
             enemies.add(f.createCopy());
         }
@@ -121,7 +131,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setDefaultLookAndFeelDecorated(true);
         setModal(true);
-        // setResizable(false);
 
         myPack();
         setVisible(true);
@@ -135,8 +144,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void widgets()
     {
-        // initMainPanel();
-        // initFightersViews(mainPn); //111
         mainPn.add(Box.createRigidArea(new Dimension(0, 16)));
 
         addButtons(mainPn);
@@ -197,35 +204,20 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void tilDeathButtonAction()
     {
-        while (nextRound()) {
-            try {
-                new MeaningOfLifeFinder().execute();
-//                Thread.sleep(750);
-            } catch (Exception e) {
-                throw new AdventureException(e);
+        Timer timer = new Timer(700, new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent ev)
+            {
+                if (nextRound()) {
+                    nextEnemy();
+                } else {
+                    Timer thisTimer = (Timer) ev.getSource();
+                    thisTimer.stop();
+                }
             }
-        }
-    }
-
-    private class MeaningOfLifeFinder extends SwingWorker<String, Object>
-    {
-        @Override
-        public String doInBackground()
-        {
-            nextEnemy();
-            return null;
-        }
-
-        @Override
-        protected void done()
-        {
-        }
-
-        @Override
-        protected void process(List<Object> chunks)
-        {
-            super.process(chunks);
-        }
+        });
+        timer.start();
     }
 
     private void nextRoundButtonAction()
@@ -239,8 +231,10 @@ public class CombatFrame extends JDialog implements AttackResultListener
     {
         if (!enemies.isEmpty()) {
             if (combat.getType() == CombatType.oneAtATime) {
+                System.out.println("B");
                 currentEnemy = enemies.removeFirst();
             } else {
+                System.out.println("A");
                 currentEnemy = enemies.getFirst();
             }
             currentEnemy.addAtackResultListener(this);
@@ -273,7 +267,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
             Fighter lastEnemy = currentEnemy;
 
             rotateToNextEnemy();
-            logger.debug("\t" + currentEnemy.getName());
+            logger.debug("\tAfter Rotate: " + currentEnemy.getName());
 
             currentEnemyView = currentEnemy.getView();
             currentEnemyView.setCurrent(true);
