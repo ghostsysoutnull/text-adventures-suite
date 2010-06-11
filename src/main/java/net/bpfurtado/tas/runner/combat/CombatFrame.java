@@ -229,7 +229,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 else
                     currentEnemy = enemies.get(nextIdx);
             }
-            System.out.println("---->>> " + currentEnemy);
             currentEnemy.addAtackResultListener(this);
         }
     }
