@@ -60,31 +60,22 @@ public class CombatFrame extends JDialog implements AttackResultListener
     private static final Logger logger = Logger.getLogger(CombatFrame.class);
 
     private static final long serialVersionUID = -3354524968137077741L;
-
     private static final Font DEFAULT_FONT = new Font("Tahoma", 1, 14);
 
     private int round = 1;
 
     private Combat combat;
-
     private Fighter player;
-
-    private LinkedList<Fighter> enemies = new LinkedList<Fighter>();
-
     private Fighter currentEnemy;
 
+    private LinkedList<Fighter> enemies = new LinkedList<Fighter>();
     private EndOfCombatListener endOfCombatListener;
 
     private JButton fightBt;
-
     private JButton tilDeathBt;
-
     private JPanel mainPn;
-
     private JPanel buttonsPn;
-
     private JList attackResultsList;
-
     private DefaultListModel attackResultsListModel;
 
     private JFrame invokerFrame;
@@ -104,13 +95,10 @@ public class CombatFrame extends JDialog implements AttackResultListener
         }
 
         currentEnemy = enemies.getFirst();
-        // logger.debug(enemies);
 
         initMainPanel();
-        initFightersViews(mainPn); // 111
-        // logger.debug(currentEnemy.getView());
+        initFightersViews(mainPn); 
 
-        // logger.debug(enemies);
         if (c.getType() == CombatType.oneAtATime) {
             currentEnemy = enemies.removeFirst();
         }
@@ -266,13 +254,9 @@ public class CombatFrame extends JDialog implements AttackResultListener
         if (combat.getType() == CombatType.allAtTheSameTime) {
             currentEnemyView.setCurrent(false);
 
-            // logger.debug("Rotating");
-            // logger.debug("\t" + currentEnemy.getName());
-
             Fighter lastEnemy = currentEnemy;
 
             rotateToNextEnemy();
-            // logger.debug("\tAfter Rotate: " + currentEnemy.getName());
 
             currentEnemyView = currentEnemy.getView();
             currentEnemyView.setCurrent(true);
@@ -290,8 +274,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
         myPack();
 
-        // logger.debug("currentEnemy=" + currentEnemy);
-
         return !(currentEnemy.isDead() || player.isDead());
     }
 
@@ -305,7 +287,6 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 currentEnemy = enemies.get(idx + 1);
             }
             currentEnemy.addAtackResultListener(this);
-            // logger.debug(currentEnemy);
             System.out.println("ROTATE --> " + currentEnemy);
             return true;
         } else {
@@ -401,13 +382,13 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 {
                     public void combatEnded(boolean keepAdventure)
                     {
-                        // logger.debug("Keep adventure? " + keepAdventure);
+                        logger.debug("Keep adventure? " + keepAdventure);
                     }
                 }, player, combat, invokerFrame);
-                // logger.debug("Swing thread END");
+                logger.debug("Swing thread END");
             }
         });
-        // logger.debug("End");
+        logger.debug("End");
     }
 
     public void clean()
