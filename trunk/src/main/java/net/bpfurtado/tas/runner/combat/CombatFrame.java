@@ -373,7 +373,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 combat.add(new Fighter("Orc", 7, 8));
                 combat.setType(CombatType.allAtTheSameTime);
 
-                Fighter player = new Player("Player", 10, 16);
+                Fighter player = new Player("Player", 11, 16);
 
                 JFrame invokerFrame = new JFrame();
                 invokerFrame.setBounds(100, 100, 800, 500);
