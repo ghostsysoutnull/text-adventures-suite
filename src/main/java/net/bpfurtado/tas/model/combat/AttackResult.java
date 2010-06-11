@@ -26,82 +26,78 @@ import org.apache.log4j.Logger;
 
 public class AttackResult
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(AttackResult.class);
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(AttackResult.class);
 
-	private int dice1;
-	private int dice2;
-	private Fighter f;
+    private int dice1;
+    private int dice2;
+    private Fighter f;
 
-	private AttackResultType type;
+    boolean instantKill = false;
 
-	public AttackResult(int dice1, int dice2, Fighter f)
-	{
-		this.f = f;
-		this.dice1 = dice1;
-		this.dice2 = dice2;
-	}
-	
-	/*public boolean relatesTo(Fighter other)
-	{
-		logger.debug("me: "+f+", other="+other+" = "+(f == other));
-		return f == other;
-	}*/
+    private AttackResultType type;
 
-	public int sum()
-	{
-		if (dice1 == dice2) {
-			if (dice1 == 1) {
-				//use rule of instant kill?
-			}
-		}
-		return dice1 + dice2 + f.getCombatSkillLevel();
-	}
+    public AttackResult(int dice1, int dice2, Fighter f)
+    {
+        this.f = f;
+        this.dice1 = dice1;
+        this.dice2 = dice2;
+        if (dice1 == dice2 && dice1 == 1) {
+            instantKill = true;
+        }
+    }
 
-	public String toString()
-	{
-		int sum = dice1 + dice2 + f.getCombatSkillLevel();
-		String string = "[" + dice1 + "] + [" + dice2 + "] + " + f.getCombatSkillLevel() + " = " + sum;
-		//logger.debug(string);
-		return string;
-	}
-	
-	public String roundInfoToString(int round)
-	{
-		String roundStr = "[" + round + "] ";
-		String nameAndDice = f.getName() + ": " + toString();
-		String stamina = ", stamina = " + f.getStamina();
-		
-		return roundStr + nameAndDice + stamina;
-	}
+    public int sum()
+    {
+        return dice1 + dice2 + f.getCombatSkillLevel();
+    }
 
-	public void defineType(AttackResult e)
-	{
-		if (sum() > e.sum()) {
-			setType(AttackResultType.won);
-			e.setType(AttackResultType.loose);
-		} else if (sum() < e.sum()) {
-			setType(AttackResultType.loose);
-			e.setType(AttackResultType.won);
-		} else {
-			setType(AttackResultType.draw);
-			e.setType(AttackResultType.draw);
-		}
-	}
+    public String toString()
+    {
+        int sum = dice1 + dice2 + f.getCombatSkillLevel();
+        return "[" + dice1 + "] + [" + dice2 + "] + " + f.getCombatSkillLevel() + " = " + sum;
+    }
 
-	public void setType(AttackResultType type)
-	{
-		this.type = type;
-	}
+    public String roundInfoToString(int round)
+    {
+        String roundStr = "[" + round + "] ";
+        String nameAndDice = f.getName() + ": " + toString();
+        String stamina = ", stamina = " + f.getStamina();
 
-	public AttackResultType getType()
-	{
-		return type;
-	}
+        return roundStr + nameAndDice + stamina;
+    }
 
-	public boolean isPlayer()
-	{
-		return f instanceof Player;
-	}
+    public void defineType(AttackResult enemy)
+    {
+        if (sum() > enemy.sum() || isInstantKill()) {
+            setType(AttackResultType.won);
+            enemy.setType(AttackResultType.loose);
+        } else if (sum() < enemy.sum()) {
+            setType(AttackResultType.loose);
+            enemy.setType(AttackResultType.won);
+        } else {
+            setType(AttackResultType.draw);
+            enemy.setType(AttackResultType.draw);
+        }
+    }
+
+    public void setType(AttackResultType type)
+    {
+        this.type = type;
+    }
+
+    public AttackResultType getType()
+    {
+        return type;
+    }
+
+    public boolean isPlayer()
+    {
+        return f instanceof Player;
+    }
+
+    public boolean isInstantKill()
+    {
+        return instantKill;
+    }
 }
-

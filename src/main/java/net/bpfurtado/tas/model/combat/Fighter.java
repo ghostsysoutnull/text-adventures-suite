@@ -63,6 +63,11 @@ public class Fighter
     public void fightWith(Fighter enemy)
     {
         AttackResult myAttackResult = attack(this);
+
+        if (myAttackResult.isInstantKill()) {
+            enemy.setStamina(0);
+        }
+
         int myForce = myAttackResult.sum();
 
         AttackResult enemyAttackResult = attack(enemy);

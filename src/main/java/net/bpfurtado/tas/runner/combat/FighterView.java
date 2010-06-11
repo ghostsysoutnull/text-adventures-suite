@@ -83,7 +83,7 @@ public class FighterView implements AttackResultListener
     {
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        
+
         dicePn = new JPanel();
         dicePn.setLayout(new BoxLayout(dicePn, BoxLayout.LINE_AXIS));
         dicePn.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -132,7 +132,14 @@ public class FighterView implements AttackResultListener
         diceLb.setFont(STRONG_FONT);
         diceLb.setText(result.toString());
 
-        if (result.getType().equals(AttackResultType.won)) {
+        if (result.isInstantKill()) {
+            diceLb.setForeground(Color.green.darker());
+            if (axeCount > 0) {
+                panel.setBorder(BorderFactory.createLineBorder(Color.black));
+            }
+            iconsPn.add(new JLabel(Util.getImage("instant_kill_skull.jpg")));
+            axeCount++;
+        } else if (result.getType().equals(AttackResultType.won)) {
             diceLb.setForeground(Color.green.darker());
             if (axeCount > 0) {
                 panel.setBorder(BorderFactory.createLineBorder(Color.black));
