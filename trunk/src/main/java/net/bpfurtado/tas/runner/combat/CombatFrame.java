@@ -97,21 +97,20 @@ public class CombatFrame extends JDialog implements AttackResultListener
         this.invokerFrame = invokerFrame;
 
         /**
-         * Creating copies not to mess with the Builder, if the Runner starts
-         * from it.
+         * Creating copies not to mess with the Builder, if the Runner starts from it.
          */
         for (Fighter f : c.getEnemies()) {
             enemies.add(f.createCopy());
         }
 
         currentEnemy = enemies.getFirst();
-        logger.debug(enemies);
+        // logger.debug(enemies);
 
         initMainPanel();
         initFightersViews(mainPn); // 111
-        logger.debug(currentEnemy.getView());
+        // logger.debug(currentEnemy.getView());
 
-        logger.debug(enemies);
+        // logger.debug(enemies);
         if (c.getType() == CombatType.oneAtATime) {
             currentEnemy = enemies.removeFirst();
         }
@@ -229,14 +228,20 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void nextEnemy()
     {
+        if (combat.getType() == CombatType.allAtTheSameTime)
+            return;
+
         if (!enemies.isEmpty()) {
             if (combat.getType() == CombatType.oneAtATime) {
-                System.out.println("B");
                 currentEnemy = enemies.removeFirst();
             } else {
-                System.out.println("A");
-                currentEnemy = enemies.getFirst();
+                int nextIdx = enemies.indexOf(currentEnemy) + 1;
+                if (nextIdx == enemies.size())
+                    currentEnemy = enemies.getFirst();
+                else
+                    currentEnemy = enemies.get(nextIdx);
             }
+            System.out.println("---->>> " + currentEnemy);
             currentEnemy.addAtackResultListener(this);
         }
     }
@@ -261,13 +266,13 @@ public class CombatFrame extends JDialog implements AttackResultListener
         if (combat.getType() == CombatType.allAtTheSameTime) {
             currentEnemyView.setCurrent(false);
 
-            logger.debug("Rotating");
-            logger.debug("\t" + currentEnemy.getName());
+            // logger.debug("Rotating");
+            // logger.debug("\t" + currentEnemy.getName());
 
             Fighter lastEnemy = currentEnemy;
 
             rotateToNextEnemy();
-            logger.debug("\tAfter Rotate: " + currentEnemy.getName());
+            // logger.debug("\tAfter Rotate: " + currentEnemy.getName());
 
             currentEnemyView = currentEnemy.getView();
             currentEnemyView.setCurrent(true);
@@ -285,14 +290,14 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
         myPack();
 
-        logger.debug("currentEnemy=" + currentEnemy);
+        // logger.debug("currentEnemy=" + currentEnemy);
 
         return !(currentEnemy.isDead() || player.isDead());
     }
 
     private boolean rotateToNextEnemy()
     {
-        int idx = enemies.lastIndexOf(currentEnemy);
+        int idx = enemies.indexOf(currentEnemy);
         if (idx != -1) {
             if (idx + 1 == enemies.size()) {
                 currentEnemy = enemies.getFirst();
@@ -300,7 +305,8 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 currentEnemy = enemies.get(idx + 1);
             }
             currentEnemy.addAtackResultListener(this);
-            logger.debug(currentEnemy);
+            // logger.debug(currentEnemy);
+            System.out.println("ROTATE --> " + currentEnemy);
             return true;
         } else {
             logger.warn(currentEnemy.getName() + " not found!");
@@ -381,12 +387,13 @@ public class CombatFrame extends JDialog implements AttackResultListener
             public void run()
             {
                 Combat combat = new Combat();
-                combat.add(new Fighter("Minotaur [1]", 7, 7));
-                combat.add(new Fighter("Hell Hound 1 [2]", 9, 10));
-                combat.add(new Fighter("Hell Hound 2 [3]", 5, 10));
+                combat.add(new Fighter("Minotaur", 10, 11));
+                combat.add(new Fighter("Hell Hound 1", 6, 5));
+                combat.add(new Fighter("Hell Hound 2", 5, 4));
+                combat.add(new Fighter("Orc", 7, 8));
                 combat.setType(CombatType.allAtTheSameTime);
 
-                Fighter player = new Player("Player", 9, 26);
+                Fighter player = new Player("Player", 10, 16);
 
                 JFrame invokerFrame = new JFrame();
                 invokerFrame.setBounds(100, 100, 800, 500);
@@ -394,13 +401,13 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 {
                     public void combatEnded(boolean keepAdventure)
                     {
-                        logger.debug("Keep adventure? " + keepAdventure);
+                        // logger.debug("Keep adventure? " + keepAdventure);
                     }
                 }, player, combat, invokerFrame);
-                logger.debug("Swing thread END");
+                // logger.debug("Swing thread END");
             }
         });
-        logger.debug("End");
+        // logger.debug("End");
     }
 
     public void clean()

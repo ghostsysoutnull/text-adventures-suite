@@ -31,7 +31,7 @@ import net.bpfurtado.tas.runner.combat.FighterView;
 
 import org.apache.log4j.Logger;
 
-public class Fighter 
+public class Fighter
 {
     private static final long serialVersionUID = -810138909324356865L;
 
@@ -50,7 +50,7 @@ public class Fighter
     private List<AttackResultListener> listeners = new LinkedList<AttackResultListener>();
 
     private FighterView view;
-    
+
     public Fighter(String name, int combatSkillLevel, int stamina)
     {
         super();
@@ -78,7 +78,7 @@ public class Fighter
 
         notifyAtackResultListeners(myAttackResult);
         enemy.notifyAtackResultListeners(enemyAttackResult);
-        
+
         for (AttackResultListener l : listeners) {
             l.roundEnded();
         }
@@ -109,7 +109,6 @@ public class Fighter
         int dice2 = RANDOM.nextInt(6) + 1;
         return new AttackResult(dice1, dice2, f);
     }
-
 
     public void setSkill(Integer combatSkillLevel)
     {
@@ -206,9 +205,9 @@ public class Fighter
             listener.receive(event);
         }
     }
-    
+
     /**
-     * For save game 
+     * For save game
      */
     public void clearEventListeners()
     {

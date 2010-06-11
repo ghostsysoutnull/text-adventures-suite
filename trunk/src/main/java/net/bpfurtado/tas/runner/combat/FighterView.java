@@ -67,6 +67,8 @@ public class FighterView implements AttackResultListener
 
     private int axeCount;
 
+    private JPanel dicePn;
+
     FighterView(Fighter fighter)
     {
         this.fighter = fighter;
@@ -80,29 +82,24 @@ public class FighterView implements AttackResultListener
     private void widgets(Fighter f)
     {
         panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        line(panel, f.getName(), STRONG_FONT);
-        space(panel);
-
-        line(panel, "Skill: " + f.getCombatSkillLevel());
-        space(panel);
-
-        this.staminaLb = line(panel, "Stamina: " + f.getStamina());
-        space(panel);
-
-        this.diceLb = line(panel, "");
-
-        JPanel mainPn = new JPanel();
-        mainPn.setLayout(new BoxLayout(mainPn, BoxLayout.PAGE_AXIS));
-        mainPn.add(panel);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        
+        dicePn = new JPanel();
+        dicePn.setLayout(new BoxLayout(dicePn, BoxLayout.LINE_AXIS));
+        dicePn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        line(dicePn, f.getName(), STRONG_FONT);
+        space(dicePn);
+        line(dicePn, "Skill: " + f.getCombatSkillLevel());
+        space(dicePn);
+        staminaLb = line(dicePn, "Stamina: " + f.getStamina());
+        space(dicePn);
+        diceLb = line(dicePn, "");
+        panel.add(dicePn);
 
         this.iconsPn = new JPanel();
         iconsPn.setAlignmentX(Component.LEFT_ALIGNMENT);
         iconsPn.setLayout(new BoxLayout(iconsPn, BoxLayout.LINE_AXIS));
-        mainPn.add(iconsPn);
-        panel = mainPn;
+        panel.add(iconsPn);
     }
 
     private JLabel line(JPanel p, String string)
@@ -160,6 +157,7 @@ public class FighterView implements AttackResultListener
                 chooseBt.setVisible(false);
             }
             panel.setBackground(LIGHT_RED_COLOR);
+            dicePn.setBackground(LIGHT_RED_COLOR);
             iconsPn.setBackground(LIGHT_RED_COLOR);
 
             diceLb.setForeground(Color.black);
