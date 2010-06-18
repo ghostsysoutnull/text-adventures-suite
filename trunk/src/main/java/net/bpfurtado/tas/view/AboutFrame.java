@@ -27,6 +27,10 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +51,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import net.bpfurtado.commons.io.FileUtils;
+import net.bpfurtado.tas.AdventureException;
 
 public class AboutFrame extends JDialog
 {
@@ -102,17 +107,23 @@ public class AboutFrame extends JDialog
         tabs.addTab("About", createAboutPanel());
         tabs.addTab("System Properties", createSystemPropertiesPanel());
         tabs.addTab("Environment Variables", createEnvironmentVariablesPanel());
+        tabs.addTab("License", createLicensePanel());
         return tabs;
+    }
+
+    private Component createLicensePanel()
+    {
+        return createTAPanel(readLicense());
     }
 
     private Component createEnvironmentVariablesPanel()
     {
-        return createTAPanel(getEnvironmentVars(), true);
+        return createTAPanel(readEnvironmentVars(), true);
     }
 
     private JPanel createSystemPropertiesPanel()
     {
-        return createTAPanel(getSystemProperties(), true);
+        return createTAPanel(readSystemProperties(), true);
     }
 
     private JPanel createTAPanel(String text)
@@ -146,7 +157,7 @@ public class AboutFrame extends JDialog
         return createTAPanel(b.toString());
     }
 
-    private String getSystemProperties()
+    private String readSystemProperties()
     {
         StringBuilder b = new StringBuilder();
         for (Entry<Object, Object> e : System.getProperties().entrySet()) {
@@ -155,7 +166,23 @@ public class AboutFrame extends JDialog
         return b.toString();
     }
 
-    private String getEnvironmentVars()
+    private String readLicense()
+    {
+        try {
+            InputStream in = getClass().getResourceAsStream("/net/bpfurtado/tas/view/license.txt");
+            BufferedReader r = new BufferedReader(new InputStreamReader(in));
+            StringBuilder b = new StringBuilder();
+            for (String l = r.readLine(); l != null; l = r.readLine()) {
+                System.out.println(l);
+                b.append(l+"\n");
+            }
+            return b.toString();
+        } catch (IOException e) {
+            throw new AdventureException("Could not read license", e);
+        }
+    }
+
+    private String readEnvironmentVars()
     {
         Map<String, String> environment = System.getenv();
         StringBuilder b = new StringBuilder();
@@ -170,7 +197,8 @@ public class AboutFrame extends JDialog
         JButton closeBt = new JButton("Close");
         closeBt.setMnemonic('C');
         closeBt.setAlignmentX(CENTER_ALIGNMENT);
-        closeBt.addActionListener(new ActionListener() {
+        closeBt.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
             {
                 dispose();
@@ -187,7 +215,8 @@ public class AboutFrame extends JDialog
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
             public void run()
             {
                 JFrame frame = new JFrame();
