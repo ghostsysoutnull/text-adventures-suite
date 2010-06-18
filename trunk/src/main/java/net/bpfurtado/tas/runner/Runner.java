@@ -206,7 +206,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         recentAdventuresMenuController = new RecentFilesMenuController(advOpenner, this, "recentAdventures.txt");
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
-        
+
         EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
         {
             public String getApplicationName()
@@ -240,7 +240,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         openSavedGamesListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openSavedGamesListeners.add(recentSavedGamesMenuController);
     }
-    
+
     @Override
     public void fireOpenSavedGameEvent(SaveGame saveGame)
     {
@@ -706,7 +706,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         }
     }
 
-    //FIXME assinatura errada, de acordo com a entidade deve ser fired o openAdventure (and* openSaveGame) 
+    // FIXME wrong signature, according to the type we should fire openAdventure (and* openSaveGame)
     private Game gameFrom(Workspace workspace, EntityPersistedOnFileOpenAction entityPersistedOnFileOpen)
     {
         this.workspace = workspace;
@@ -717,25 +717,31 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveGameMnIt.setEnabled(true);
         startAgainMnIt.setEnabled(true);
 
-        //FIXME 666 abrindo por saveGame... fire no SaveGame e na Adventure...
-        //E qdo envio (workspace, workspace)?
-        fireOpenAdventureEvent(entityPersistedOnFileOpen);
+        // FIXME 666 opening saveGames... fire both SaveGame and Adventure...
+        // and when we receive (workspace, workspace)?
+
+        // FIXME Please, never use instanceof... 
+        if (entityPersistedOnFileOpen instanceof Workspace) {
+            fireOpenAdventureEvent(entityPersistedOnFileOpen);
+        } else if (entityPersistedOnFileOpen instanceof SaveGame) {
+            fireOpenSavedGameEvent((SaveGame) entityPersistedOnFileOpen);
+        }
 
         return startGame();
     }
-    
+
     @Override
     public Game gameFrom(SaveGame saveGame)
     {
         Conf.runner().set("lastWorkspaceId", saveGame.getWorkspace().getId());
         return gameFrom(saveGame.getWorkspace(), saveGame);
     }
-    
+
     private Game gameFrom(Workspace workspace)
     {
         return gameFrom(workspace, workspace);
     }
-    
+
     private void fireOpenAdventureEvent(EntityPersistedOnFileOpenAction entity)
     {
         for (EntityPersistedOnFileOpenActionListener listener : openAdventureListeners) {
