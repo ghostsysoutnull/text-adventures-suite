@@ -74,8 +74,11 @@ public class OpenningFrame extends JFrame
     private void initView()
     {
         widgets();
-
-        Util.setBoundsFrom(Conf.oppening(), this);
+        Conf conf = Conf.oppening();
+        int x = conf.getInt("bounds.x", 235); //FIXME remove these defaults
+        int y = conf.getInt("bounds.y", 260);
+        
+        this.setBounds(x, y, 665, 287);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
