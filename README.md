@@ -1,5 +1,4 @@
 # text-adventures-suite
-Automatically exported from code.google.com/p/text-adventures-suite
 
 Text Adventures Suite is a authoring and interpreter of Text Adventures largely 
 inspired on Steve Jackson and Ian Livingstone Fighting Fantasy series of 
