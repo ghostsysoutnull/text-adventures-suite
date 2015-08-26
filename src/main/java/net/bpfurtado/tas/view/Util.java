@@ -69,15 +69,9 @@ public class Util
     public static int showSaveDialog(JFrame parent, String message)
     {
         Object[] saveDialogOptions = new Object[] { "Save", "Discard Changes", "Cancel" };
-        return JOptionPane.showOptionDialog(
-                        parent,
-                        "You have an unsaved adventure!\n" + message,
-                        "Warning",
-                        JOptionPane.YES_NO_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE,
-                        null,
-                        saveDialogOptions,
-                        saveDialogOptions[0]);
+        return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning",
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions,
+                saveDialogOptions[0]);
     }
 
     public static ImageIcon getImage(String imageName)
@@ -168,7 +162,8 @@ public class Util
         System.exit(0);
     }
 
-    public static JMenuItem menuItem(String text, char mnemonic, int key, String imageName, JMenu adventureMenu, ActionListener action)
+    public static JMenuItem menuItem(String text, char mnemonic, int key, String imageName, JMenu adventureMenu,
+            ActionListener action)
     {
         JMenuItem it = new JMenuItem(text, getImage(imageName));
         it.setAccelerator(KeyStroke.getKeyStroke(key, ActionEvent.CTRL_MASK));
@@ -246,14 +241,19 @@ public class Util
         return builderBt;
     }
 
-    public static void setBoundsFrom(Conf conf, JFrame frame)
+    public static void setBoundsFrom(Conf conf, JFrame frame, int width, int height)
     {
-        int x = conf.getInt("bounds.x", 235); //FIXME remove these defaults
+        int x = conf.getInt("bounds.x", 235); // FIXME remove these defaults
         int y = conf.getInt("bounds.y", 260);
-        int w = conf.getInt("bounds.w", 665);
-        int h = conf.getInt("bounds.h", 400);
+        int w = conf.getInt("bounds.w", width);
+        int h = conf.getInt("bounds.h", height);
 
         frame.setBounds(x, y, w, h);
+    }
+
+    public static void setBoundsFrom(Conf conf, JFrame frame)
+    {
+        setBoundsFrom(conf, frame, 665, 400);
     }
 
     public static JMenuItem menuItem(String text, String image)
