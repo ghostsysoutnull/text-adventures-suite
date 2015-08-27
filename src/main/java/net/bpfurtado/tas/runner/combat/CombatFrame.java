@@ -44,6 +44,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import org.apache.log4j.Logger;
+
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.combat.AttackResult;
 import net.bpfurtado.tas.model.combat.AttackResultListener;
@@ -52,8 +54,6 @@ import net.bpfurtado.tas.model.combat.CombatType;
 import net.bpfurtado.tas.model.combat.EndOfCombatListener;
 import net.bpfurtado.tas.model.combat.Fighter;
 import net.bpfurtado.tas.view.Util;
-
-import org.apache.log4j.Logger;
 
 public class CombatFrame extends JDialog implements AttackResultListener
 {
@@ -75,8 +75,11 @@ public class CombatFrame extends JDialog implements AttackResultListener
     private JButton tilDeathBt;
     private JPanel mainPn;
     private JPanel buttonsPn;
+
+    @SuppressWarnings("rawtypes")
     private JList attackResultsList;
-    private DefaultListModel attackResultsListModel;
+
+    private DefaultListModel<String> attackResultsListModel;
 
     private JFrame invokerFrame;
 
@@ -95,18 +98,26 @@ public class CombatFrame extends JDialog implements AttackResultListener
         }
 
         currentEnemy = enemies.getFirst();
+        logState("CombatFrame::constr");
 
         initMainPanel();
-        initFightersViews(mainPn); 
+        initFightersViews(mainPn);
 
         if (c.getType() == CombatType.oneAtATime) {
             currentEnemy = enemies.removeFirst();
+            logState("CombatFrame::constr");
         }
 
         currentEnemy.addAtackResultListener(this);
         player.addAtackResultListener(this);
 
         initView(invokerFrame);
+    }
+
+    private void logState(String from)
+    {
+        logger.debug("{" + from + "} list of enemies(" + enemies.size() + "): " + enemies);
+        logger.debug("\tRound: " + round + ", Current enemy: " + currentEnemy);
     }
 
     private void initView(JFrame invokerFrame)
@@ -129,6 +140,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
         pack();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private void widgets()
     {
         mainPn.add(Box.createRigidArea(new Dimension(0, 16)));
@@ -164,8 +176,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
         fightBt = new JButton("Next Round");
         fightBt.setMinimumSize(new Dimension(100, 30));
         fightBt.setMnemonic('n');
-        fightBt.addActionListener(new ActionListener()
-        {
+        fightBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 nextRoundButtonAction();
@@ -177,8 +188,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
         tilDeathBt = new JButton("Fight until death!");
         tilDeathBt.setMinimumSize(new Dimension(130, 30));
         tilDeathBt.setMnemonic('f');
-        tilDeathBt.addActionListener(new ActionListener()
-        {
+        tilDeathBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 tilDeathButtonAction();
@@ -191,16 +201,16 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void tilDeathButtonAction()
     {
-        Timer timer = new Timer(700, new ActionListener()
-        {
+        Timer timer = new Timer(800, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev)
             {
-                if (nextRound()) {
+                if (!nextRound()) {
                     nextEnemy();
-                } else {
-                    Timer thisTimer = (Timer) ev.getSource();
-                    thisTimer.stop();
+                }
+                
+                if (player.isDead() || (enemies.isEmpty() && currentEnemy.isDead())) {
+                    ((Timer) ev.getSource()).stop();
                 }
             }
         });
@@ -222,12 +232,16 @@ public class CombatFrame extends JDialog implements AttackResultListener
         if (!enemies.isEmpty()) {
             if (combat.getType() == CombatType.oneAtATime) {
                 currentEnemy = enemies.removeFirst();
+                logState("nextEnemy:method");
             } else {
                 int nextIdx = enemies.indexOf(currentEnemy) + 1;
+
                 if (nextIdx == enemies.size())
                     currentEnemy = enemies.getFirst();
                 else
                     currentEnemy = enemies.get(nextIdx);
+
+                logState("nextEnemy:method_ELSE");
             }
             currentEnemy.addAtackResultListener(this);
         }
@@ -272,12 +286,15 @@ public class CombatFrame extends JDialog implements AttackResultListener
         round++;
 
         myPack();
+        
+        logState("nextRound");
 
         return !(currentEnemy.isDead() || player.isDead());
     }
 
     private boolean rotateToNextEnemy()
     {
+        logger.debug("START");
         int idx = enemies.indexOf(currentEnemy);
         if (idx != -1) {
             if (idx + 1 == enemies.size()) {
@@ -307,8 +324,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
         closeBt.setMnemonic('c');
 
         JPanel closePn = new JPanel();
-        closeBt.addActionListener(new ActionListener()
-        {
+        closeBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 dispose();
@@ -360,25 +376,23 @@ public class CombatFrame extends JDialog implements AttackResultListener
         attackResultsListModel.addElement("==================");
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeAndWait(new Runnable() {
             public void run()
             {
                 Combat combat = new Combat();
-                combat.add(new Fighter("Minotaur", 10, 11));
+                combat.add(new Fighter("Minotaur", 7, 6));
                 combat.add(new Fighter("Hell Hound 1", 6, 5));
                 combat.add(new Fighter("Hell Hound 2", 5, 4));
-                combat.add(new Fighter("Orc", 7, 8));
-                combat.setType(CombatType.allAtTheSameTime);
+                combat.add(new Fighter("Goblin", 4, 5));
+                combat.setType(CombatType.oneAtATime);
 
-                Fighter player = new Player("Player", 11, 16);
+                Fighter player = new Player("Player", 4, 16);
 
                 JFrame invokerFrame = new JFrame();
                 invokerFrame.setBounds(100, 100, 800, 500);
-                new CombatFrame(new EndOfCombatListener()
-                {
+                new CombatFrame(new EndOfCombatListener() {
                     public void combatEnded(boolean keepAdventure)
                     {
                         logger.debug("Keep adventure? " + keepAdventure);
