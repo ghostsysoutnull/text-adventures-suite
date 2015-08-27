@@ -33,8 +33,6 @@ import net.bpfurtado.tas.model.combat.Fighter;
 
 public class Player extends Fighter
 {
-    private static final long serialVersionUID = -5128951986418140176L;
-
     private static final Random rand = new Random();
 
     private Map<String, String> attributes = new HashMap<String, String>();
