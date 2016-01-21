@@ -81,7 +81,7 @@ public class CodePanelBuilder
     private void addCodeSnippetsPanel()
     {
         JPanel p = new JPanel();
-        final JComboBox cb = new JComboBox();
+        final JComboBox<String> cb = new JComboBox<String>();
         cb.addItem("player.setStamina(player.getStamina()+6);");
         cb.addItem("player.setSkill(player.getSkill()-1);");
         cb.addItem("player.setStamina(20);");
@@ -108,7 +108,7 @@ public class CodePanelBuilder
         cb.addItem("ammo = player.getIntValue(\"gun ammo\");");
         cb.addItem("player.addAttribute(\"gun ammo\", ammo + 6);");
         cb.addItem("player.incIntValue(\"coins\", 30);");
-        cb.addItem("player.incIntValue(\"coins\", 30);");
+        cb.addItem("player.decIntValue(\"coins\", 15);");
         cb.addItem("n = player.getIntValue(\"health potion\");");
         cb.addItem("player.addAttribute(\"health potion\", n-1);");
         cb.addItem("player.decIntValue(\"stamina\", 6);");
