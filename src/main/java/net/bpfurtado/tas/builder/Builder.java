@@ -1027,6 +1027,23 @@ public class Builder extends JFrame
                 saveAdventureMenuAction(false);
             }
         });
+        
+
+        JMenuItem exportMnIt = Util.menuItem("Export", 'x', KeyEvent.VK_X, "export_wiz.gif", adventureMenu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println("Export!");
+            }
+        });
+        
+        JMenuItem importMnIt = Util.menuItem("Import", 'i', KeyEvent.VK_I, "import_wiz.gif", adventureMenu, new ActionListener()
+        {
+            public void actionPerformed(ActionEvent e)
+            {
+                System.out.println("Import!");
+            }
+        });
 
         saveAsMnIt = Util.menuItem("Save As...", 'a', KeyEvent.VK_A, "textfield_rename.png", adventureMenu, new ActionListener()
         {
