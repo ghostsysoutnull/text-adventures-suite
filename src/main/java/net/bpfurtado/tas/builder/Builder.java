@@ -70,6 +70,7 @@ import net.bpfurtado.tas.Conf;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.builder.combat.BuilderCombatPanelManager;
 import net.bpfurtado.tas.builder.depth.DepthScenesFrame;
+import net.bpfurtado.tas.builder.export.WorkspaceExporter;
 import net.bpfurtado.tas.builder.scenespanel.ChooseSceneDialog;
 import net.bpfurtado.tas.builder.scenespanel.ScenesList;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory;
@@ -1033,7 +1034,7 @@ public class Builder extends JFrame
         {
             public void actionPerformed(ActionEvent e)
             {
-                System.out.println("Export!");
+                exportWorkspaceAction();
             }
         });
         
@@ -1395,5 +1396,11 @@ public class Builder extends JFrame
     public Workspace getWorkspace()
     {
         return workspace;
+    }
+
+    private void exportWorkspaceAction()
+    {
+        System.out.println("Export!");
+        WorkspaceExporter.export(getWorkspace());
     }
 }

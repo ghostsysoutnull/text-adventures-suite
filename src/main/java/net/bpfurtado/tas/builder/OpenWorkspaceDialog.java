@@ -23,23 +23,31 @@
 package net.bpfurtado.tas.builder;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Workspace;
 import net.bpfurtado.tas.view.Util;
 
@@ -72,10 +80,11 @@ public class OpenWorkspaceDialog extends JDialog
         JPanel main = new JPanel();
         main.setLayout(new BorderLayout());
 
+        main.add(buildWorkspacesHomeRef(), BorderLayout.PAGE_START);
+
         final JList list = new JList(new WorkspacesListModel());
         list.setBorder(BorderFactory.createTitledBorder("Workspaces"));
-        list.addKeyListener(new KeyListener()
-        {
+        list.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e)
             {
@@ -97,8 +106,7 @@ public class OpenWorkspaceDialog extends JDialog
         JPanel buttonsPn = new JPanel();
 
         JButton chooseBt = new JButton("Choose");
-        chooseBt.addActionListener(new ActionListener()
-        {
+        chooseBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0)
             {
@@ -108,8 +116,7 @@ public class OpenWorkspaceDialog extends JDialog
         buttonsPn.add(chooseBt, BorderLayout.PAGE_END);
 
         JButton cancelBt = new JButton("Cancel");
-        cancelBt.addActionListener(new ActionListener()
-        {
+        cancelBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0)
             {
@@ -124,6 +131,23 @@ public class OpenWorkspaceDialog extends JDialog
         list.requestFocusInWindow();
 
         add(main);
+    }
+
+    private JComponent buildWorkspacesHomeRef()
+    {
+        JLabel lb = new JLabel(Workspace.getWorkspacesHome());
+        lb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                try {
+                    Desktop.getDesktop().open(new File(Workspace.getWorkspacesHome()));
+                } catch (IOException e1) {
+                    throw new AdventureException(e1);
+                }
+            }
+        });
+        return lb;
     }
 
     private void selectedWorkspaceAction(final JList list)
@@ -189,8 +213,7 @@ public class OpenWorkspaceDialog extends JDialog
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 JFrame f = new JFrame("Mock Parent");
