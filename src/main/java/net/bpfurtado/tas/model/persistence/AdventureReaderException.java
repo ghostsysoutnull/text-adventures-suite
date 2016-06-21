@@ -22,9 +22,9 @@ import net.bpfurtado.tas.AdventureException;
 
 public class AdventureReaderException extends AdventureException
 {
-	private static final long serialVersionUID = 7655648827034131817L;
+    private static final long serialVersionUID = 7655648827034131817L;
 
-	public AdventureReaderException()
+    public AdventureReaderException()
     {
         super();
     }

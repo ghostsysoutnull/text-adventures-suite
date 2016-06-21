@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model;
 
@@ -66,14 +66,14 @@ public class Depth implements IDepth
 
     public void remove(PathDepth pathDepthToRemove)
     {
-		boolean removed = pathDepths.remove(pathDepthToRemove);
-		if (!removed) {
-			//throw new AdventureException("Should have removed the " + pathDepthToRemove);
-		    logger.error("Should have removed the " + pathDepthToRemove);
-		    return;
-		}
-		logger.debug(this + "<<== Removed " + pathDepthToRemove + ": my pathDepths are: " + pathDepths);
-	}
+        boolean removed = pathDepths.remove(pathDepthToRemove);
+        if (!removed) {
+            // throw new AdventureException("Should have removed the " + pathDepthToRemove);
+            logger.error("Should have removed the " + pathDepthToRemove);
+            return;
+        }
+        logger.debug(this + "<<== Removed " + pathDepthToRemove + ": my pathDepths are: " + pathDepths);
+    }
 
     public int getLevel()
     {
@@ -81,14 +81,14 @@ public class Depth implements IDepth
     }
 
     public boolean contains(Scene scene)
-	{
-		for (PathDepth pd : pathDepths) {
-			if (pd.isRelatedTo(scene)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    {
+        for (PathDepth pd : pathDepths) {
+            if (pd.isRelatedTo(scene)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public boolean equals(Object obj)
@@ -99,7 +99,7 @@ public class Depth implements IDepth
         }
         return false;
     }
-    
+
     @Override
     public int hashCode()
     {

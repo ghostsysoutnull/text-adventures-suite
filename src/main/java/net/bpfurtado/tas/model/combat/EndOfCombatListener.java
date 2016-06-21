@@ -22,5 +22,5 @@ package net.bpfurtado.tas.model.combat;
 
 public interface EndOfCombatListener
 {
-	void combatEnded(boolean keepAdventure);
+    void combatEnded(boolean keepAdventure);
 }

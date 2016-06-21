@@ -33,6 +33,6 @@ public interface IDepth
     void remove(PathDepth depth);
 
     int getLevel();
-    
+
     public boolean contains(Scene scene);
 }

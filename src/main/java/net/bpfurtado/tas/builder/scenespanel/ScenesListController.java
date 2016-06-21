@@ -156,7 +156,7 @@ public class ScenesListController implements FilterScenesFieldsHolder
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    for(ScenesListControllerListener l: listeners) {
+                    for (ScenesListControllerListener l : listeners) {
                         l.focusOnList();
                     }
                 }
@@ -218,10 +218,8 @@ public class ScenesListController implements FilterScenesFieldsHolder
         }
     }
 
-    enum SortBy
-    {
-        Name
-        {
+    enum SortBy {
+        Name {
             Comparator<Scene> getComparator()
             {
                 return new Comparator<Scene>() {
@@ -242,8 +240,7 @@ public class ScenesListController implements FilterScenesFieldsHolder
                 return Util.getImage("alphab_sort.gif");
             }
         },
-        Number
-        {
+        Number {
             Comparator<Scene> getComparator()
             {
                 return new Comparator<Scene>() {

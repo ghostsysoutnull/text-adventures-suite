@@ -45,9 +45,9 @@ public class SaveGameManagerTest
     {
         Adventure a = new Adventure();
         a.setName("SaveGameManagerTest");
-        
+
         Workspace workspace = Workspace.createWith(a);
-        
+
         Game game = new GameImpl(a);
         game.setCurrentScene(new Scene(1337));
 
@@ -78,7 +78,7 @@ public class SaveGameManagerTest
         assertEquals(op.skill("Luck"), p.skill("Luck"));
         assertEquals(op.skill("swim"), p.skill("swim"));
         assertEquals(op.skill("Combat"), p.skill("Combat"));
-        
+
         assertEquals(op.skill("XCombat"), Skill.NULL_OBJECT);
     }
 }
@@ -101,7 +101,6 @@ class MockSaveGameListener implements SaveGameListener
     public void openScene(Scene to, boolean execActions)
     {
     }
-
 
     @Override
     public void fireOpenSavedGameEvent(SaveGame saveGame)

@@ -58,8 +58,8 @@ public class StartDepth implements IDepth
         return 0;
     }
 
-	public boolean contains(Scene scene)
-	{
-		return scenes.contains(scene);
-	}
+    public boolean contains(Scene scene)
+    {
+        return scenes.contains(scene);
+    }
 }

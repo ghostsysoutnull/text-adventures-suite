@@ -196,7 +196,7 @@ public class Workspace implements EntityPersistedOnFileOpenAction
         }
         return img;
     }
-    
+
     @Override
     public String getMenuItemText()
     {
@@ -208,7 +208,7 @@ public class Workspace implements EntityPersistedOnFileOpenAction
         List<Workspace> ws = new LinkedList<Workspace>();
         File workspacesHomeFolder = new File(Workspace.getWorkspacesHome());
         for (File f : workspacesHomeFolder.listFiles()) {
-            if (f.isDirectory()) {
+            if (f.isDirectory() && !f.getName().startsWith("exported")) {
                 logger.debug("Reading [" + f + "]...");
                 ws.add(Workspace.loadFrom(f.getName()));
             }

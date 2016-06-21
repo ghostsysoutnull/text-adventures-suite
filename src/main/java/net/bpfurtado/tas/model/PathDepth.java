@@ -27,10 +27,11 @@ import java.util.ListIterator;
 import org.apache.log4j.Logger;
 
 /**
- * Just relates a Path with a Depth. 
+ * Just relates a Path with a Depth.
  * 
- * Always that a path leads a scene to be contained in a new depth (always when the path leads to a scene) one new instance
- * of this is created to make the precise link between the path that lead one Scene to one Depth. 
+ * Always that a path leads a scene to be contained in a new depth (always when the path leads to a scene)
+ * one new instance of this is created to make the precise link between the path that lead one Scene to one
+ * Depth.
  */
 public class PathDepth
 {
@@ -42,7 +43,7 @@ public class PathDepth
     private int id = idCounter++;
     private IPath path;
     private IDepth depth;
-    
+
     private List<PathDepth> children = new LinkedList<PathDepth>();
 
     public PathDepth(IPath path, IDepth depth)
@@ -58,7 +59,7 @@ public class PathDepth
         PathDepth child = new PathDepth(path, nextDepth());
         children.add(child);
 
-        //logger.debug(id + "::I've got the child: " + child.toStringShort());
+        // logger.debug(id + "::I've got the child: " + child.toStringShort());
 
         return child;
     }
@@ -70,79 +71,79 @@ public class PathDepth
 
     public boolean hasPath(IPath otherPath)
     {
-		return path.equals(otherPath);
+        return path.equals(otherPath);
     }
 
     private static String tabs = "";
-    
+
     public void removeItSelfFromDepth(Scene startScene)
     {
-    	logger.debug("###:= REMOVING: " + this);
-    	
-    	//TODO $$$ remove error 
-    	//path.getTo().remove(this);
-    	
-    	tabs = "";
+        logger.debug("###:= REMOVING: " + this);
+
+        // TODO $$$ remove error
+        // path.getTo().remove(this);
+
+        tabs = "";
         removeItSelfFromDepth(this, startScene);
     }
 
     private static void removeItSelfFromDepth(PathDepth pathDepth, Scene startScene)
     {
-    	tabs += "\t";
-    	
+        tabs += "\t";
+
         logger.debug(tabs + "I am " + pathDepth);
         logger.debug(tabs + "Going out of depth " + pathDepth.depth);
         pathDepth.depth.remove(pathDepth);
-        
-        logger.debug("&&& Trying [me:"+pathDepth.toString()+"]to go out of my scene " + pathDepth.getPath().getTo());
+
+        logger.debug(
+                "&&& Trying [me:" + pathDepth.toString() + "]to go out of my scene " + pathDepth.getPath().getTo());
         if (!pathDepth.getPath().getTo().equals(startScene)) {
             logger.debug("&&& YES me: " + pathDepth.toString() + "removing pd: " + pathDepth);
-            pathDepth.getPath().getTo().remove(pathDepth); //111
+            pathDepth.getPath().getTo().remove(pathDepth); // 111
         } else {
-            logger.debug("&&& NO me: " + pathDepth.toString() + " NOT BEING REMOVED from " + pathDepth.getPath().getTo());
+            logger.debug(
+                    "&&& NO me: " + pathDepth.toString() + " NOT BEING REMOVED from " + pathDepth.getPath().getTo());
         }
 
         logger.debug(tabs + "REMOVING (recursive): " + pathDepth);
-    	
 
-		logger.debug(tabs + "My children=" + pathDepth.children);
+        logger.debug(tabs + "My children=" + pathDepth.children);
 
-		assert !pathDepth.depth.getScenes().contains(pathDepth);
+        assert !pathDepth.depth.getScenes().contains(pathDepth);
 
-		for (ListIterator<PathDepth> parentChildren = pathDepth.children.listIterator(); parentChildren.hasNext();) {
-			PathDepth child = parentChildren.next();
-            
+        for (ListIterator<PathDepth> parentChildren = pathDepth.children.listIterator(); parentChildren.hasNext();) {
+            PathDepth child = parentChildren.next();
+
             assert !child.equals(pathDepth);
-            
-			logger.debug(tabs + "removing depths from child " + child);
 
-			logger.debug(tabs + " REMOVING, CALLING recursive with : " + child);
-			removeItSelfFromDepth(child, startScene);
-			parentChildren.remove();
-            
-            /*if (!child.getPath().getTo().equals(startScene)) {
-                logger.debug("&&& me: " + toString() + "removing pd: " + child);
-                child.getPath().getTo().remove(this); // TODO ver se funciona aqui
-            } else {
-                System.out.println("here");
-            }*/
-			
-			logger.debug(tabs + "child " + child + " removed");
-		}
+            logger.debug(tabs + "removing depths from child " + child);
 
-		logger.debug(tabs + "Now my children are " + pathDepth.children);
+            logger.debug(tabs + " REMOVING, CALLING recursive with : " + child);
+            removeItSelfFromDepth(child, startScene);
+            parentChildren.remove();
 
-		tabs = tabs.substring(tabs.length() - 1);
+            /*
+             * if (!child.getPath().getTo().equals(startScene)) { logger.debug("&&& me: " + toString() +
+             * "removing pd: " + child); child.getPath().getTo().remove(this); // TODO ver se funciona aqui
+             * } else { System.out.println("here"); }
+             */
+
+            logger.debug(tabs + "child " + child + " removed");
+        }
+
+        logger.debug(tabs + "Now my children are " + pathDepth.children);
+
+        tabs = tabs.substring(tabs.length() - 1);
     }
 
     public IPath getPath()
     {
         return path;
     }
-    
+
     public Iterable<PathDepth> children()
     {
-    	return children;
+        return children;
     }
 
     @Override
@@ -150,19 +151,19 @@ public class PathDepth
     {
         return "[PathDepth: id=" + id + ", path=" + path + ", depth=" + depth + "]";
     }
-    
+
     public String toStringShort()
     {
         return "[" + id + ", dep=" + depth.getLevel() + "to=" + path.getTo() + "]";
     }
 
-	public boolean relatesTo(Path otherPath)
-	{
-		return this.path.equals(otherPath);
-	}
+    public boolean relatesTo(Path otherPath)
+    {
+        return this.path.equals(otherPath);
+    }
 
-	public boolean isRelatedTo(Scene scene)
-	{
-		return path.getTo().equals(scene);
-	}
+    public boolean isRelatedTo(Scene scene)
+    {
+        return path.getTo().equals(scene);
+    }
 }

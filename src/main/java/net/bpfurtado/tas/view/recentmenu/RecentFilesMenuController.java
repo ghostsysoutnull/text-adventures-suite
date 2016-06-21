@@ -128,12 +128,14 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     {
         if (recentEntitiesPersisted.contains(entityPersisted)) {
             for (JMenuItem item : menuItems) {
-                if (item.getText().equals(entityPersisted.getMenuItemText()) || item.getText().startsWith("<html>" + entityPersisted.getMenuItemText() + " <")) {
+                if (item.getText().equals(entityPersisted.getMenuItemText())
+                        || item.getText().startsWith("<html>" + entityPersisted.getMenuItemText() + " <")) {
                     openRecentMenu.remove(item);
                     menuItems.remove(item);
                     recentEntitiesPersisted.remove(entityPersisted);
 
-                    //item.setText("<html>" + entityPersisted.getMenuItemText() + " <DEFAULT_FONT size=-2 color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
+                    // item.setText("<html>" + entityPersisted.getMenuItemText() + " <DEFAULT_FONT size=-2
+                    // color=blue><b><i>" + sdf.format(new Date()) + "</i></b></DEFAULT_FONT> </html>");
                     item.setText(entityPersisted.getMenuItemText());
                     openRecentMenu.add(item, 0);
                     menuItems.add(0, item);
@@ -165,8 +167,8 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     private void saveRecentEntriesFile()
     {
         try {
-            if(historyFile.getAbsolutePath().contains("Adv")) {
-                int a=0;
+            if (historyFile.getAbsolutePath().contains("Adv")) {
+                int a = 0;
                 a++;
             }
             PrintWriter writer = new PrintWriter(new FileWriter(historyFile));

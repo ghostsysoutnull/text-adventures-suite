@@ -22,28 +22,30 @@ package net.bpfurtado.tas.model;
 
 public interface IPath extends ITextObject
 {
-	/**
-	 * FIXME O erro está aqui! TODO Aceitar newTo==null? Adjust Depths
-	 */
-	void setTo(Scene newTo);
+    /**
+     * FIXME O erro está aqui! TODO Aceitar newTo==null? Adjust Depths
+     */
+    void setTo(Scene newTo);
 
-	/**
-	 * TODO: Grandes chances da necessidade de refatorar este código em breve.
-	 * FIXME: Adjust Depths (isto é doc ou correcao?)
-	 */
-	void goToNowhere();
+    /**
+     * TODO: Grandes chances da necessidade de refatorar este código em breve. FIXME: Adjust Depths (isto
+     * é doc ou correcao?)
+     */
+    void goToNowhere();
 
-	Scene getTo();
-	Scene getFrom();
+    Scene getTo();
 
-	void setFrom(Scene from);
+    Scene getFrom();
 
-	void setVisible(boolean isVisible);
-	boolean isVisible();
-	
-	String toStringShort();
-	
-	int getOrder();
+    void setFrom(Scene from);
 
-	void setOrder(int i);
+    void setVisible(boolean isVisible);
+
+    boolean isVisible();
+
+    String toStringShort();
+
+    int getOrder();
+
+    void setOrder(int i);
 }

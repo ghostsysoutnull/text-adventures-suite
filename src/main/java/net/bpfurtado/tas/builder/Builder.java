@@ -37,6 +37,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +48,7 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -63,6 +65,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 
 import net.bpfurtado.tas.AdventureException;
@@ -98,8 +101,8 @@ import org.apache.log4j.Logger;
 /**
  * @author Bruno Patini Furtado
  */
-public class Builder extends JFrame 
-    implements EntityPersistedOnFileOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder, ImageReceiver
+public class Builder extends JFrame
+        implements EntityPersistedOnFileOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder, ImageReceiver
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
     private static final long serialVersionUID = -3424967248011145801L;
@@ -218,8 +221,7 @@ public class Builder extends JFrame
 
         updateTitle();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e)
             {
@@ -295,8 +297,7 @@ public class Builder extends JFrame
         BuilderSwingUtils.addTextEventHandlers(adventureNameTF, this);
         centerPn.add(adventureNameTF);
 
-        adventureNameTF.getDocument().addDocumentListener(new DocumentListener()
-        {
+        adventureNameTF.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e)
             {
                 updateTitle();
@@ -318,8 +319,7 @@ public class Builder extends JFrame
         this.playFromCurrentBt = new JButton(Util.getImage("control_fastforward_blue.png"));
         playFromCurrentBt.setToolTipText("Play from current scene");
         playFromCurrentBt.setEnabled(false);
-        playFromCurrentBt.addActionListener(new ActionListener()
-        {
+        playFromCurrentBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 playAdventureFromActualSceneMenuAction();
@@ -332,8 +332,7 @@ public class Builder extends JFrame
         playBt.setToolTipText("Saves the adventure and plays it from the Start Scene");
         playBt.setMnemonic('P');
         playBt.setEnabled(false);
-        playBt.addActionListener(new ActionListener()
-        {
+        playBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 playAdventureAction();
@@ -346,8 +345,7 @@ public class Builder extends JFrame
         saveBt = new JButton("Save", Util.getImage("disk.png"));
         saveBt.setMnemonic('S');
         saveBt.setEnabled(false);
-        saveBt.addActionListener(new ActionListener()
-        {
+        saveBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 saveAdventureMenuAction(false);
@@ -379,7 +377,9 @@ public class Builder extends JFrame
     public void switchTo(Scene sceneToSwitch)
     {
         /**
-         * Se for o inicio de uma nova aventura então nao temos ainda uma actualScene então não devemos salvar. Se setarmos a scene start para a actual agora a mesma será salva com os dados da gui vazios pois o updateView ainda não foi feito.
+         * Se for o inicio de uma nova aventura então nao temos ainda uma actualScene então não devemos
+         * salvar. Se setarmos a scene start para a actual agora a mesma será salva com os dados da gui
+         * vazios pois o updateView ainda não foi feito.
          */
         if (currentScene != null) {
             save(currentScene);
@@ -549,8 +549,7 @@ public class Builder extends JFrame
 
         JPopupMenu popupMenu = sceneSTA.popup;
         final JMenuItem createPathMnIt = new JMenuItem("Create Path...");
-        createPathMnIt.addActionListener(new ActionListener()
-        {
+        createPathMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 String t = createPathMnIt.getText().trim();
@@ -561,8 +560,7 @@ public class Builder extends JFrame
         popupMenu.add(createPathMnIt);
 
         final JMenuItem splitSceneMnIt = new JMenuItem("Split Scene from here");
-        splitSceneMnIt.addActionListener(new ActionListener()
-        {
+        splitSceneMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 splitSceneAction();
@@ -571,8 +569,7 @@ public class Builder extends JFrame
         popupMenu.add(splitSceneMnIt);
 
         final JMenuItem addCombatEnemiesMnIt = new JMenuItem("Add Combat Enemy");
-        addCombatEnemiesMnIt.addActionListener(new ActionListener()
-        {
+        addCombatEnemiesMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 addCombatEnemySceneTextAreaContextMenuItemAction();
@@ -581,8 +578,7 @@ public class Builder extends JFrame
         popupMenu.add(addCombatEnemiesMnIt);
 
         final JMenuItem testYourSkillMnIt = new JMenuItem("Add 'Test Your Skill'");
-        testYourSkillMnIt.addActionListener(new ActionListener()
-        {
+        testYourSkillMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 addTestYourSkillMnItSceneTextAreaContextMenuItemAction();
@@ -591,8 +587,7 @@ public class Builder extends JFrame
         popupMenu.add(testYourSkillMnIt);
 
         final JMenuItem addCodeToAddItemMnIt = new JMenuItem("Add 'Item'");
-        addCodeToAddItemMnIt.addActionListener(new ActionListener()
-        {
+        addCodeToAddItemMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 // 000
@@ -601,7 +596,8 @@ public class Builder extends JFrame
         });
         popupMenu.add(addCodeToAddItemMnIt);
 
-        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt, addCombatEnemiesMnIt, testYourSkillMnIt, addCodeToAddItemMnIt));
+        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt,
+                addCombatEnemiesMnIt, testYourSkillMnIt, addCodeToAddItemMnIt));
 
         panel.add(headerFieldsPanelWidgets());
 
@@ -631,7 +627,8 @@ public class Builder extends JFrame
 
     protected void addCodeToAddItemMnItSceneTextAreaContextMenuItemAction()
     {
-        currentScene.setCode(currentScene.getCode() + "\n player.addAttribute(\"" + sceneTA.getSelectedText().trim() + "\");\n");
+        currentScene.setCode(
+                currentScene.getCode() + "\n player.addAttribute(\"" + sceneTA.getSelectedText().trim() + "\");\n");
         codeTA.setText(currentScene.getCode());
     }
 
@@ -663,8 +660,7 @@ public class Builder extends JFrame
 
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem copyMnIt = menuItem("Copy", "copy.gif");
-        copyMnIt.addActionListener(new ActionListener()
-        {
+        copyMnIt.addActionListener(new ActionListener() {
             SceneCodeToPasteHolder holder = codeHolder;
 
             public void actionPerformed(ActionEvent e)
@@ -675,8 +671,7 @@ public class Builder extends JFrame
         popupMenu.add(copyMnIt);
 
         final JMenuItem copyAndPasteMnIt = menuItem("Copy and Paste", "paste.gif");
-        copyAndPasteMnIt.addActionListener(new ActionListener()
-        {
+        copyAndPasteMnIt.addActionListener(new ActionListener() {
             SceneCodeToPasteHolder holder = codeHolder;
 
             public void actionPerformed(ActionEvent e)
@@ -690,7 +685,8 @@ public class Builder extends JFrame
         });
         popupMenu.add(copyAndPasteMnIt);
 
-        helpDialog.getEditorPane().addMouseListener(new TextComponentForPasteMouseListener(popupMenu, copyAndPasteMnIt, helpDialog.getEditorPane(), codeTA, codeHolder));
+        helpDialog.getEditorPane().addMouseListener(new TextComponentForPasteMouseListener(popupMenu, copyAndPasteMnIt,
+                helpDialog.getEditorPane(), codeTA, codeHolder));
     }
 
     private JPanel headerFieldsPanelWidgets()
@@ -753,8 +749,7 @@ public class Builder extends JFrame
 
     private void sceneHeaderFieldsEvents()
     {
-        sceneNameTF.addKeyListener(new KeyAdapter()
-        {
+        sceneNameTF.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e)
             {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -778,8 +773,7 @@ public class Builder extends JFrame
         pane.add(pathsPane);
 
         newPathBt = new JButton("New Path");
-        newPathBt.addActionListener(new ActionListener()
-        {
+        newPathBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 createPath();
@@ -794,8 +788,7 @@ public class Builder extends JFrame
         goBackToSceneFromBt = new JButton("Back", Util.getImage("backward_nav_003.gif"));
         goBackToSceneFromBt.setMnemonic('b');
         goBackToSceneFromBt.setToolTipText("Click to navigate to the selected scene");
-        goBackToSceneFromBt.addActionListener(new ActionListener()
-        {
+        goBackToSceneFromBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 switchTo((Scene) backToFromScenesCb.getSelectedItem());
@@ -879,8 +872,7 @@ public class Builder extends JFrame
         final PathView pathView = new PathView(orderLb, sceneBt, chooseSceneBt, deleteSceneBt, pathText, path);
         pathViews.add(pathView);
 
-        deleteSceneBt.addActionListener(new ActionListener()
-        {
+        deleteSceneBt.addActionListener(new ActionListener() {
             PathView _pathView = pathView;
 
             public void actionPerformed(ActionEvent e)
@@ -890,8 +882,7 @@ public class Builder extends JFrame
         });
 
         if (path.getTo() == null) {
-            sceneBt.addActionListener(new ActionListener()
-            {
+            sceneBt.addActionListener(new ActionListener() {
                 PathView _pathView = pathView;
 
                 public void actionPerformed(ActionEvent e)
@@ -900,8 +891,7 @@ public class Builder extends JFrame
                 }
             });
         } else {
-            sceneBt.addActionListener(new ActionListener()
-            {
+            sceneBt.addActionListener(new ActionListener() {
                 PathView _pathView = pathView;
 
                 public void actionPerformed(ActionEvent e)
@@ -911,8 +901,7 @@ public class Builder extends JFrame
             });
         }
 
-        chooseSceneBt.addActionListener(new ActionListener()
-        {
+        chooseSceneBt.addActionListener(new ActionListener() {
             IPath _path = path;
 
             public void actionPerformed(ActionEvent e)
@@ -975,7 +964,8 @@ public class Builder extends JFrame
 
         IPath path;
 
-        public PathView(JLabel orderLb, JButton createBt, JButton deleteBt, JButton chooseSceneBt, JTextField textField, IPath path)
+        public PathView(JLabel orderLb, JButton createBt, JButton deleteBt, JButton chooseSceneBt, JTextField textField,
+                IPath path)
         {
             this.orderLb = orderLb;
             this.createSceneBt = createBt;
@@ -991,18 +981,17 @@ public class Builder extends JFrame
         JMenuBar menuBar = new JMenuBar();
         JMenu adventureMenu = Util.menu("Adventure", 'A', menuBar);
 
-        playMnIt = Util.menuItem("Create a new Adventure", 'n', KeyEvent.VK_N, "control_play_blue.png", adventureMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                createNewAdventure();
-            }
-        });
+        playMnIt = Util.menuItem("Create a new Adventure", 'n', KeyEvent.VK_N, "control_play_blue.png", adventureMenu,
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        createNewAdventure();
+                    }
+                });
 
         JMenu testMenu = Util.menu("Test", 't', menuBar);
 
-        playMnIt = Util.menuItem("Play", 'p', KeyEvent.VK_P, "control_play_blue.png", testMenu, new ActionListener()
-        {
+        playMnIt = Util.menuItem("Play", 'p', KeyEvent.VK_P, "control_play_blue.png", testMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 playAdventureAction();
@@ -1010,54 +999,51 @@ public class Builder extends JFrame
         });
         playMnIt.setEnabled(false);
 
-        playFromCurrentMnIt = Util.menuItem("Play from current scene", 'r', KeyEvent.VK_R, "control_fastforward_blue.png", testMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                playAdventureFromActualSceneMenuAction();
-            }
-        });
+        playFromCurrentMnIt = Util.menuItem("Play from current scene", 'r', KeyEvent.VK_R,
+                "control_fastforward_blue.png", testMenu, new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        playAdventureFromActualSceneMenuAction();
+                    }
+                });
         playFromCurrentMnIt.setEnabled(false);
 
         adventureMenu.add(new JSeparator());
 
-        saveMnIt = Util.menuItem("Save", 'S', KeyEvent.VK_S, "disk.png", adventureMenu, new ActionListener()
-        {
+        saveMnIt = Util.menuItem("Save", 'S', KeyEvent.VK_S, "disk.png", adventureMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 saveAdventureMenuAction(false);
             }
         });
-        
 
-        JMenuItem exportMnIt = Util.menuItem("Export", 'x', KeyEvent.VK_X, "export_wiz.gif", adventureMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                exportWorkspaceAction();
-            }
-        });
-        
-        JMenuItem importMnIt = Util.menuItem("Import", 'i', KeyEvent.VK_I, "import_wiz.gif", adventureMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                System.out.println("Import!");
-            }
-        });
+        JMenuItem exportMnIt = Util.menuItem("Export", 'x', KeyEvent.VK_X, "export_wiz.gif", adventureMenu,
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        exportWorkspaceAction();
+                    }
+                });
 
-        saveAsMnIt = Util.menuItem("Save As...", 'a', KeyEvent.VK_A, "textfield_rename.png", adventureMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                saveAdventureMenuAction(true);
-            }
-        });
+        JMenuItem importMnIt = Util.menuItem("Import", 'i', KeyEvent.VK_I, "import_wiz.gif", adventureMenu,
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        importWorkspaceAction();
+                    }
+                });
+
+        saveAsMnIt = Util.menuItem("Save As...", 'a', KeyEvent.VK_A, "textfield_rename.png", adventureMenu,
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        saveAdventureMenuAction(true);
+                    }
+                });
 
         adventureMenu.add(new JSeparator());
 
-        Util.menuItem("Open", 'a', KeyEvent.VK_O, "folder_table.png", adventureMenu, new ActionListener()
-        {
+        Util.menuItem("Open", 'a', KeyEvent.VK_O, "folder_table.png", adventureMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 openAdventureMenuAction();
@@ -1067,8 +1053,7 @@ public class Builder extends JFrame
         adventureMenu.add(recentMenuController.getOpenRecentMenu());
         adventureMenu.add(new JSeparator());
 
-        Util.menuItem("Quit", 'q', KeyEvent.VK_Q, "cancel.png", adventureMenu, new ActionListener()
-        {
+        Util.menuItem("Quit", 'q', KeyEvent.VK_Q, "cancel.png", adventureMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 exitMenuItemAction();
@@ -1077,8 +1062,7 @@ public class Builder extends JFrame
 
         JMenu viewMenu = Util.menu("View", 'v', menuBar);
 
-        byDepthMnIt = Util.menuItem("By Depth", 'd', KeyEvent.VK_D, "tree.gif", viewMenu, new ActionListener()
-        {
+        byDepthMnIt = Util.menuItem("By Depth", 'd', KeyEvent.VK_D, "tree.gif", viewMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 byDepthMenuAction();
@@ -1129,8 +1113,7 @@ public class Builder extends JFrame
 
     private void byDepthMenuAction()
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 try {
@@ -1145,8 +1128,7 @@ public class Builder extends JFrame
 
     private void playAdventureAction()
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 try {
@@ -1163,8 +1145,7 @@ public class Builder extends JFrame
 
     private void playAdventureFromActualSceneMenuAction()
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 try {
@@ -1219,26 +1200,6 @@ public class Builder extends JFrame
     {
         logger.debug("Saving..."); // 111
 
-        // boolean wasNewSaveFile = false;
-        // if (saveFile == null || isSaveAs) {
-        // JFileChooser fileChooser =
-        // createFileChooserWithDirFromConfigItem("lastSaveDir");
-        // if (fileChooser.showSaveDialog(Builder.this) ==
-        // JFileChooser.APPROVE_OPTION) {
-        // saveFile = fileChooser.getSelectedFile();
-        // if (saveFile.exists()) {
-        // int answer = JOptionPane.showConfirmDialog(Builder.this,
-        // "This file already exists!\n" + "Do you want to overwrite it?",
-        // "File already exists", JOptionPane.YES_NO_OPTION,
-        // JOptionPane.QUESTION_MESSAGE);
-        // if (answer == JOptionPane.NO_OPTION) {
-        // return;
-        // }
-        // }
-        // wasNewSaveFile = true;
-        // }
-        // }
-
         save(currentScene);
 
         workspace.save();
@@ -1246,10 +1207,6 @@ public class Builder extends JFrame
         updateConfWithLastAdventureFile();
 
         updateTitle();
-
-        /*
-         * if (wasNewSaveFile) { fireOpenAdventureEvent(saveFile); }
-         */
 
         markAsClean();
     }
@@ -1263,7 +1220,8 @@ public class Builder extends JFrame
     private void createNewAdventure()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Builder.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Builder.this, "Close current adventure?", "Warning",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.NO_OPTION)
                 return;
@@ -1272,7 +1230,7 @@ public class Builder extends JFrame
         adventure = new Adventure();
         adventure.setName("Your new Adventure name");
 
-        workspace = Workspace.createWith(adventure); // 222
+        workspace = Workspace.createWith(adventure);
         updateTitle();
 
         enableOpenAdventureMenuItems();
@@ -1320,8 +1278,7 @@ public class Builder extends JFrame
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 new Builder();
@@ -1345,7 +1302,8 @@ public class Builder extends JFrame
     }
 
     /**
-     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na jlist de cenas pois o updateView refaz o modelo da jlist.
+     * Devemos guardar a [lastSceneListIndex] para mais tarde re-selecionar na jlist de cenas pois o
+     * updateView refaz o modelo da jlist.
      */
     public void switchTo(Scene selectedScene, int selectedSceneIdx)
     {
@@ -1364,13 +1322,16 @@ public class Builder extends JFrame
             String secMsg = null;
 
             if (type.exactPathsNumberPermited() == 0) {
-                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths will be deleted\n" + "Are you sure?";
+                msg = "A " + type + " Scene cannot have any paths.\n"
+                        + "If you confirm all current paths will be deleted\n" + "Are you sure?";
                 secMsg = "This action will delete this scene paths";
             } else {
-                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths but " + type.exactPathsNumberPermited() + " " + "will be deleted\n" + "Are you sure?";
+                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths but "
+                        + type.exactPathsNumberPermited() + " " + "will be deleted\n" + "Are you sure?";
                 secMsg = "Only " + type.exactPathsNumberPermited() + " paths will remain!";
             }
-            int answer = JOptionPane.showConfirmDialog(Builder.this, msg, secMsg, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Builder.this, msg, secMsg, JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.YES_OPTION) {
                 changeType = true;
@@ -1400,7 +1361,19 @@ public class Builder extends JFrame
 
     private void exportWorkspaceAction()
     {
-        System.out.println("Export!");
         WorkspaceExporter.export(getWorkspace());
+    }
+
+    private void importWorkspaceAction()
+    {
+        Workspace importedWorkspace = WorkspaceExporter.importWorkspace(this.mainPanel);
+        if (isDirty) {
+            int answer = Util.showSaveDialog(this, "Do you want to save it before openning another adventure?");
+            if (answer == Util.SAVE_DIALOG_OPT_CANCEL)
+                return;
+            else if (answer == Util.SAVE_DIALOG_OPT_SAVE)
+                saveAdventureMenuAction(false);
+        }
+        open(importedWorkspace);
     }
 }

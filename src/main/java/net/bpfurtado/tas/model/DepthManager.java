@@ -27,82 +27,82 @@ import java.util.List;
 
 public class DepthManager
 {
-	/** Singleton stuff */
-	private static DepthManager INSTANCE = new DepthManager();
+    /** Singleton stuff */
+    private static DepthManager INSTANCE = new DepthManager();
 
-	public static DepthManager getInstance()
-	{
-		return INSTANCE;
-	}
+    public static DepthManager getInstance()
+    {
+        return INSTANCE;
+    }
 
-	/** Attributes */
-	private List<IDepth> depths;
+    /** Attributes */
+    private List<IDepth> depths;
 
-	/** Constructor */
-	private DepthManager()
-	{
-		depths = new LinkedList<IDepth>();
-	}
+    /** Constructor */
+    private DepthManager()
+    {
+        depths = new LinkedList<IDepth>();
+    }
 
-	/** Methods */
-	public void setStart(Scene start)
-	{
-		assert depths.isEmpty() : "Creating a new adventure, should have no depths, lacking a clean-up perhaps?";
+    /** Methods */
+    public void setStart(Scene start)
+    {
+        assert depths.isEmpty() : "Creating a new adventure, should have no depths, lacking a clean-up perhaps?";
 
-		PathDepth pathDepth = new PathDepth(new NullPath(start), DepthManager.getInstance().getOrCreateDepth(0));
-		start.add(Arrays.asList(pathDepth));
-	}
+        PathDepth pathDepth = new PathDepth(new NullPath(start), DepthManager.getInstance().getOrCreateDepth(0));
+        start.add(Arrays.asList(pathDepth));
+    }
 
-	public Collection<Scene> getScenesFromDepth(int i)
-	{
-		return depths.get(i).getScenes();
-	}
+    public Collection<Scene> getScenesFromDepth(int i)
+    {
+        return depths.get(i).getScenes();
+    }
 
-	public int getNumberOfScenesFromDepth(int idx)
-	{
-		return depths.get(idx).getNumberOfScenes();
-	}
+    public int getNumberOfScenesFromDepth(int idx)
+    {
+        return depths.get(idx).getNumberOfScenes();
+    }
 
-	public int getNumberOfDepths()
-	{
-		return depths.size();
-	}
+    public int getNumberOfDepths()
+    {
+        return depths.size();
+    }
 
-	public IDepth getOrCreateDepth(int i)
-	{
-		try {
-			return depths.get(i);
-		} catch (IndexOutOfBoundsException e) {
-			if (i < 0) {
-				throw e;
-			}
+    public IDepth getOrCreateDepth(int i)
+    {
+        try {
+            return depths.get(i);
+        } catch (IndexOutOfBoundsException e) {
+            if (i < 0) {
+                throw e;
+            }
 
-			assert i == depths.size();
+            assert i == depths.size();
 
-			Depth depth = new Depth(i);
-			depths.add(depth);
-			return depth;
-		}
-	}
+            Depth depth = new Depth(i);
+            depths.add(depth);
+            return depth;
+        }
+    }
 
-	public int getFirstDepthOfScene(Scene s)
-	{
-		for (IDepth d : depths) {
-			if (d.contains(s)) {
-				return d.getLevel();
-			}
-		}
-		return -1;
-	}
+    public int getFirstDepthOfScene(Scene s)
+    {
+        for (IDepth d : depths) {
+            if (d.contains(s)) {
+                return d.getLevel();
+            }
+        }
+        return -1;
+    }
 
-	public void reset()
-	{
-		depths.clear();
-	}
+    public void reset()
+    {
+        depths.clear();
+    }
 
-	@Override
-	public String toString()
-	{
-		return "[DepthManager: depths+" + depths + "]";
-	}
+    @Override
+    public String toString()
+    {
+        return "[DepthManager: depths+" + depths + "]";
+    }
 }

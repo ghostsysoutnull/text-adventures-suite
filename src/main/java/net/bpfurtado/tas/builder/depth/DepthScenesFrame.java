@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.builder.depth;
 
@@ -39,8 +39,8 @@ import net.bpfurtado.tas.model.Scene;
  */
 public class DepthScenesFrame extends JFrame
 {
-	private static final long serialVersionUID = -6765971296929822669L;
-	
+    private static final long serialVersionUID = -6765971296929822669L;
+
     private Scene s;
 
     private DepthScenesViewController viewController;

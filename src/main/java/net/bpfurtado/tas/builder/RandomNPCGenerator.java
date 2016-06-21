@@ -29,70 +29,70 @@ import net.bpfurtado.tas.model.combat.Fighter;
 
 public class RandomNPCGenerator
 {
-	private Random random = new Random();
+    private Random random = new Random();
 
-	private List<String> npcsSuggestions = new LinkedList<String>();
-	private List<String> races = new LinkedList<String>();
+    private List<String> npcsSuggestions = new LinkedList<String>();
+    private List<String> races = new LinkedList<String>();
 
-	public RandomNPCGenerator()
-	{
-		races.addAll(Arrays.asList("Human", "Dwarf", "Elf", "Orc"));
-		
-		npcsSuggestions = new LinkedList<String>();
-		npcsSuggestions.add("Trool");
-		npcsSuggestions.add("Elf");
-		npcsSuggestions.add("Drow");
-		npcsSuggestions.add("Dwarf");
-		npcsSuggestions.add("Mage");
-		npcsSuggestions.add("Human Warrior");
-		npcsSuggestions.add("Human Thief");
-		npcsSuggestions.add("Centaur");
-		npcsSuggestions.add("Fish Soldier");
-		npcsSuggestions.add("Snake warrior");
-		npcsSuggestions.add("Necromancer");
-		npcsSuggestions.add("Sorcerer");
-		npcsSuggestions.add("Prince");
-		npcsSuggestions.add("King");
-		npcsSuggestions.add("Monk");
-		npcsSuggestions.add("Druid");
-		npcsSuggestions.add("Minotaur");
-		npcsSuggestions.add("Demon");
-		npcsSuggestions.add("Gargoile");
-		npcsSuggestions.add("Mummy");
-		npcsSuggestions.add("Goblin");
-		npcsSuggestions.add("Orc");
-		npcsSuggestions.add("Giant Bat");
-		npcsSuggestions.add("Skeleton");
-		npcsSuggestions.add("Ghoul");
-	}
+    public RandomNPCGenerator()
+    {
+        races.addAll(Arrays.asList("Human", "Dwarf", "Elf", "Orc"));
 
-	public String generateName()
-	{
-		return npcsSuggestions.get(random.nextInt(npcsSuggestions.size()));
-	}
+        npcsSuggestions = new LinkedList<String>();
+        npcsSuggestions.add("Trool");
+        npcsSuggestions.add("Elf");
+        npcsSuggestions.add("Drow");
+        npcsSuggestions.add("Dwarf");
+        npcsSuggestions.add("Mage");
+        npcsSuggestions.add("Human Warrior");
+        npcsSuggestions.add("Human Thief");
+        npcsSuggestions.add("Centaur");
+        npcsSuggestions.add("Fish Soldier");
+        npcsSuggestions.add("Snake warrior");
+        npcsSuggestions.add("Necromancer");
+        npcsSuggestions.add("Sorcerer");
+        npcsSuggestions.add("Prince");
+        npcsSuggestions.add("King");
+        npcsSuggestions.add("Monk");
+        npcsSuggestions.add("Druid");
+        npcsSuggestions.add("Minotaur");
+        npcsSuggestions.add("Demon");
+        npcsSuggestions.add("Gargoile");
+        npcsSuggestions.add("Mummy");
+        npcsSuggestions.add("Goblin");
+        npcsSuggestions.add("Orc");
+        npcsSuggestions.add("Giant Bat");
+        npcsSuggestions.add("Skeleton");
+        npcsSuggestions.add("Ghoul");
+    }
 
-	public Fighter generateFighter()
-	{
-		String name = generateName();
-		if (name == "King" || name == "Prince") {
-			name = races.get(random.nextInt(races.size())) + " " + name;
-		}
-		Fighter fighter = new Fighter(name, 4 + random.nextInt(9), 4 + random.nextInt(13));
-		
-		int i = random.nextInt(10);
-		if (i == 0) {
-			fighter.setDamage(1);
-			return fighter;
-		}
+    public String generateName()
+    {
+        return npcsSuggestions.get(random.nextInt(npcsSuggestions.size()));
+    }
 
-		int d = 2;
-		if (i > 5) {
-			d++;
-		}
-		if (i == 8) {
-			d++;
-		}
-		fighter.setDamage(d);
-		return fighter;
-	}
+    public Fighter generateFighter()
+    {
+        String name = generateName();
+        if (name == "King" || name == "Prince") {
+            name = races.get(random.nextInt(races.size())) + " " + name;
+        }
+        Fighter fighter = new Fighter(name, 4 + random.nextInt(9), 4 + random.nextInt(13));
+
+        int i = random.nextInt(10);
+        if (i == 0) {
+            fighter.setDamage(1);
+            return fighter;
+        }
+
+        int d = 2;
+        if (i > 5) {
+            d++;
+        }
+        if (i == 8) {
+            d++;
+        }
+        fighter.setDamage(d);
+        return fighter;
+    }
 }

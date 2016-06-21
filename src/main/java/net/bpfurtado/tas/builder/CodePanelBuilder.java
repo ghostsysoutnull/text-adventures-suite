@@ -115,8 +115,7 @@ public class CodePanelBuilder
         cb.addItem("if ( player.getIntValue(\"cat statues\")==2 ) {");
         cb.addItem("if ( player.getStamina() <= 0 ) { go=42;");
 
-        cb.addActionListener(new ActionListener()
-        {
+        cb.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev)
             {
                 try {
@@ -138,8 +137,7 @@ public class CodePanelBuilder
         JButton codeHelpBt = new JButton("Help and Code snippets", Util.getImage("help.png"));
         codeHelpBt.setMnemonic('H');
         codeHelpBt.setAlignmentX(JComponent.RIGHT_ALIGNMENT);
-        codeHelpBt.addActionListener(new ActionListener()
-        {
+        codeHelpBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 builder.showSceneCodeHelpDialog();
@@ -152,8 +150,7 @@ public class CodePanelBuilder
     {
         JButton trimSpacesBt = new JButton("Indent", Util.getImage("indent-icon.png"));
         trimSpacesBt.setMnemonic('i');
-        trimSpacesBt.addActionListener(new ActionListener()
-        {
+        trimSpacesBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 indentCodeAction(getTextArea());

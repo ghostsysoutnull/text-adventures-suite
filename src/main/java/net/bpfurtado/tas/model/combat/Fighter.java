@@ -27,6 +27,7 @@ import java.util.Random;
 import net.bpfurtado.tas.model.PlayerEvent;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
+import net.bpfurtado.tas.runner.SoundUtil;
 import net.bpfurtado.tas.runner.combat.FighterView;
 
 import org.apache.log4j.Logger;
@@ -75,7 +76,10 @@ public class Fighter
 
         if (myForce > enemyForce) {
             this.damage(enemy);
+            // FIXME refactor to a listener design pattern, the model cannot play a sound!
+            SoundUtil.playInternalClip("dsdmpain");
         } else if (myForce < enemyForce) {
+            SoundUtil.playInternalClip("dsplpain");
             enemy.damage(this);
         }
 
@@ -119,7 +123,8 @@ public class Fighter
     {
         int old = combatSkillLevel;
         this.combatSkill.setLevel(combatSkillLevel);
-        fire(new PlayerEvent(combatSkill.getName(), combatSkill.getName() + " was " + old + ", now is " + combatSkill.getLevel()));
+        fire(new PlayerEvent(combatSkill.getName(),
+                combatSkill.getName() + " was " + old + ", now is " + combatSkill.getLevel()));
     }
 
     public void setStamina(Integer stamina)

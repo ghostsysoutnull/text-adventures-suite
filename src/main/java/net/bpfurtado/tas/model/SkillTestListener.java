@@ -22,5 +22,5 @@ package net.bpfurtado.tas.model;
 
 public interface SkillTestListener
 {
-	void setSkillful(boolean skillful);
+    void setSkillful(boolean skillful);
 }

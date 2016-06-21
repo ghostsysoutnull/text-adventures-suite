@@ -20,13 +20,13 @@
  */
 package net.bpfurtado.tas.model.combat;
 
-
 public interface AttackResultListener
 {
-	void attackResult(AttackResult r);
-	void roundEnded();
+    void attackResult(AttackResult r);
 
-	void clean();
+    void roundEnded();
 
-	boolean relatesTo(Fighter enemy);
+    void clean();
+
+    boolean relatesTo(Fighter enemy);
 }

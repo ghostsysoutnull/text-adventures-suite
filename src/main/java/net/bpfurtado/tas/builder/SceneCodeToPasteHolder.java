@@ -28,26 +28,26 @@ import net.bpfurtado.tas.view.TextToPasteHolder;
 
 public class SceneCodeToPasteHolder extends TextToPasteHolder
 {
-	@Override
-	public void setText(String text)
-	{
-		if (text == null) {
-			super.setText(text);
-			return;
-		}
+    @Override
+    public void setText(String text)
+    {
+        if (text == null) {
+            super.setText(text);
+            return;
+        }
 
-		StringBuilder b = new StringBuilder();
-		StringReader r = new StringReader(text);
-		try {
-			for (int c = r.read(); c != -1; c = r.read()) {
-				b.append((char) c);
-				if (c == '{' || c == ';') {
-					b.append((char) '\n');
-				}
-			}
-		} catch (IOException e) {
-			throw new AdventureException(e.getMessage(), e);
-		}
-		super.setText(b.toString());
-	}
+        StringBuilder b = new StringBuilder();
+        StringReader r = new StringReader(text);
+        try {
+            for (int c = r.read(); c != -1; c = r.read()) {
+                b.append((char) c);
+                if (c == '{' || c == ';') {
+                    b.append((char) '\n');
+                }
+            }
+        } catch (IOException e) {
+            throw new AdventureException(e.getMessage(), e);
+        }
+        super.setText(b.toString());
+    }
 }

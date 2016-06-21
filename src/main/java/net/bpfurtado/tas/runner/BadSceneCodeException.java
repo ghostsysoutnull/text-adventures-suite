@@ -24,24 +24,24 @@ import net.bpfurtado.tas.AdventureException;
 
 public class BadSceneCodeException extends AdventureException
 {
-	private static final long serialVersionUID = -449057138502818563L;
+    private static final long serialVersionUID = -449057138502818563L;
 
-	public BadSceneCodeException()
-	{
-	}
+    public BadSceneCodeException()
+    {
+    }
 
-	public BadSceneCodeException(String message)
-	{
-		super(message);
-	}
+    public BadSceneCodeException(String message)
+    {
+        super(message);
+    }
 
-	public BadSceneCodeException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public BadSceneCodeException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 
-	public BadSceneCodeException(Throwable cause)
-	{
-		super(cause);
-	}
+    public BadSceneCodeException(Throwable cause)
+    {
+        super(cause);
+    }
 }

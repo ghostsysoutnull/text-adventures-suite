@@ -208,7 +208,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 if (!nextRound()) {
                     nextEnemy();
                 }
-                
+
                 if (player.isDead() || (enemies.isEmpty() && currentEnemy.isDead())) {
                     ((Timer) ev.getSource()).stop();
                 }
@@ -286,7 +286,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
         round++;
 
         myPack();
-        
+
         logState("nextRound");
 
         return !(currentEnemy.isDead() || player.isDead());

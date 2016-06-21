@@ -25,47 +25,47 @@ import java.util.List;
 
 public class Combat
 {
-	private List<Fighter> fighters = new LinkedList<Fighter>();
-	private CombatType type = CombatType.oneAtATime;
+    private List<Fighter> fighters = new LinkedList<Fighter>();
+    private CombatType type = CombatType.oneAtATime;
 
-	/**
-	 * to easy the loading from the xml file we just use the id here. To prevent
-	 * us from loading all scenes before building the combat objects.
-	 */
-	private int sucessDestinyId;
+    /**
+     * to easy the loading from the xml file we just use the id here. To prevent us from loading all scenes
+     * before building the combat objects.
+     */
+    private int sucessDestinyId;
 
-	public void add(Fighter fighter)
-	{
-		fighters.add(fighter);
-	}
+    public void add(Fighter fighter)
+    {
+        fighters.add(fighter);
+    }
 
-	public List<Fighter> getEnemies()
-	{
-		return fighters;
-	}
+    public List<Fighter> getEnemies()
+    {
+        return fighters;
+    }
 
-	public int getSucessDestinyId()
-	{
-		return sucessDestinyId;
-	}
+    public int getSucessDestinyId()
+    {
+        return sucessDestinyId;
+    }
 
-	public void setSucessDestinyId(int sucessDestinyId)
-	{
-		this.sucessDestinyId = sucessDestinyId;
-	}
+    public void setSucessDestinyId(int sucessDestinyId)
+    {
+        this.sucessDestinyId = sucessDestinyId;
+    }
 
-	public CombatType getType()
-	{
-		return type;
-	}
+    public CombatType getType()
+    {
+        return type;
+    }
 
-	public void setType(CombatType t)
-	{
-		this.type = t;
-	}
+    public void setType(CombatType t)
+    {
+        this.type = t;
+    }
 
-	public void remove(Fighter enemy)
-	{
-		fighters.remove(enemy);
-	}
+    public void remove(Fighter enemy)
+    {
+        fighters.remove(enemy);
+    }
 }

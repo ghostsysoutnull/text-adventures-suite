@@ -36,35 +36,34 @@ import org.apache.log4j.Logger;
 
 public class SceneTypesWidgets
 {
-	private static Logger logger = Logger.getLogger(SceneTypesWidgets.class);
+    private static Logger logger = Logger.getLogger(SceneTypesWidgets.class);
 
-	final JComboBox cb;
+    final JComboBox cb;
 
-	public SceneTypesWidgets(JPanel panel, final Builder builder)
-	{
-		panel.add(new JLabel("Scene type: "));
-		cb = new JComboBox(SceneType.values());
-		cb.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				SceneType type = (SceneType) cb.getSelectedItem();
-				builder.changeSceneTypeEvent(type);
-				logger.debug(type);
-			}
-		});
-		cb.setMaximumSize(new Dimension(100, 23));
-		panel.add(cb);
-	}
+    public SceneTypesWidgets(JPanel panel, final Builder builder)
+    {
+        panel.add(new JLabel("Scene type: "));
+        cb = new JComboBox(SceneType.values());
+        cb.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                SceneType type = (SceneType) cb.getSelectedItem();
+                builder.changeSceneTypeEvent(type);
+                logger.debug(type);
+            }
+        });
+        cb.setMaximumSize(new Dimension(100, 23));
+        panel.add(cb);
+    }
 
-	public void setEnabled(boolean b)
-	{
-		cb.setEnabled(b);
-	}
+    public void setEnabled(boolean b)
+    {
+        cb.setEnabled(b);
+    }
 
-	public void updateView(Scene currentScene, Scene start)
-	{
-		cb.setEnabled(!currentScene.equals(start));
-		cb.setSelectedItem(currentScene.getType());
-	}
+    public void updateView(Scene currentScene, Scene start)
+    {
+        cb.setEnabled(!currentScene.equals(start));
+        cb.setSelectedItem(currentScene.getType());
+    }
 }

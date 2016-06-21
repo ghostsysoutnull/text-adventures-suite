@@ -31,7 +31,7 @@ import javax.swing.Action;
 public class DisposeAction implements Action
 {
     public static final String ACTION_NAME = "net.bpfurtado.tas.view.DisposeAction";
-    
+
     private Window w;
 
     public DisposeAction(Window w)

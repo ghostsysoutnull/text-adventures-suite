@@ -18,12 +18,11 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */ 
+ */
 
 package net.bpfurtado.tas.builder;
 
 import net.bpfurtado.tas.Workspace;
-
 
 /**
  * Consider renaming to WorkspaceHolder
@@ -31,5 +30,6 @@ import net.bpfurtado.tas.Workspace;
 public interface ImageReceiver
 {
     void fireNewImageSelectedAction(String imageId);
+
     Workspace getWorkspace();
 }

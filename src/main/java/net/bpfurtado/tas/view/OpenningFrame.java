@@ -74,13 +74,12 @@ public class OpenningFrame extends JFrame
     private void initView()
     {
         widgets();
-        
+
         Util.setBoundsFrom(Conf.oppening(), this, 665, 287);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e)
             {
@@ -126,16 +125,14 @@ public class OpenningFrame extends JFrame
 
     private void events(JButton builderBt, JButton runnerBt)
     {
-        builderBt.addActionListener(new ActionListener()
-        {
+        builderBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 new Builder();
             }
         });
 
-        runnerBt.addActionListener(new ActionListener()
-        {
+        runnerBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 Runner.runLastAdventure();
@@ -145,8 +142,7 @@ public class OpenningFrame extends JFrame
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 OpenningFrame.open();

@@ -27,8 +27,11 @@ import net.bpfurtado.tas.builder.scenespanel.ScenesListController.SortBy;
 public interface ScenesListControllerListener
 {
     void searchFieldUpdated(String filterExp);
+
     JPanel getPanel();
+
     boolean isPanelVisible();
+
     void sort(SortBy by);
 
     void focusOnList();

@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model;
 
@@ -169,8 +169,8 @@ public class Scene extends TextObject implements Comparable<Scene>
     }
 
     /**
-     * FIXME os from'scrollPane de uma scene virão das entidades PathDepth, refatorar isto em breve!
-     * TODO could make read only
+     * FIXME os from'scrollPane de uma scene virão das entidades PathDepth, refatorar isto em breve! TODO
+     * could make read only
      */
     public List<Scene> getScenesFrom()
     {

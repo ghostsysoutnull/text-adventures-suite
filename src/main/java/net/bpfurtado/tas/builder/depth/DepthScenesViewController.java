@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.builder.depth;
 
@@ -77,13 +77,13 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     private Scene selectedScene;
     private DepthScenesFrame scenesDepthFrame;
 
-	private JScrollPane scrollPane;
+    private JScrollPane scrollPane;
 
     static String renderToList(Scene scene)
     {
         boolean hasNoTos = true;
-        for(IPath p:scene.getPaths()) {
-            if(p.getTo()!=null) {
+        for (IPath p : scene.getPaths()) {
+            if (p.getTo() != null) {
                 hasNoTos = false;
                 break;
             }
@@ -105,9 +105,9 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     {
         listsPanel = new JPanel();
         listsPanel.setLayout(new BoxLayout(listsPanel, BoxLayout.LINE_AXIS));
-        
+
         this.scrollPane = new JScrollPane(listsPanel);
-		panel.add(scrollPane);
+        panel.add(scrollPane);
 
         mountDepthLists(currentScene);
         checkCanStillGoPrev();
@@ -115,20 +115,20 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     }
 
     private void mountDepthLists(Scene currentScene)
-	{
-		int numLevels = DepthManager.getInstance().getNumberOfDepths();
+    {
+        int numLevels = DepthManager.getInstance().getNumberOfDepths();
 
-		int idx = DepthManager.getInstance().getFirstDepthOfScene(currentScene);
-		idx = idx == -1 ? 0 : idx;
+        int idx = DepthManager.getInstance().getFirstDepthOfScene(currentScene);
+        idx = idx == -1 ? 0 : idx;
 
-		int first = idx - 3 < 0 ? 0 : idx - 3;
-		int last = idx + 3 > numLevels-1 ? numLevels-1 : idx + 3;
-		logger.debug("currentScene="+currentScene+" ,first=" + first + ", last=" + last);
+        int first = idx - 3 < 0 ? 0 : idx - 3;
+        int last = idx + 3 > numLevels - 1 ? numLevels - 1 : idx + 3;
+        logger.debug("currentScene=" + currentScene + " ,first=" + first + ", last=" + last);
 
-		for (int i = first; i <= last; i++) {
-			mountListToEnd(i, i == idx, currentScene);
-		}
-	}
+        for (int i = first; i <= last; i++) {
+            mountListToEnd(i, i == idx, currentScene);
+        }
+    }
 
     private void checkCanStillGoPrev()
     {
@@ -155,33 +155,31 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
 
     private void mountButtonsPanel()
     {
-    	next.setVerticalTextPosition(AbstractButton.CENTER);
-    	next.setHorizontalTextPosition(AbstractButton.LEADING);
-    	next.setMnemonic('n');
+        next.setVerticalTextPosition(AbstractButton.CENTER);
+        next.setHorizontalTextPosition(AbstractButton.LEADING);
+        next.setMnemonic('n');
 
-    	prev.setMnemonic('p');
-    	
-    	jumpToBt.setMnemonic('j');
-    	jumpToBt.setVerticalTextPosition(AbstractButton.CENTER);
-    	jumpToBt.setHorizontalTextPosition(AbstractButton.LEADING);
-    	
+        prev.setMnemonic('p');
+
+        jumpToBt.setMnemonic('j');
+        jumpToBt.setVerticalTextPosition(AbstractButton.CENTER);
+        jumpToBt.setHorizontalTextPosition(AbstractButton.LEADING);
+
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.LINE_AXIS));
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         buttonsPanel.add(prev);
-        prev.addActionListener(new ActionListener()
-        {
+        prev.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 prevButtonAction();
             }
         });
-        Dimension space = new Dimension(5,0);
+        Dimension space = new Dimension(5, 0);
         buttonsPanel.add(Box.createRigidArea(space));
 
-        next.addActionListener(new ActionListener()
-        {
+        next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 nextButtonAction();
@@ -189,15 +187,14 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         });
         buttonsPanel.add(next);
         buttonsPanel.add(Box.createRigidArea(space));
-        
-        jumpToBt.addActionListener(new ActionListener()
-        {
+
+        jumpToBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 jumpToButtonAction();
             }
         });
-        
+
         buttonsPanel.add(jumpToBt);
         jumpToBt.setEnabled(false);
 
@@ -225,57 +222,54 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         navigationButtonScreenAdjustments(ScrollTo.first);
     }
 
-	private void mountListToEnd(int i)
-	{
-		mountListToEnd(i, false, null);
-	}
-	
-	private enum ScrollTo
-	{
-		last
-		{
-			JList getList(LinkedList<ListLevel> depthLists)
-			{
-				return depthLists.getLast().list;
-			}
-		},
-		first
-		{
-			JList getList(LinkedList<ListLevel> depthLists)
-			{
-				return depthLists.getFirst().list;
-			}
-		};
-		abstract JList getList(LinkedList<ListLevel> depthLists);
-	};
-	
-	private void navigationButtonScreenAdjustments(ScrollTo scrollTo)
-	{
-		scenesDepthFrame.pack();
-        
+    private void mountListToEnd(int i)
+    {
+        mountListToEnd(i, false, null);
+    }
+
+    private enum ScrollTo {
+        last {
+            JList getList(LinkedList<ListLevel> depthLists)
+            {
+                return depthLists.getLast().list;
+            }
+        },
+        first {
+            JList getList(LinkedList<ListLevel> depthLists)
+            {
+                return depthLists.getFirst().list;
+            }
+        };
+        abstract JList getList(LinkedList<ListLevel> depthLists);
+    };
+
+    private void navigationButtonScreenAdjustments(ScrollTo scrollTo)
+    {
+        scenesDepthFrame.pack();
+
         double width = scenesDepthFrame.getSize().getWidth();
-		double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-		if (width > screenWidth) {
-			Rectangle bounds = scenesDepthFrame.getBounds();
-			bounds.setRect(bounds.getX(), bounds.getY(), screenWidth - 50, bounds.getHeight());
-			scenesDepthFrame.setBounds(bounds);
-		}
-		
-		JList list = scrollTo.getList(depthLists);
-		list.requestFocusInWindow();
-		list.setSelectedIndex(0);
-		
-		scenesDepthFrame.setVisible(true);
-		
-		//Must come before the setVisible method above
-		scrollToTheLastList(scrollPane, scrollTo); 
-	}
-	
-	private void scrollToTheLastList(JScrollPane scroll, ScrollTo to)
-	{
-		JScrollBar bar = scroll.getHorizontalScrollBar();
-		bar.setValue(to.equals(ScrollTo.last) ? bar.getMaximum() : bar.getMinimum());
-	}
+        double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+        if (width > screenWidth) {
+            Rectangle bounds = scenesDepthFrame.getBounds();
+            bounds.setRect(bounds.getX(), bounds.getY(), screenWidth - 50, bounds.getHeight());
+            scenesDepthFrame.setBounds(bounds);
+        }
+
+        JList list = scrollTo.getList(depthLists);
+        list.requestFocusInWindow();
+        list.setSelectedIndex(0);
+
+        scenesDepthFrame.setVisible(true);
+
+        // Must come before the setVisible method above
+        scrollToTheLastList(scrollPane, scrollTo);
+    }
+
+    private void scrollToTheLastList(JScrollPane scroll, ScrollTo to)
+    {
+        JScrollBar bar = scroll.getHorizontalScrollBar();
+        bar.setValue(to.equals(ScrollTo.last) ? bar.getMaximum() : bar.getMinimum());
+    }
 
     private Collection<Scene> mountListToStart(int depthNumber)
     {
@@ -294,14 +288,14 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         JList list = createList();
         list.setModel(createOrderedSceneListModel(nextDepthScenes));
         if (selectScene) {
-			for (int i = 0; i < list.getModel().getSize(); i++) {
-				Scene s = (Scene) list.getModel().getElementAt(i);
-				if (s.equals(sceneToSelect)) {
-					list.setSelectedIndex(i);
-					break;
-				}
-			}
-		}
+            for (int i = 0; i < list.getModel().getSize(); i++) {
+                Scene s = (Scene) list.getModel().getElementAt(i);
+                if (s.equals(sceneToSelect)) {
+                    list.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
         addListToEnd(depthNumber, list);
     }
 
@@ -318,7 +312,7 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
     }
 
     @SuppressWarnings("unchecked")
-	private DefaultListModel createOrderedSceneListModel(Collection<Scene> origScenes)
+    private DefaultListModel createOrderedSceneListModel(Collection<Scene> origScenes)
     {
         DefaultListModel listModel = new DefaultListModel();
         List<Scene> scenes = new LinkedList<Scene>(origScenes);
@@ -338,23 +332,21 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         list.setLayoutOrientation(JList.VERTICAL);
         list.setMinimumSize(new Dimension(120, 140));
 
-        list.addListSelectionListener(new ListSelectionListener()
-		{
-			public void valueChanged(ListSelectionEvent e)
-			{
-				listMouseClicked(e);
-			}
-		});
-        
-        list.addMouseListener(new MouseAdapter() 
-		{
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				listMouseClicked(e);
-			}
-		});
-        
+        list.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e)
+            {
+                listMouseClicked(e);
+            }
+        });
+
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                listMouseClicked(e);
+            }
+        });
+
         return list;
     }
 
@@ -406,9 +398,3 @@ public class DepthScenesViewController implements EntityPersistedOnFileOpenActio
         depthLists.clear();
     }
 }
-
-
-
-
-
-

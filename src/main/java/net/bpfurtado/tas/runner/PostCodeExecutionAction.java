@@ -24,5 +24,5 @@ import net.bpfurtado.tas.model.Game;
 
 public interface PostCodeExecutionAction
 {
-	void exec(Game game);
+    void exec(Game game);
 }

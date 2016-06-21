@@ -20,7 +20,6 @@
  */
 package net.bpfurtado.tas.model.combat;
 
-public enum AttackResultType
-{
-	won, loose, draw;
+public enum AttackResultType {
+    won, loose, draw;
 }

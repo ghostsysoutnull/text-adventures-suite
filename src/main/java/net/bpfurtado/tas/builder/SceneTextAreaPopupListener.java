@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.builder;
 
@@ -41,16 +41,17 @@ class SceneTextAreaPopupListener extends MouseAdapter
 
     private JPopupMenu popup;
     private JTextArea sceneTA;
-    
+
     private JMenuItem createPathMnIt;
 
     private JMenuItem[] m;
 
-    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt, JMenuItem... menuItems)
+    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt,
+            JMenuItem... menuItems)
     {
         popup = popupMenu;
         this.sceneTA = sceneTA;
-        
+
         this.createPathMnIt = createPathMnIt;
         this.m = menuItems;
     }
@@ -74,15 +75,15 @@ class SceneTextAreaPopupListener extends MouseAdapter
         if (sceneTA.getSelectedText() == null) {
             createPathMnIt.setEnabled(false);
             createPathMnIt.setText("Select some text...");
-            
-            for(JMenuItem it : m) {
+
+            for (JMenuItem it : m) {
                 it.setEnabled(false);
             }
         } else {
             createPathMnIt.setEnabled(true);
             createPathMnIt.setText("Create Path '" + sceneTA.getSelectedText().trim() + "'");
-            
-            for(JMenuItem it : m) {
+
+            for (JMenuItem it : m) {
                 it.setEnabled(true);
             }
         }

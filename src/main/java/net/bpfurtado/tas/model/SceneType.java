@@ -20,84 +20,79 @@
  */
 package net.bpfurtado.tas.model;
 
-public enum SceneType
-{
-	regular
-	{
-		public String toString()
-		{
-			return "Regular";
-		}
+public enum SceneType {
+    regular {
+        public String toString()
+        {
+            return "Regular";
+        }
 
-		public int exactPathsNumberPermited()
-		{
-			return Integer.MAX_VALUE;
-		}
+        public int exactPathsNumberPermited()
+        {
+            return Integer.MAX_VALUE;
+        }
 
-		public boolean hasPathsNumberRestrictions()
-		{
-			return false;
-		}
-	},
-	skillTest
-	{
-		public String toString()
-		{
-			return "Test some skill";
-		}
+        public boolean hasPathsNumberRestrictions()
+        {
+            return false;
+        }
+    },
+    skillTest {
+        public String toString()
+        {
+            return "Test some skill";
+        }
 
-		public int exactPathsNumberPermited()
-		{
-			return 2;
-		}
+        public int exactPathsNumberPermited()
+        {
+            return 2;
+        }
 
-		public boolean hasPathsNumberRestrictions()
-		{
-			return true;
-		}
-	},
-	combat
-	{
-		public String toString()
-		{
-			return "Combat";
-		}
+        public boolean hasPathsNumberRestrictions()
+        {
+            return true;
+        }
+    },
+    combat {
+        public String toString()
+        {
+            return "Combat";
+        }
 
-		public int exactPathsNumberPermited()
-		{
-			return 1;
-		}
+        public int exactPathsNumberPermited()
+        {
+            return 1;
+        }
 
-		public boolean hasPathsNumberRestrictions()
-		{
-			return true;
-		}
-	},
-	end
-	{
-		public String toString()
-		{
-			return "End";
-		}
+        public boolean hasPathsNumberRestrictions()
+        {
+            return true;
+        }
+    },
+    end {
+        public String toString()
+        {
+            return "End";
+        }
 
-		public int exactPathsNumberPermited()
-		{
-			return 0;
-		}
+        public int exactPathsNumberPermited()
+        {
+            return 0;
+        }
 
-		public boolean hasPathsNumberRestrictions()
-		{
-			return true;
-		}
-	};
+        public boolean hasPathsNumberRestrictions()
+        {
+            return true;
+        }
+    };
 
-	public int exactPathsNumberPermited()
-	{
-		return 0;
-	}
+    public int exactPathsNumberPermited()
+    {
+        return 0;
+    }
 
-	public boolean hasPathsNumberRestrictions()
-	{
-		return false;
-	}
+    public boolean hasPathsNumberRestrictions()
+    {
+        return false;
+    }
 }

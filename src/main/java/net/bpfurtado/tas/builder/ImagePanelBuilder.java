@@ -53,8 +53,7 @@ public class ImagePanelBuilder
 
     private static final JFileChooser fc = new JFileChooser();
     static {
-        fc.setFileFilter(new FileFilter()
-        {
+        fc.setFileFilter(new FileFilter() {
             @Override
             public String getDescription()
             {
@@ -143,8 +142,7 @@ public class ImagePanelBuilder
     {
         JPanel top = new JPanel();
         JButton chooseBt = new JButton("Choose...");
-        chooseBt.addActionListener(new ActionListener()
-        {
+        chooseBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 chooseImageButtonAction(imageReceiver.getWorkspace());

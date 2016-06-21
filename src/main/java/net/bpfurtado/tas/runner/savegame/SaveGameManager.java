@@ -39,13 +39,13 @@ public class SaveGameManager
 {
     @SuppressWarnings("unused")
     private static final Logger logger = Logger.getLogger(SaveGameManager.class);
-    
+
     private static final boolean DONT_EXEC_SCENE_ACTIONS = false;
 
     private Game game;
     private SaveGameListener runner;
     private Workspace workspace;
-    
+
     public SaveGameManager(Workspace workspace, Game game, SaveGameListener list)
     {
         this.workspace = workspace;
@@ -62,7 +62,7 @@ public class SaveGameManager
 
         SaveGamePersister.write(xml, file, runner);
 
-        //FIXME solve line bellow
+        // FIXME solve line bellow
         runner.fireOpenSavedGameEvent(saveGame);
 
         return file;
@@ -85,11 +85,11 @@ public class SaveGameManager
         return new SaveGame(workspace, game.getPlayer(), game.getCurrentScene().getId());
     }
 
-    public SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener) //999
+    public SaveGame open(String saveGameFilePath, PlayerEventListener playerEventListener) // 999
     {
         try {
             File saveGameFile = new File(saveGameFilePath);
-            
+
             SaveGame saveGame = SaveGamePersister.read(saveGameFile);
 
             Conf.runner().set("lastSavedGameFile", saveGameFile.getAbsolutePath());
@@ -101,7 +101,7 @@ public class SaveGameManager
             // creates a new gameImpl // FIXME 666 should send saveGame instead of workspace
             this.game = runner.gameFrom(saveGame);
             this.game.setPlayer(saveGame.getPlayer());
-            
+
             Player player = game.getPlayer();
             player.add(playerEventListener);
 

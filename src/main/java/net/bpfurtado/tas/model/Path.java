@@ -71,8 +71,7 @@ public class Path extends TextObject implements IPath
         createPathDepthsToDestinyScene(this, from, to);
 
         /*
-         * FIXME os from'scrollPane de uma scene virão das entidades PathDepth, refatorar isto em
-         * breve!
+         * FIXME os from'scrollPane de uma scene virão das entidades PathDepth, refatorar isto em breve!
          */
         to.addFrom(from);
     }
@@ -92,7 +91,7 @@ public class Path extends TextObject implements IPath
 
             // Aqui embaixo q a cena vai para o nivel 3
             PathDepth newPathDepth = pathDepthFrom.createChild(path); // TODO pensar em
-                                                                        // encapsulamento aqui.
+                                                                      // encapsulamento aqui.
             new CreatePathDepthsToDestinyScene().create(newPathDepth, from, to);
             pathDepthsToTheNewTo.add(newPathDepth);
         }
@@ -146,7 +145,7 @@ public class Path extends TextObject implements IPath
     {
         this.order = order;
     }
-    
+
     @Override
     public int hashCode()
     {
@@ -156,17 +155,18 @@ public class Path extends TextObject implements IPath
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
-          return false;
+            return false;
         }
         Path other = (Path) obj;
-        return new EqualsBuilder()
-                      .appendSuper(super.equals(obj))
-                      .append(getId(), other.getId())
-                      .append(from, other.from)
-                      .isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(getId(), other.getId())
+                .append(from, other.from).isEquals();
     }
 
     @Override

@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model;
 
@@ -56,15 +56,16 @@ public class DomainObject implements IDomainObject
     @Override
     public boolean equals(Object obj)
     {
-        if (obj == null) { return false; }
-        if (obj == this) { return true; }
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
         if (obj.getClass() != getClass()) {
-          return false;
+            return false;
         }
         DomainObject other = (DomainObject) obj;
-        return new EqualsBuilder()
-                      .appendSuper(super.equals(obj))
-                      .append(id, other.id)
-                      .isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(id, other.id).isEquals();
     }
 }

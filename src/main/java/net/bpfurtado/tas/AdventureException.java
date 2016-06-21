@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas;
 
@@ -27,9 +27,9 @@ package net.bpfurtado.tas;
  */
 public class AdventureException extends RuntimeException
 {
-	private static final long serialVersionUID = -8485696600334757699L;
+    private static final long serialVersionUID = -8485696600334757699L;
 
-	public AdventureException()
+    public AdventureException()
     {
         super();
     }

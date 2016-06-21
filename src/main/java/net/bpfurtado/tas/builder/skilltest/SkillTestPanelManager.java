@@ -60,8 +60,7 @@ public class SkillTestPanelManager
 
     private void events()
     {
-        nameTf.getDocument().addDocumentListener(new DocumentListener()
-        {
+        nameTf.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e)
             {
                 System.out.println(".changedUpdate()");

@@ -27,17 +27,17 @@ import net.bpfurtado.tas.model.Game;
 
 public class HidePaths implements PostCodeExecutionAction
 {
-	private Collection<Integer> pathsToHide = new LinkedList<Integer>();
+    private Collection<Integer> pathsToHide = new LinkedList<Integer>();
 
-	public HidePaths(Collection<Integer> pathsToHide)
-	{
-		for(int i: pathsToHide) {
-			this.pathsToHide.add(i-1);
-		}
-	}
+    public HidePaths(Collection<Integer> pathsToHide)
+    {
+        for (int i : pathsToHide) {
+            this.pathsToHide.add(i - 1);
+        }
+    }
 
-	public void exec(Game game)
-	{
-		game.addPathToHideByOrder(pathsToHide);
-	}
+    public void exec(Game game)
+    {
+        game.addPathToHideByOrder(pathsToHide);
+    }
 }

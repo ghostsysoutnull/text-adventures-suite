@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */ 
+ */
 
 package net.bpfurtado.tas.runner.savegame;
 
@@ -28,9 +28,10 @@ import net.bpfurtado.tas.model.Scene;
 public interface SaveGameListener
 {
     void fireOpenSavedGameEvent(SaveGame saveGame);
-    
+
     Game gameFrom(SaveGame saveGame);
-    
+
     void openScene(Scene to, boolean execActions);
+
     void log(String msg);
 }

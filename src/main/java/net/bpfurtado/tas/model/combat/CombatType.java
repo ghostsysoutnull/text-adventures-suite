@@ -20,19 +20,17 @@
  */
 package net.bpfurtado.tas.model.combat;
 
-public enum CombatType
-{
-	oneAtATime, 
-	allAtTheSameTime;
-	
-	public static CombatType fromPersistentRepr(String persistentRepr)
-	{
-		if (persistentRepr.equals("oneAtATime")) {
-			return oneAtATime;
-		} else if (persistentRepr.equals("allAtTheSameTime")) {
-			return allAtTheSameTime;
-		} else {
-			throw new IllegalArgumentException(persistentRepr + " is not a valid representation");
-		}
-	}
+public enum CombatType {
+    oneAtATime, allAtTheSameTime;
+
+    public static CombatType fromPersistentRepr(String persistentRepr)
+    {
+        if (persistentRepr.equals("oneAtATime")) {
+            return oneAtATime;
+        } else if (persistentRepr.equals("allAtTheSameTime")) {
+            return allAtTheSameTime;
+        } else {
+            throw new IllegalArgumentException(persistentRepr + " is not a valid representation");
+        }
+    }
 }

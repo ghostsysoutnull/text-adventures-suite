@@ -54,7 +54,7 @@ public class BuilderSwingUtils
             @Override
             public void focusLost(FocusEvent e)
             {
-                builder.saveActualScene(); 
+                builder.saveActualScene();
             }
         });
     }

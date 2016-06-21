@@ -24,28 +24,28 @@ import javax.swing.JList;
 
 public class ListLevel
 {
-	JList list;
-	int level;
+    JList list;
+    int level;
 
-	public ListLevel(int level, JList list)
-	{
-		this.level = level;
-		this.list = list;
-	}
+    public ListLevel(int level, JList list)
+    {
+        this.level = level;
+        this.list = list;
+    }
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		if (obj instanceof ListLevel) {
-			ListLevel other = (ListLevel) obj;
-			return list.equals(other.list);
-		}
-		return false;
-	}
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof ListLevel) {
+            ListLevel other = (ListLevel) obj;
+            return list.equals(other.list);
+        }
+        return false;
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return list.hashCode();
-	}
+    @Override
+    public int hashCode()
+    {
+        return list.hashCode();
+    }
 }

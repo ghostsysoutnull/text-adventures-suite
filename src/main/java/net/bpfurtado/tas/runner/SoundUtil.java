@@ -34,11 +34,22 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import net.bpfurtado.tas.AdventureException;
+
 public class SoundUtil
 {
     public static void main(String[] args) throws Exception
     {
         playClip(SoundUtil.class.getResourceAsStream("/net/bpfurtado/tas/runner/sounds/dssgtdth.wav"));
+    }
+
+    public static void playInternalClip(String clipName)
+    {
+        try {
+            playClip(SoundUtil.class.getResourceAsStream("/net/bpfurtado/tas/runner/sounds/" + clipName + ".wav"));
+        } catch (Exception e) {
+            throw new AdventureException(e);
+        }
     }
 
     public static void playClip(InputStream input)

@@ -31,9 +31,9 @@ import net.bpfurtado.tas.model.Scene;
 
 public class FromCellRenderer extends JLabel implements ListCellRenderer
 {
-	private static final long serialVersionUID = -5377905431761323142L;
-	
-	private Scene s;
+    private static final long serialVersionUID = -5377905431761323142L;
+
+    private Scene s;
 
     public FromCellRenderer(Scene s)
     {
@@ -41,7 +41,8 @@ public class FromCellRenderer extends JLabel implements ListCellRenderer
         this.s = s;
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            boolean cellHasFocus)
     {
         Scene scene = (Scene) value;
         setText(DepthScenesViewController.renderToList(scene));

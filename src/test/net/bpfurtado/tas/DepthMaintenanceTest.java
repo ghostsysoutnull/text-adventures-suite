@@ -1,6 +1,5 @@
 package net.bpfurtado.tas;
 
-
 import junit.framework.TestCase;
 import net.bpfurtado.tas.model.Adventure;
 import net.bpfurtado.tas.model.IPath;
@@ -10,8 +9,8 @@ import net.bpfurtado.tas.model.Scene;
 import org.apache.log4j.Logger;
 
 /**
- * Created using Test Driven Development
- * Caso de teste 22-04-2006 (top of page)
+ * Created using Test Driven Development Caso de teste 22-04-2006 (top of page)
+ * 
  * @author Bruno Patini Furtado
  */
 public class DepthMaintenanceTest extends TestCase
@@ -73,7 +72,9 @@ public class DepthMaintenanceTest extends TestCase
         pStartToS12.setTo(s12);
 
         int s12PathDepthsSize = 0;
-        for (@SuppressWarnings("unused") PathDepth p : s12.getPathDepths()) s12PathDepthsSize++;
+        for (@SuppressWarnings("unused")
+        PathDepth p : s12.getPathDepths())
+            s12PathDepthsSize++;
         assertEquals(2, s12PathDepthsSize);
 
         assertEquals(3, a.getNumberOfDepths());
@@ -90,30 +91,30 @@ public class DepthMaintenanceTest extends TestCase
         TestUtils.hasScenesInDepth(this, a, 1, s1, s2, s12);
         TestUtils.hasScenesInDepth(this, a, 2, s11, s12, s121);
         TestUtils.hasScenesInDepth(this, a, 3, s121);
-        
+
         TestUtils.hasNumberOfPathDepths(this, 1, s1, s2, s11);
         TestUtils.hasNumberOfPathDepths(this, 2, s12, s121);
 
         // - Remove path 'Start to S12'
         logger.debug("\nRemove path \'Start to S12\'");
-        
-        start.remove(pStartToS12); 
+
+        start.remove(pStartToS12);
         TestUtils.hasScenesInDepth(this, a, 1, s1, s2);
         TestUtils.hasScenesInDepth(this, a, 2, s11, s12);
-        TestUtils.hasScenesInDepth(this, a, 3, s121); 
-        
+        TestUtils.hasScenesInDepth(this, a, 3, s121);
+
         PathDepthPrinter printer = new PathDepthPrinter();
-		printer.printPathDepthsTree(s1);
-		printer.printPathDepthsTree(s11);
-		printer.printPathDepthsTree(s12);
+        printer.printPathDepthsTree(s1);
+        printer.printPathDepthsTree(s11);
+        printer.printPathDepthsTree(s12);
         printer.printPathDepthsTree(s2);
         printer.printPathDepthsTree(s121);
-        
+
         TestUtils.hasNumberOfPathDepths(this, 1, s1, s2, s11, s12, s121);
-        
+
         // - S_1.2.1.1
         IPath pS121toS1211 = s121.createPath("to S_1.2.1.1");
-        
+
         Scene s1211 = a.createSceneFrom(pS121toS1211);
         s1211.setName("S1211");
 

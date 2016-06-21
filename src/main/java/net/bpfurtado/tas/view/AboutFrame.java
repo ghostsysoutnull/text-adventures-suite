@@ -174,7 +174,7 @@ public class AboutFrame extends JDialog
             StringBuilder b = new StringBuilder();
             for (String l = r.readLine(); l != null; l = r.readLine()) {
                 System.out.println(l);
-                b.append(l+"\n");
+                b.append(l + "\n");
             }
             return b.toString();
         } catch (IOException e) {
@@ -197,8 +197,7 @@ public class AboutFrame extends JDialog
         JButton closeBt = new JButton("Close");
         closeBt.setMnemonic('C');
         closeBt.setAlignmentX(CENTER_ALIGNMENT);
-        closeBt.addActionListener(new ActionListener()
-        {
+        closeBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 dispose();
@@ -215,8 +214,7 @@ public class AboutFrame extends JDialog
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 JFrame frame = new JFrame();

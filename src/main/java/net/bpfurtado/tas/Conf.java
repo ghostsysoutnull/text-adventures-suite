@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 public class Conf
 {
     private static final Logger logger = Logger.getLogger(Conf.class);
-    
+
     private static final Conf builder = new Conf("builder");
     private static final Conf runner = new Conf("runner");
     private static final Conf oppening = new Conf("oppeningScreen");
@@ -79,7 +79,7 @@ public class Conf
     {
         return System.getProperty("user.home") + File.separator + ".adventure-tools";
     }
-    
+
     public static File getSavedGamesFolder()
     {
         File savedGamesFolder = new File(getHome() + File.separator + "savedGames");

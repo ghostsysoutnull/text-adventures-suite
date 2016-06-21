@@ -27,32 +27,32 @@ import org.apache.log4j.Logger;
 
 public class CreatePathDepthsToDestinyScene
 {
-	private static Logger logger = Logger.getLogger(CreatePathDepthsToDestinyScene.class);
-	
-	private Collection<Scene> visited = new LinkedList<Scene>();
+    private static Logger logger = Logger.getLogger(CreatePathDepthsToDestinyScene.class);
 
-	void create(PathDepth newPathDepth, Scene from, Scene to)
-	{
-		if (visited.contains(to)) {
-			return;
-		}
+    private Collection<Scene> visited = new LinkedList<Scene>();
 
-		visited.add(to);
+    void create(PathDepth newPathDepth, Scene from, Scene to)
+    {
+        if (visited.contains(to)) {
+            return;
+        }
 
-		for (IPath p : to.getPaths()) {
-			logger.debug(p.getTo() + "=" + from);
-			if (p.getTo() == null) {
-				continue;
-			}
-			if (p.getTo().equals(from)) {
-				logger.debug("Continue");
-				continue;
-			} else {
-				logger.debug("KEEP GOING");
-			}
-			PathDepth child = newPathDepth.createChild(p);
-			p.getTo().add(child); // TODO pensar em encapsulamento aqui.
-			create(child, to, p.getTo());
-		}
-	}
+        visited.add(to);
+
+        for (IPath p : to.getPaths()) {
+            logger.debug(p.getTo() + "=" + from);
+            if (p.getTo() == null) {
+                continue;
+            }
+            if (p.getTo().equals(from)) {
+                logger.debug("Continue");
+                continue;
+            } else {
+                logger.debug("KEEP GOING");
+            }
+            PathDepth child = newPathDepth.createChild(p);
+            p.getTo().add(child); // TODO pensar em encapsulamento aqui.
+            create(child, to, p.getTo());
+        }
+    }
 }

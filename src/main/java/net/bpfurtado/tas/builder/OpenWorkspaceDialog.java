@@ -164,7 +164,7 @@ public class OpenWorkspaceDialog extends JDialog
 
     private static class WorkspacesListModel extends AbstractListModel
     {
-        private static final long serialVersionUID = -8167581289776094824L;
+        private static final long serialVersionUID = 1L;
 
         private List<WorkspaceHolder> all;
 

@@ -32,11 +32,11 @@ public class BackToFromScenesCbCellRender extends JLabel implements ListCellRend
 {
     private static final long serialVersionUID = -2823840017048688774L;
 
-    public Component getListCellRendererComponent(
-            JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            boolean cellHasFocus)
     {
         Scene scene = (Scene) value;
-        setText(scene.getName()); 
+        setText(scene.getName());
 
         if (isSelected) {
             setBackground(list.getSelectionBackground());

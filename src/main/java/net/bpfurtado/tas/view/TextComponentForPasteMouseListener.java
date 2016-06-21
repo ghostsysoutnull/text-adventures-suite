@@ -33,55 +33,56 @@ import org.apache.log4j.Logger;
 
 public class TextComponentForPasteMouseListener extends MouseAdapter
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(TextComponentForPasteMouseListener.class);
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(TextComponentForPasteMouseListener.class);
 
-	private JPopupMenu popup;
+    private JPopupMenu popup;
 
-	private JMenuItem menuItem;
+    private JMenuItem menuItem;
 
-	private JTextComponent text;
+    private JTextComponent text;
 
-	private SceneCodeToPasteHolder ho;
+    private SceneCodeToPasteHolder ho;
 
-	public TextComponentForPasteMouseListener(JPopupMenu popupMenu, JMenuItem menuItem, JTextComponent origin, JTextComponent destiny, SceneCodeToPasteHolder ho)
-	{
-		this.popup = popupMenu;
-		this.menuItem = menuItem;
-		this.text = origin;
-		this.ho = ho;
-	}
+    public TextComponentForPasteMouseListener(JPopupMenu popupMenu, JMenuItem menuItem, JTextComponent origin,
+            JTextComponent destiny, SceneCodeToPasteHolder ho)
+    {
+        this.popup = popupMenu;
+        this.menuItem = menuItem;
+        this.text = origin;
+        this.ho = ho;
+    }
 
-	public void mousePressed(MouseEvent e)
-	{
-		maybeShowPopup(e);
-	}
+    public void mousePressed(MouseEvent e)
+    {
+        maybeShowPopup(e);
+    }
 
-	public void mouseReleased(MouseEvent e)
-	{
-		maybeShowPopup(e);
-	}
+    public void mouseReleased(MouseEvent e)
+    {
+        maybeShowPopup(e);
+    }
 
-	private void maybeShowPopup(MouseEvent e)
-	{
-		if (!e.isPopupTrigger()) {
-			return;
-		}
+    private void maybeShowPopup(MouseEvent e)
+    {
+        if (!e.isPopupTrigger()) {
+            return;
+        }
 
-		String selectedText = text.getSelectedText();
-		if (selectedText == null) {
-			ho.setText(selectedText);
-			menuItem.setEnabled(false);
-			menuItem.setText("Select some text...");
-		} else {
-			ho.setText(new String(selectedText)); //don't remember why I used 'new String' here
-			if (selectedText.length() > 40) {
-				selectedText = selectedText.substring(0, 40);
-			}	
-			menuItem.setEnabled(true);
-			menuItem.setText("Paste [" + selectedText + "]");
-		}
+        String selectedText = text.getSelectedText();
+        if (selectedText == null) {
+            ho.setText(selectedText);
+            menuItem.setEnabled(false);
+            menuItem.setText("Select some text...");
+        } else {
+            ho.setText(new String(selectedText)); // don't remember why I used 'new String' here
+            if (selectedText.length() > 40) {
+                selectedText = selectedText.substring(0, 40);
+            }
+            menuItem.setEnabled(true);
+            menuItem.setText("Paste [" + selectedText + "]");
+        }
 
-		popup.show(e.getComponent(), e.getX(), e.getY());
-	}
+        popup.show(e.getComponent(), e.getX(), e.getY());
+    }
 }

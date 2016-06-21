@@ -76,7 +76,7 @@ public class ScenesList extends SceneListBase
     {
         for (int i = 0; i < list.getModel().getSize(); i++) {
             Scene s = (Scene) list.getModel().getElementAt(i);
-            if(builder.getCurrentScene().equals(s)) {
+            if (builder.getCurrentScene().equals(s)) {
                 list.setSelectedIndex(i);
                 list.ensureIndexIsVisible(i);
                 break;
@@ -87,11 +87,11 @@ public class ScenesList extends SceneListBase
     /**
      * Update graphically the JList component.
      *
-     * Can't be called in this object construction because at this time the Builder instance
-     * has not yet all the proper attributes setted, which would cause a NPE.
+     * Can't be called in this object construction because at this time the Builder instance has not yet all
+     * the proper attributes setted, which would cause a NPE.
      *
-     * So after this instance contruction you have to manually call this method to properly
-     * graphical render.
+     * So after this instance contruction you have to manually call this method to properly graphical
+     * render.
      */
     @SuppressWarnings("unchecked")
     public void updateView()
@@ -132,9 +132,8 @@ public class ScenesList extends SceneListBase
     }
 
     /**
-     * Prepares the Scene JList component with the start scene, needed to create
-     * the Scene cell render, to properly render the start scene with a
-     * different color.
+     * Prepares the Scene JList component with the start scene, needed to create the Scene cell render, to
+     * properly render the start scene with a different color.
      */
     public void prepareView(Scene start)
     {
@@ -151,8 +150,7 @@ public class ScenesList extends SceneListBase
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
 
-        list.addMouseListener(new MouseAdapter()
-        {
+        list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e)
             {
                 scenesListMouseClicked();
@@ -180,8 +178,7 @@ public class ScenesList extends SceneListBase
 
         JButton newSceneBt = new JButton("New Scene", Util.getImage("new.gif"));
         newSceneBt.setMnemonic('N');
-        newSceneBt.addActionListener(new ActionListener()
-        {
+        newSceneBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 newSceneButtonActionPerformed();
@@ -189,11 +186,10 @@ public class ScenesList extends SceneListBase
         });
         panel.add(newSceneBt);
 
-        panel.add(Box.createRigidArea(new Dimension(5,0)));
+        panel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         removeSceneBt = new JButton(Util.getImage("delete.gif"));
-        removeSceneBt.addActionListener(new ActionListener()
-        {
+        removeSceneBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 removeSceneBtAction();

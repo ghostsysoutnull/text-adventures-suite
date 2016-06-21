@@ -34,59 +34,60 @@ import bsh.Interpreter;
 
 public class CodeExecutionAnalyser
 {
-	private static Logger logger = Logger.getLogger(CodeExecutionAnalyser.class);
+    private static Logger logger = Logger.getLogger(CodeExecutionAnalyser.class);
 
-	private static Random rnd = new Random();
+    private static Random rnd = new Random();
 
-	public static void main(String[] args)
-	{
-		System.out.println(rnd.nextInt(10));
-	}
+    public static void main(String[] args)
+    {
+        System.out.println(rnd.nextInt(10));
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<PostCodeExecutionAction> analyseCode(Game game, String code, String currentSceneText)
-	{
-		List<PostCodeExecutionAction> actions = new LinkedList<PostCodeExecutionAction>();
-		Interpreter interpreter = new Interpreter();
-		try {
-			interpreter.set("text", currentSceneText);
-			
-			interpreter.set("rnd", rnd);
-			interpreter.set("originalText", game.getCurrentScene().getOriginalText());
-			interpreter.set("origText", game.getCurrentScene().getOriginalText());
+    @SuppressWarnings("unchecked")
+    public List<PostCodeExecutionAction> analyseCode(Game game, String code, String currentSceneText)
+    {
+        List<PostCodeExecutionAction> actions = new LinkedList<PostCodeExecutionAction>();
+        Interpreter interpreter = new Interpreter();
+        try {
+            interpreter.set("text", currentSceneText);
 
-			LinkedList<Integer> pathsToHide = new LinkedList<Integer>();
-			interpreter.set("pathsToHide", pathsToHide);
+            interpreter.set("rnd", rnd);
+            interpreter.set("originalText", game.getCurrentScene().getOriginalText());
+            interpreter.set("origText", game.getCurrentScene().getOriginalText());
 
-			interpreter.set("player", game.getPlayer());
+            LinkedList<Integer> pathsToHide = new LinkedList<Integer>();
+            interpreter.set("pathsToHide", pathsToHide);
 
-			interpreter.eval(code);
+            interpreter.set("player", game.getPlayer());
 
-			logger.debug(game.getPlayer());
+            interpreter.eval(code);
 
-			Integer go = (Integer) interpreter.get("go");
-			if (go != null) {
-				logger.debug("will go to " + go);
-				actions.add(new SwitchSceneAction(go));
-			}
+            logger.debug(game.getPlayer());
 
-			pathsToHide = (LinkedList<Integer>) interpreter.get("pathsToHide");
-			logger.debug(pathsToHide);
+            Integer go = (Integer) interpreter.get("go");
+            if (go != null) {
+                logger.debug("will go to " + go);
+                actions.add(new SwitchSceneAction(go));
+            }
 
-			if(!pathsToHide.isEmpty()) {
-				actions.add(new HidePaths(pathsToHide));
-			}
+            pathsToHide = (LinkedList<Integer>) interpreter.get("pathsToHide");
+            logger.debug(pathsToHide);
 
-			String text = (String) interpreter.get("text");
-			if (text != null && text.trim().length() > 0) {
-				game.getCurrentScene().setText(text);
-			}
+            if (!pathsToHide.isEmpty()) {
+                actions.add(new HidePaths(pathsToHide));
+            }
 
-		} catch (EvalError e) {
+            String text = (String) interpreter.get("text");
+            if (text != null && text.trim().length() > 0) {
+                game.getCurrentScene().setText(text);
+            }
+
+        } catch (EvalError e) {
             Scene currentScene = game.getCurrentScene();
-            String sceneStr = "[Scene: id=" + currentScene.getId() + ", code=" + currentScene.getCode() + ", name=" + currentScene.getName() + "]";
+            String sceneStr = "[Scene: id=" + currentScene.getId() + ", code=" + currentScene.getCode() + ", name="
+                    + currentScene.getName() + "]";
             throw new BadSceneCodeException("Bad Scene " + sceneStr + " code, call the scene author :)", e);
         }
-		return actions;
-	}
+        return actions;
+    }
 }

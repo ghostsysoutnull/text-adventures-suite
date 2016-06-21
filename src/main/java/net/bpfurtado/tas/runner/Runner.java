@@ -88,7 +88,8 @@ import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
+public class Runner extends JFrame
+        implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
     private static final Logger logger = Logger.getLogger(Runner.class);
@@ -176,8 +177,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void buildRecentMenus()
     {
-        EntityPersistedOnFileOpenner advOpenner = new EntityPersistedOnFileOpenner()
-        {
+        EntityPersistedOnFileOpenner advOpenner = new EntityPersistedOnFileOpenner() {
             public String getApplicationName()
             {
                 return Runner.this.getApplicationName();
@@ -207,8 +207,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         openAdventureListeners = new LinkedList<EntityPersistedOnFileOpenActionListener>();
         openAdventureListeners.add(recentAdventuresMenuController);
 
-        EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner()
-        {
+        EntityPersistedOnFileOpenner savedGamesOpenner = new EntityPersistedOnFileOpenner() {
             public String getApplicationName()
             {
                 return Runner.this.getApplicationName();
@@ -267,8 +266,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         Util.setBoundsFrom(Conf.runner(), this);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter()
-        {
+        addWindowListener(new WindowAdapter() {
             /**
              * TODO CHANGE TO WINDOW CLOSED!
              */
@@ -359,8 +357,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     private void addEvents(final IPath path, final JLabel pathLb)
     {
-        pathLb.addMouseListener(new MouseAdapter()
-        {
+        pathLb.addMouseListener(new MouseAdapter() {
             IPath _path = path;
 
             public void mouseClicked(MouseEvent e)
@@ -425,11 +422,11 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             JButton combatBt = new JButton("Combat");
             combatBt.setMnemonic('c');
             combatBt.setAlignmentX(CENTER_ALIGNMENT);
-            combatBt.addActionListener(new ActionListener()
-            {
+            combatBt.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e)
                 {
-                    Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(), game.getCurrentScene().getCombat(), Runner.this);
+                    Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(),
+                            game.getCurrentScene().getCombat(), Runner.this);
                 }
             });
             pathsPn.add(combatBt);
@@ -438,14 +435,14 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
             JButton skillToTestBt = new JButton("Test your " + to.getSkillToTest().getName() + " Skill!");
             skillToTestBt.setMnemonic('t');
             skillToTestBt.setAlignmentX(CENTER_ALIGNMENT);
-            skillToTestBt.addActionListener(new ActionListener()
-            {
+            skillToTestBt.addActionListener(new ActionListener() {
                 // 333
                 public void actionPerformed(ActionEvent e)
                 {
                     Skill skill = game.getCurrentScene().getSkillToTest();
                     logger.debug("game.getCurrentScene().getSkillToTest()=" + skill.getName());
-                    Runner.this.skillToTestFrame = new SkillTestFrame(Runner.this, game.getPlayer(), skill, Runner.this);
+                    Runner.this.skillToTestFrame = new SkillTestFrame(Runner.this, game.getPlayer(), skill,
+                            Runner.this);
                 }
             });
             pathsPn.add(skillToTestBt);
@@ -564,8 +561,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
         JButton startAgainBt = new JButton("Start again");
         startAgainBt.setMnemonic('S');
-        startAgainBt.addActionListener(new ActionListener()
-        {
+        startAgainBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 startAgain();
@@ -594,17 +590,16 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         saveGameMenu.setMnemonic('G');
         menuBar.add(saveGameMenu);
 
-        this.saveGameMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu, new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                Runner.this.saveGameManager.save();
-            }
-        });
+        this.saveGameMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu,
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e)
+                    {
+                        Runner.this.saveGameManager.save();
+                    }
+                });
         saveGameMnIt.setEnabled(false);
 
-        Util.menuItem("Open Saved Game", 'O', KeyEvent.VK_O, "folder_table.png", saveGameMenu, new ActionListener()
-        {
+        Util.menuItem("Open Saved Game", 'O', KeyEvent.VK_O, "folder_table.png", saveGameMenu, new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 loadSavedGameAction();
@@ -624,11 +619,11 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
         this.startAgainMnIt = new JMenuItem("Start again", Util.getImage("arrow_redo.png"));
         startAgainMnIt.setEnabled(false);
-        startAgainMnIt.addActionListener(new ActionListener()
-        {
+        startAgainMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     startAgain();
                 }
@@ -637,8 +632,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         advMenu.add(startAgainMnIt);
 
         JMenuItem openMnIt = new JMenuItem("Open", Util.getImage("folder_table.png"));
-        openMnIt.addActionListener(new ActionListener()
-        {
+        openMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 openMenuAction();
@@ -652,8 +646,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         JMenuItem exitBt = new JMenuItem("Exit", 'x');
         exitBt.setIcon(Util.getImage("cancel.png"));
 
-        exitBt.addActionListener(new ActionListener()
-        {
+        exitBt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 exitApplication();
@@ -694,7 +687,8 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
     private void openMenuAction()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (answer == JOptionPane.NO_OPTION)
                 return;
         }
@@ -720,7 +714,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         // FIXME 666 opening saveGames... fire both SaveGame and Adventure...
         // and when we receive (workspace, workspace)?
 
-        // FIXME Please, never use instanceof... 
+        // FIXME Please, never use instanceof...
         if (entityPersistedOnFileOpen instanceof Workspace) {
             fireOpenAdventureEvent(entityPersistedOnFileOpen);
         } else if (entityPersistedOnFileOpen instanceof SaveGame) {
@@ -774,8 +768,7 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
 
     public static void main(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable()
-        {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run()
             {
                 Runner runner = null;

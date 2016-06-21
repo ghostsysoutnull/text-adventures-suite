@@ -22,6 +22,7 @@ package net.bpfurtado.tas.builder;
 
 public interface AdventureNeedsSavingController
 {
-	void markAsDirty();
+    void markAsDirty();
+
     void markAsClean();
 }

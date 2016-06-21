@@ -20,9 +20,9 @@
  */
 package net.bpfurtado.tas.model;
 
-public interface ITextObject extends IDomainObject 
+public interface ITextObject extends IDomainObject
 {
-	public abstract String getText();
+    public abstract String getText();
 
-	public abstract void setText(String text);
+    public abstract void setText(String text);
 }

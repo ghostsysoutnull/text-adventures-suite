@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model.persistence;
 
@@ -44,9 +44,9 @@ import org.dom4j.io.XMLWriter;
  */
 public class XMLAdventureWriter
 {
-	@SuppressWarnings("unused")
-	private static Logger logger = Logger.getLogger(XMLAdventureWriter.class);
-	
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(XMLAdventureWriter.class);
+
     private File saveFile;
 
     private Adventure adventure;
@@ -64,26 +64,26 @@ public class XMLAdventureWriter
         return save(doc);
     }
 
-	private Document createXML()
-	{
-		Document doc = DocumentHelper.createDocument();
+    private Document createXML()
+    {
+        Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("adventure");
         root.addAttribute("startScene", adventure.getStart().getId() + "");
         root.addElement("name").setText(adventure.getName());
-        //root.addElement("id").setText(adventure.getId());
+        // root.addElement("id").setText(adventure.getId());
 
         Element assertions = root.addElement("assertions");
         assertions.addCDATA(adventure.getAssertions());
-        
+
         Element scenes = root.addElement("scenes");
         createSceneNodes(scenes);
-        
-		return doc;
-	}
 
-	private void createSceneNodes(Element scenes)
-	{
-		for (Scene s : adventure.getScenes()) {
+        return doc;
+    }
+
+    private void createSceneNodes(Element scenes)
+    {
+        for (Scene s : adventure.getScenes()) {
             StringBuilder idsOfFromScenes = new StringBuilder("");
             for (Scene f : s.getScenesFrom()) {
                 idsOfFromScenes.append(f.getId());
@@ -92,46 +92,39 @@ public class XMLAdventureWriter
             if (idsOfFromScenes.length() > 0) {
                 idsOfFromScenes.deleteCharAt(idsOfFromScenes.length() - 1);
             }
-            Element sceneNode = scenes.addElement("scene").
-                addAttribute("id", s.getId()+"").
-                addAttribute("isEnd",s.isEnd()+"").
-                addAttribute("name", s.getName()).
-                addAttribute("tags", s.getTags()).
-                addAttribute("imageId", s.getImageId() == null ? "" : s.getImageId()).
-                addAttribute("from", idsOfFromScenes.toString());
-            
-            if(s.getType().equals(SceneType.combat)) {
-            	Element c = sceneNode.addElement("combat").addAttribute("type", s.getCombat().getType().toString());
-            	for (Fighter f : s.getCombat().getEnemies()) {
-					c.addElement("enemy").
-					addAttribute("name", f.getName()).
-					addAttribute("skill", f.getCombatSkillLevel()+"").
-					addAttribute("stamina", f.getStamina()+"").
-					addAttribute("damage", f.getDamage()+"");
-				}
-            } else if(s.getType().equals(SceneType.skillTest)) {
-            	sceneNode.addElement("skill-test")
-            		.addAttribute("name", s.getSkillToTest().getName());
+            Element sceneNode = scenes.addElement("scene").addAttribute("id", s.getId() + "")
+                    .addAttribute("isEnd", s.isEnd() + "").addAttribute("name", s.getName())
+                    .addAttribute("tags", s.getTags())
+                    .addAttribute("imageId", s.getImageId() == null ? "" : s.getImageId())
+                    .addAttribute("from", idsOfFromScenes.toString());
+
+            if (s.getType().equals(SceneType.combat)) {
+                Element c = sceneNode.addElement("combat").addAttribute("type", s.getCombat().getType().toString());
+                for (Fighter f : s.getCombat().getEnemies()) {
+                    c.addElement("enemy").addAttribute("name", f.getName())
+                            .addAttribute("skill", f.getCombatSkillLevel() + "")
+                            .addAttribute("stamina", f.getStamina() + "").addAttribute("damage", f.getDamage() + "");
+                }
+            } else if (s.getType().equals(SceneType.skillTest)) {
+                sceneNode.addElement("skill-test").addAttribute("name", s.getSkillToTest().getName());
             }
-            
+
             Element e = sceneNode.addElement("text");
-			e.addCDATA(s.getText());
-			
-			Element code = sceneNode.addElement("code");
-			code.addCDATA(s.getCode());
-            
+            e.addCDATA(s.getText());
+
+            Element code = sceneNode.addElement("code");
+            code.addCDATA(s.getCode());
+
             for (IPath p : s.getPaths()) {
-                sceneNode.addElement("path").
-                    addAttribute("toScene", p.getTo() == null ? "" : p.getTo().getId() + "").
-                    addAttribute("order", p.getOrder()+"").
-                    setText(p.getText());
+                sceneNode.addElement("path").addAttribute("toScene", p.getTo() == null ? "" : p.getTo().getId() + "")
+                        .addAttribute("order", p.getOrder() + "").setText(p.getText());
             }
         }
-	}
+    }
 
-	private File save(Document doc)
-	{
-		try {
+    private File save(Document doc)
+    {
+        try {
             if (!saveFile.getName().endsWith(".adv.xml")) {
                 saveFile = new File(saveFile.getAbsolutePath() + ".adv.xml");
             }
@@ -141,7 +134,7 @@ public class XMLAdventureWriter
             format.setNewlines(true);
             format.setLineSeparator(System.getProperty("line.separator"));
             XMLWriter writer = new XMLWriter(new FileWriter(saveFile), format);
-            
+
             writer.write(doc);
             writer.close();
 
@@ -149,5 +142,5 @@ public class XMLAdventureWriter
         } catch (Exception e) {
             throw new AdventureException("Error writing adventure", e);
         }
-	}
+    }
 }

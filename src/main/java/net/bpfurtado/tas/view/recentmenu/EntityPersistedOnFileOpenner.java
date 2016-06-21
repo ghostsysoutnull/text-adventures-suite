@@ -18,19 +18,21 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.view.recentmenu;
 
 /**
  * @author Bruno Patini Furtado
  */
-public interface EntityPersistedOnFileOpenner 
+public interface EntityPersistedOnFileOpenner
 {
     void openEntityPersisted(String id);
+
     void save(boolean isSaveAs);
 
     boolean isDirty();
+
     boolean hasAnOpenEntity();
 
     String getApplicationName();

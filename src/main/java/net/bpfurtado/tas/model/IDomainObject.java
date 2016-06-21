@@ -23,8 +23,8 @@ package net.bpfurtado.tas.model;
 public interface IDomainObject
 {
 
-	public abstract int getId();
+    public abstract int getId();
 
-	public abstract void setId(int id);
+    public abstract void setId(int id);
 
 }

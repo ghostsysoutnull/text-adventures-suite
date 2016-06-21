@@ -47,8 +47,7 @@ public class TextComponentUtils
         final TextToPasteHolder codeHolder = (TextToPasteHolder) result[0];
         final JMenuItem copyMnIt = (JMenuItem) result[1];
 
-        ta.addMouseListener(new MouseAdapter()
-        {
+        ta.addMouseListener(new MouseAdapter() {
             TextToPasteHolder holder = codeHolder;
 
             public void mousePressed(MouseEvent e)
@@ -80,8 +79,7 @@ public class TextComponentUtils
         final TextToPasteHolder codeHolder = new TextToPasteHolder();
 
         JMenuItem copyMnIt = new JMenuItem("Copy", Util.getImage("copy.gif"));
-        copyMnIt.addActionListener(new ActionListener()
-        {
+        copyMnIt.addActionListener(new ActionListener() {
             TextToPasteHolder holder = codeHolder;
 
             public void actionPerformed(ActionEvent e)
@@ -92,8 +90,7 @@ public class TextComponentUtils
         popup.add(copyMnIt);
 
         JMenuItem pasteMnIt = new JMenuItem("Paste", Util.getImage("paste.gif"));
-        pasteMnIt.addActionListener(new ActionListener()
-        {
+        pasteMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
                 Transferable contents = toolkit.getSystemClipboard().getContents(null);

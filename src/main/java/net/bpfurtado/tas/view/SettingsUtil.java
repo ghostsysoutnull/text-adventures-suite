@@ -32,27 +32,27 @@ import net.bpfurtado.tas.Conf;
 
 public class SettingsUtil
 {
-	public static void addSettingsMenu(JMenuBar menuBar, final Conf conf)
-	{
-		JMenu settingsMenu = new JMenu("Settings");
+    public static void addSettingsMenu(JMenuBar menuBar, final Conf conf)
+    {
+        JMenu settingsMenu = new JMenu("Settings");
         settingsMenu.setMnemonic('t');
         final JMenuItem openLastAdventureMenuItem = new JCheckBoxMenuItem("Open last adventure on start");
-        
-        openLastAdventureMenuItem.setSelected(conf.is("openLastAdventureOnStart", false));
-        
-        openLastAdventureMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				openLastAdventureOnStartMenuItemAction(openLastAdventureMenuItem.isSelected(), conf);
-			}
-		});
-		settingsMenu.add(openLastAdventureMenuItem);
-        menuBar.add(settingsMenu);
-	}
 
-	private static void openLastAdventureOnStartMenuItemAction(Boolean isSelected, Conf conf)
-	{
-		conf.set("openLastAdventureOnStart", isSelected.toString());
-		conf.save();
-	}
+        openLastAdventureMenuItem.setSelected(conf.is("openLastAdventureOnStart", false));
+
+        openLastAdventureMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                openLastAdventureOnStartMenuItemAction(openLastAdventureMenuItem.isSelected(), conf);
+            }
+        });
+        settingsMenu.add(openLastAdventureMenuItem);
+        menuBar.add(settingsMenu);
+    }
+
+    private static void openLastAdventureOnStartMenuItemAction(Boolean isSelected, Conf conf)
+    {
+        conf.set("openLastAdventureOnStart", isSelected.toString());
+        conf.save();
+    }
 }

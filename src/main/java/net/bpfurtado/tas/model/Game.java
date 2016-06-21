@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.model;
 
@@ -32,23 +32,30 @@ import net.bpfurtado.tas.runner.savegame.SaveGame;
 public interface Game
 {
     void open(Scene scene);
+
     void execPostCodeActions();
 
     Player getPlayer();
+
     void setPlayer(Player player);
-    
+
     void addGoToSceneListener(GoToSceneListener goToSceneListener);
 
-	void setCurrentScene(Scene scene);
-	Scene getCurrentScene();
+    void setCurrentScene(Scene scene);
 
-	void setSceneToOpen(int sceneId);
-	int getSceneIdToOpen();
+    Scene getCurrentScene();
 
-	void addPathToHideByOrder(Collection<Integer> pathsToHide);
-	void execAssertions();
+    void setSceneToOpen(int sceneId);
+
+    int getSceneIdToOpen();
+
+    void addPathToHideByOrder(Collection<Integer> pathsToHide);
+
+    void execAssertions();
+
     Adventure open(SaveGame saveGame);
+
     void openNoActions(Scene to);
-    
+
     Adventure getAdventure();
 }

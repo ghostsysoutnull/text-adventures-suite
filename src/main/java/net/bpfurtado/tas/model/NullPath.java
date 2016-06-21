@@ -24,88 +24,88 @@ import org.apache.log4j.Logger;
 
 public class NullPath implements IPath
 {
-	private static Logger logger = Logger.getLogger(NullPath.class);
-	
-	private Scene to;
-	private Scene from;
+    private static Logger logger = Logger.getLogger(NullPath.class);
 
-	public NullPath(Scene to)
-	{
-		this.to = to;
-		this.from = new Scene(-999);
-	}
+    private Scene to;
+    private Scene from;
 
-	public Scene getFrom()
-	{
-		return from;
-	}
+    public NullPath(Scene to)
+    {
+        this.to = to;
+        this.from = new Scene(-999);
+    }
 
-	public void goToNowhere()
-	{
-		
-	}
+    public Scene getFrom()
+    {
+        return from;
+    }
 
-	public boolean isVisible()
-	{
-		return false;
-	}
+    public void goToNowhere()
+    {
 
-	public void setFrom(Scene from)
-	{
-		
-	}
+    }
 
-	public void setVisible(boolean isVisible)
-	{
-		
-	}
+    public boolean isVisible()
+    {
+        return false;
+    }
 
-	public String getText()
-	{
-		return null;
-	}
+    public void setFrom(Scene from)
+    {
 
-	public void setText(String text)
-	{
-	}
+    }
 
-	public int getId()
-	{
-		return 0;
-	}
+    public void setVisible(boolean isVisible)
+    {
 
-	public void setId(int id)
-	{
-	}
+    }
 
-	public Scene getTo()
-	{
-		return to;
-	}
+    public String getText()
+    {
+        return null;
+    }
 
-	public void setTo(Scene to)
-	{
-		this.to = to;
-	}
+    public void setText(String text)
+    {
+    }
 
-	public String toStringShort()
-	{
-		return "[NullPath]";
-	}
+    public int getId()
+    {
+        return 0;
+    }
 
-	@Override
-	public String toString()
-	{
-		return toStringShort();
-	}
+    public void setId(int id)
+    {
+    }
 
-	public int getOrder()
-	{
-		return 0;
-	}
+    public Scene getTo()
+    {
+        return to;
+    }
 
-	public void setOrder(int i)
-	{
-		logger.warn("Should I be called?");
-	}
+    public void setTo(Scene to)
+    {
+        this.to = to;
+    }
+
+    public String toStringShort()
+    {
+        return "[NullPath]";
+    }
+
+    @Override
+    public String toString()
+    {
+        return toStringShort();
+    }
+
+    public int getOrder()
+    {
+        return 0;
+    }
+
+    public void setOrder(int i)
+    {
+        logger.warn("Should I be called?");
+    }
 }

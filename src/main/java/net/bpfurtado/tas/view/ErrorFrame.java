@@ -45,123 +45,119 @@ import javax.swing.SwingUtilities;
 
 public class ErrorFrame extends JFrame
 {
-	private static final long serialVersionUID = 5890537060503281033L;
+    private static final long serialVersionUID = 5890537060503281033L;
 
-	private Exception exception;
+    private Exception exception;
 
-	private JFrame parentFrame;
+    private JFrame parentFrame;
 
-	private JTextArea ta;
+    private JTextArea ta;
 
-	public ErrorFrame(JFrame frame, Exception e, String title)
-	{
-		this.parentFrame = frame;
-		this.exception = e;
-		initView(title);
-	}
+    public ErrorFrame(JFrame frame, Exception e, String title)
+    {
+        this.parentFrame = frame;
+        this.exception = e;
+        initView(title);
+    }
 
-	private void initView(String title)
-	{
-		widgets();
+    private void initView(String title)
+    {
+        widgets();
 
-		setTitle(title + " Error - Text Adventures Suite");
-		setBounds(parentFrame.getX() + 30, parentFrame.getY() + 30, 620, 400);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setDefaultLookAndFeelDecorated(true);
+        setTitle(title + " Error - Text Adventures Suite");
+        setBounds(parentFrame.getX() + 30, parentFrame.getY() + 30, 620, 400);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultLookAndFeelDecorated(true);
 
-		setVisible(true);
-	}
+        setVisible(true);
+    }
 
-	private void widgets()
-	{
-		JPanel p = new JPanel();
-		p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
+    private void widgets()
+    {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.PAGE_AXIS));
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
+        p.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		JLabel label = new JLabel("  " + exception.getMessage() + "  ");
-		label.setBorder(BorderFactory.createRaisedBevelBorder());
-		label.setAlignmentX(CENTER_ALIGNMENT);
-		p.add(label);
+        JLabel label = new JLabel("  " + exception.getMessage() + "  ");
+        label.setBorder(BorderFactory.createRaisedBevelBorder());
+        label.setAlignmentX(CENTER_ALIGNMENT);
+        p.add(label);
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
+        p.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		StringWriter writer = new StringWriter();
-		exception.printStackTrace(new PrintWriter(writer));
-		ta = new JTextArea(writer.getBuffer().toString());
-		ta.setMaximumSize(new Dimension(400, 400));
-		JScrollPane taScrollPane = new JScrollPane(ta);
-		taScrollPane.setAlignmentX(CENTER_ALIGNMENT);
-		p.add(taScrollPane);
+        StringWriter writer = new StringWriter();
+        exception.printStackTrace(new PrintWriter(writer));
+        ta = new JTextArea(writer.getBuffer().toString());
+        ta.setMaximumSize(new Dimension(400, 400));
+        JScrollPane taScrollPane = new JScrollPane(ta);
+        taScrollPane.setAlignmentX(CENTER_ALIGNMENT);
+        p.add(taScrollPane);
 
-		addListeners(ta);
+        addListeners(ta);
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
+        p.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		JButton closeBt = new JButton("Close");
-		closeBt.setMnemonic('c');
-		closeBt.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				dispose();
-			}
-		});
-		closeBt.setAlignmentX(CENTER_ALIGNMENT);
-		p.add(closeBt);
+        JButton closeBt = new JButton("Close");
+        closeBt.setMnemonic('c');
+        closeBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                dispose();
+            }
+        });
+        closeBt.setAlignmentX(CENTER_ALIGNMENT);
+        p.add(closeBt);
 
-		p.add(Box.createRigidArea(new Dimension(0, 5)));
+        p.add(Box.createRigidArea(new Dimension(0, 5)));
 
-		add(p);
-	}
+        add(p);
+    }
 
-	private void addListeners(final JTextArea ta)
-	{
-		final JPopupMenu copyTracePopupMenu = new JPopupMenu();
-		JMenuItem copyMnIt = new JMenuItem("Copy Stacktrace");
-		copyMnIt.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(ta.getText()), null);
-			}
-		});
+    private void addListeners(final JTextArea ta)
+    {
+        final JPopupMenu copyTracePopupMenu = new JPopupMenu();
+        JMenuItem copyMnIt = new JMenuItem("Copy Stacktrace");
+        copyMnIt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(ta.getText()), null);
+            }
+        });
 
-		copyTracePopupMenu.add(copyMnIt);
-		ta.addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseReleased(MouseEvent e)
-			{
-				showPopup(copyTracePopupMenu, e);
-			}
+        copyTracePopupMenu.add(copyMnIt);
+        ta.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e)
+            {
+                showPopup(copyTracePopupMenu, e);
+            }
 
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				showPopup(copyTracePopupMenu, e);
-			}
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                showPopup(copyTracePopupMenu, e);
+            }
 
-			private void showPopup(final JPopupMenu m, MouseEvent e)
-			{
-				if (!e.isPopupTrigger()) {
-					return;
-				}
-				m.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
+            private void showPopup(final JPopupMenu m, MouseEvent e)
+            {
+                if (!e.isPopupTrigger()) {
+                    return;
+                }
+                m.show(e.getComponent(), e.getX(), e.getY());
+            }
+        });
+    }
 
-	public static void main(String[] args)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
-				JFrame someFrame = new JFrame();
-				someFrame.setBounds(50, 50, 200, 200);
-				new ErrorFrame(someFrame, new Exception("Big error message"), "Scene script");
-			}
-		});
-	}
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                JFrame someFrame = new JFrame();
+                someFrame.setBounds(50, 50, 200, 200);
+                new ErrorFrame(someFrame, new Exception("Big error message"), "Scene script");
+            }
+        });
+    }
 }

@@ -7,25 +7,25 @@ import org.apache.log4j.Logger;
 
 public class PathDepthPrinter
 {
-	private static Logger logger = Logger.getLogger(PathDepthPrinter.class);
+    private static Logger logger = Logger.getLogger(PathDepthPrinter.class);
 
-	private String tabs = "";
+    private String tabs = "";
 
-	public void printPathDepthsTree(Scene start)
-	{
-		tabs = "";
-		for (PathDepth pd : start.getPathDepths()) {
-			printChildren(pd);
-		}
-	}
+    public void printPathDepthsTree(Scene start)
+    {
+        tabs = "";
+        for (PathDepth pd : start.getPathDepths()) {
+            printChildren(pd);
+        }
+    }
 
-	private void printChildren(PathDepth parent)
-	{
-		logger.debug("Parent: " + parent);
-		tabs += "\t";
-		for (PathDepth pd : parent.children()) {
-			logger.debug(tabs + pd);
-		}
-		tabs = tabs.substring(tabs.length() - 1);
-	}
+    private void printChildren(PathDepth parent)
+    {
+        logger.debug("Parent: " + parent);
+        tabs += "\t";
+        for (PathDepth pd : parent.children()) {
+            logger.debug(tabs + pd);
+        }
+        tabs = tabs.substring(tabs.length() - 1);
+    }
 }

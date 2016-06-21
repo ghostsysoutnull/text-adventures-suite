@@ -34,32 +34,33 @@ import net.bpfurtado.tas.model.Scene;
 
 public class ToCellRenderer extends JLabel implements ListCellRenderer
 {
-	private static final long serialVersionUID = -5508903623764928405L;
-	
-	private Collection<Scene> scenesTo;
+    private static final long serialVersionUID = -5508903623764928405L;
 
-	public ToCellRenderer(Scene to)
-	{
-		setOpaque(true);
+    private Collection<Scene> scenesTo;
 
-		scenesTo = new LinkedList<Scene>();
-		for (IPath p : to.getPaths()) {
-			scenesTo.add(p.getTo());
-		}
-	}
+    public ToCellRenderer(Scene to)
+    {
+        setOpaque(true);
 
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
-	{
-		Scene scene = (Scene) value;
-		setText(DepthScenesViewController.renderToList(scene));
+        scenesTo = new LinkedList<Scene>();
+        for (IPath p : to.getPaths()) {
+            scenesTo.add(p.getTo());
+        }
+    }
 
-		if (scenesTo.contains(scene)) {
-			setBackground(Color.blue);
-			setForeground(Color.white);
-		} else {
-			setBackground(Color.white);
-			setForeground(Color.black);
-		}
-		return this;
-	}
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            boolean cellHasFocus)
+    {
+        Scene scene = (Scene) value;
+        setText(DepthScenesViewController.renderToList(scene));
+
+        if (scenesTo.contains(scene)) {
+            setBackground(Color.blue);
+            setForeground(Color.white);
+        } else {
+            setBackground(Color.white);
+            setForeground(Color.black);
+        }
+        return this;
+    }
 }

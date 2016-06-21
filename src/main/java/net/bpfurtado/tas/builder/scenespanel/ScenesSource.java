@@ -26,6 +26,7 @@ import net.bpfurtado.tas.model.Scene;
 
 public interface ScenesSource
 {
-	Collection<Scene> getScenes();
-	void switchTo(Scene selectedScene, int selectedSceneIdx);
+    Collection<Scene> getScenes();
+
+    void switchTo(Scene selectedScene, int selectedSceneIdx);
 }

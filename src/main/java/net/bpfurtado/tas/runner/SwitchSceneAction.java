@@ -24,25 +24,25 @@ import net.bpfurtado.tas.model.Game;
 
 public class SwitchSceneAction implements PostCodeExecutionAction
 {
-	int sceneId;
+    int sceneId;
 
-	public SwitchSceneAction(int sceneId)
-	{
-		this.sceneId = sceneId;
-	}
+    public SwitchSceneAction(int sceneId)
+    {
+        this.sceneId = sceneId;
+    }
 
-	public int getSceneId()
-	{
-		return sceneId;
-	}
+    public int getSceneId()
+    {
+        return sceneId;
+    }
 
-	public void setSceneId(int sceneId)
-	{
-		this.sceneId = sceneId;
-	}
+    public void setSceneId(int sceneId)
+    {
+        this.sceneId = sceneId;
+    }
 
-	public void exec(Game game)
-	{
-		game.setSceneToOpen(sceneId);
-	}
+    public void exec(Game game)
+    {
+        game.setSceneToOpen(sceneId);
+    }
 }

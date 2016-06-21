@@ -18,7 +18,7 @@
  * along with Text Adventures Suite.  If not, see <http://www.gnu.org/licenses/>.         
  *                                                                            
  * Project page: http://code.google.com/p/text-adventures-suite/              
- */                                                                           
+ */
 
 package net.bpfurtado.tas.builder.scenespanel;
 
@@ -46,9 +46,9 @@ import org.apache.log4j.Logger;
  */
 public class ChooseSceneDialog extends JDialog
 {
-	private static final long serialVersionUID = -5055062143576691936L;
+    private static final long serialVersionUID = -5055062143576691936L;
 
-	private static final Logger logger = Logger.getLogger(ChooseSceneDialog.class);
+    private static final Logger logger = Logger.getLogger(ChooseSceneDialog.class);
 
     private Scene choosenScene;
 
@@ -61,7 +61,7 @@ public class ChooseSceneDialog extends JDialog
 
     private void initView(Builder builder)
     {
-		widgets(builder);
+        widgets(builder);
 
         setBounds(650, 430, 445, 226);
         setTitle("Choose a Scene");
@@ -70,56 +70,55 @@ public class ChooseSceneDialog extends JDialog
         setVisible(true);
     }
 
-	private void widgets(Builder builder)
-	{
-		ScenesListControllerResult result = ScenesListControllerFactory.create(builder, false);
-		add(result.getPanel());
+    private void widgets(Builder builder)
+    {
+        ScenesListControllerResult result = ScenesListControllerFactory.create(builder, false);
+        add(result.getPanel());
 
-		ScenesList scenesList = result.getScenesList();
-		scenesList.updateView();
-		events(result.getFilterList());
-		events(scenesList.getList());
-		
+        ScenesList scenesList = result.getScenesList();
+        scenesList.updateView();
+        events(result.getFilterList());
+        events(scenesList.getList());
+
         JPanel buttonsPn = new JPanel();
         JButton cancelBt = new JButton("Cancel");
         cancelBt.setMnemonic('c');
-        cancelBt.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				closeDialog();
-			}
-		});
-        
-		buttonsPn.add(cancelBt);
+        cancelBt.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                closeDialog();
+            }
+        });
 
-        add(buttonsPn, BorderLayout.PAGE_END);		
-	}
+        buttonsPn.add(cancelBt);
 
-	private void events(final JList list_)
-	{
-		list_.addMouseListener(new MouseAdapter()
-        {
-			private JList list;
+        add(buttonsPn, BorderLayout.PAGE_END);
+    }
+
+    private void events(final JList list_)
+    {
+        list_.addMouseListener(new MouseAdapter() {
+            private JList list;
+
             public void mouseClicked(MouseEvent e)
             {
-            	this.list = list_;
+                this.list = list_;
                 selectScene(this.list);
             }
         });
-		
-		list_.addKeyListener(new KeyAdapter()
-        {
-			private JList list;
+
+        list_.addKeyListener(new KeyAdapter() {
+            private JList list;
+
             public void keyTyped(KeyEvent e)
             {
-            	this.list = list_;
+                this.list = list_;
                 listKeyAction(list, e);
             }
         });
-	}
+    }
 
-	private void listKeyAction(JList list2, KeyEvent e)
+    private void listKeyAction(JList list2, KeyEvent e)
     {
         if (e.getKeyChar() == 27) { // ESC
             closeDialog();
@@ -130,13 +129,13 @@ public class ChooseSceneDialog extends JDialog
 
     private void selectScene(JList list)
     {
-    	try {
-			choosenScene = (Scene) list.getModel().getElementAt(list.getSelectedIndex());
-		} catch (ClassCastException cce) {
-			choosenScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).getScene();
-		}
-		logger.debug("Selected scene: " + choosenScene.getName());
-		closeDialog();
+        try {
+            choosenScene = (Scene) list.getModel().getElementAt(list.getSelectedIndex());
+        } catch (ClassCastException cce) {
+            choosenScene = ((SceneRank) list.getModel().getElementAt(list.getSelectedIndex())).getScene();
+        }
+        logger.debug("Selected scene: " + choosenScene.getName());
+        closeDialog();
     }
 
     private void closeDialog()
