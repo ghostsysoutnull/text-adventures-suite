@@ -37,7 +37,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +47,6 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -65,8 +63,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
+
+import org.apache.log4j.Logger;
 
 import net.bpfurtado.tas.AdventureException;
 import net.bpfurtado.tas.Conf;
@@ -77,8 +76,8 @@ import net.bpfurtado.tas.builder.export.WorkspaceExporter;
 import net.bpfurtado.tas.builder.scenespanel.ChooseSceneDialog;
 import net.bpfurtado.tas.builder.scenespanel.ScenesList;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory;
-import net.bpfurtado.tas.builder.scenespanel.ScenesSource;
 import net.bpfurtado.tas.builder.scenespanel.ScenesListControllerFactory.ScenesListControllerResult;
+import net.bpfurtado.tas.builder.scenespanel.ScenesSource;
 import net.bpfurtado.tas.builder.scenetype.SceneTypesWidgets;
 import net.bpfurtado.tas.builder.skilltest.SkillTestPanelManager;
 import net.bpfurtado.tas.model.Adventure;
@@ -95,8 +94,6 @@ import net.bpfurtado.tas.view.TextComponentForPasteMouseListener;
 import net.bpfurtado.tas.view.Util;
 import net.bpfurtado.tas.view.recentmenu.EntityPersistedOnFileOpenner;
 import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author Bruno Patini Furtado
