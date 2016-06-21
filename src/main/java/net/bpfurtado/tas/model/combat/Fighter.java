@@ -24,18 +24,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
+
 import net.bpfurtado.tas.model.PlayerEvent;
 import net.bpfurtado.tas.model.PlayerEventListener;
 import net.bpfurtado.tas.model.Skill;
-import net.bpfurtado.tas.runner.SoundUtil;
 import net.bpfurtado.tas.runner.combat.FighterView;
-
-import org.apache.log4j.Logger;
 
 public class Fighter
 {
-    private static final long serialVersionUID = -810138909324356865L;
-
     @SuppressWarnings("unused")
     private static Logger logger = Logger.getLogger(Fighter.class);
 
@@ -76,10 +73,7 @@ public class Fighter
 
         if (myForce > enemyForce) {
             this.damage(enemy);
-            // FIXME refactor to a listener design pattern, the model cannot play a sound!
-            SoundUtil.playInternalClip("dsdmpain");
         } else if (myForce < enemyForce) {
-            SoundUtil.playInternalClip("dsplpain");
             enemy.damage(this);
         }
 
@@ -105,7 +99,7 @@ public class Fighter
         enemy.setStamina(enemy.getStamina() - getDamage());
     }
 
-    public void addAtackResultListener(AttackResultListener l)
+    public void addAttackResultListener(AttackResultListener l)
     {
         if (!listeners.contains(l)) {
             listeners.add(l);

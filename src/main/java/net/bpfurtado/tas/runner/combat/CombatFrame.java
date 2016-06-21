@@ -49,10 +49,12 @@ import org.apache.log4j.Logger;
 import net.bpfurtado.tas.model.Player;
 import net.bpfurtado.tas.model.combat.AttackResult;
 import net.bpfurtado.tas.model.combat.AttackResultListener;
+import net.bpfurtado.tas.model.combat.AttackResultType;
 import net.bpfurtado.tas.model.combat.Combat;
 import net.bpfurtado.tas.model.combat.CombatType;
 import net.bpfurtado.tas.model.combat.EndOfCombatListener;
 import net.bpfurtado.tas.model.combat.Fighter;
+import net.bpfurtado.tas.runner.SoundUtil;
 import net.bpfurtado.tas.view.Util;
 
 public class CombatFrame extends JDialog implements AttackResultListener
@@ -108,8 +110,8 @@ public class CombatFrame extends JDialog implements AttackResultListener
             logState("CombatFrame::constr");
         }
 
-        currentEnemy.addAtackResultListener(this);
-        player.addAtackResultListener(this);
+        currentEnemy.addAttackResultListener(this);
+        player.addAttackResultListener(this);
 
         initView(invokerFrame);
     }
@@ -243,7 +245,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
                 logState("nextEnemy:method_ELSE");
             }
-            currentEnemy.addAtackResultListener(this);
+            currentEnemy.addAttackResultListener(this);
         }
     }
 
@@ -302,7 +304,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
             } else {
                 currentEnemy = enemies.get(idx + 1);
             }
-            currentEnemy.addAtackResultListener(this);
+            currentEnemy.addAttackResultListener(this);
             System.out.println("ROTATE --> " + currentEnemy);
             return true;
         } else {
@@ -365,6 +367,16 @@ public class CombatFrame extends JDialog implements AttackResultListener
     {
         /* JList output history only */
 
+        if (attackResult.isPlayer()) {
+            if (!attackResult.getType().equals(AttackResultType.draw)) {
+                if (attackResult.getType().equals(AttackResultType.won)) {
+                    SoundUtil.playInternalClip("dsdmpain");
+                } else {
+                    SoundUtil.playInternalClip("dsplpain");
+                }
+            }
+        }
+
         attackResultsListModel.addElement(attackResult.roundInfoToString(round));
 
         attackResultsList.setSelectedIndex(attackResultsListModel.size() - 1);
@@ -386,9 +398,9 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 combat.add(new Fighter("Hell Hound 1", 6, 5));
                 combat.add(new Fighter("Hell Hound 2", 5, 4));
                 combat.add(new Fighter("Goblin", 4, 5));
-                combat.setType(CombatType.oneAtATime);
+                combat.setType(CombatType.allAtTheSameTime);
 
-                Fighter player = new Player("Player", 4, 16);
+                Fighter player = new Player("Player", 8, 16);
 
                 JFrame invokerFrame = new JFrame();
                 invokerFrame.setBounds(100, 100, 800, 500);

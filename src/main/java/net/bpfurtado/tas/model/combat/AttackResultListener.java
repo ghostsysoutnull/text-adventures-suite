@@ -27,6 +27,4 @@ public interface AttackResultListener
     void roundEnded();
 
     void clean();
-
-    boolean relatesTo(Fighter enemy);
 }

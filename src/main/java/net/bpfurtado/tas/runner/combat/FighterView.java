@@ -72,7 +72,7 @@ public class FighterView implements AttackResultListener
     FighterView(Fighter fighter)
     {
         this.fighter = fighter;
-        fighter.addAtackResultListener(this);
+        fighter.addAttackResultListener(this);
 
         widgets(fighter);
 
