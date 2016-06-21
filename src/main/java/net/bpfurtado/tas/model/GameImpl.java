@@ -128,8 +128,7 @@ public class GameImpl implements Game
 
     public void execAssertions()
     {
-        List<PostCodeExecutionAction> actions = new CodeExecutionAnalyser().analyseCode(this, adventure.getAssertions(),
-                getCurrentScene().getText());
+        List<PostCodeExecutionAction> actions = new CodeExecutionAnalyser().analyseCode(this, adventure.getAssertions(), getCurrentScene().getText());
 
         execCode(getCurrentScene(), actions);
     }

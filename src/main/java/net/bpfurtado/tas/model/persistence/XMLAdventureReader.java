@@ -180,8 +180,7 @@ public class XMLAdventureReader
 
         List<Node> enemyNodes = cn.selectNodes("./enemy");
         for (Node en : enemyNodes) {
-            Fighter fighter = new Fighter(en.valueOf("@name"), Integer.valueOf(en.valueOf("@skill")),
-                    Integer.valueOf(en.valueOf("@stamina")));
+            Fighter fighter = new Fighter(en.valueOf("@name"), Integer.valueOf(en.valueOf("@skill")), Integer.valueOf(en.valueOf("@stamina")));
             fighter.setDamage(Integer.valueOf(en.valueOf("@damage")));
             c.add(fighter);
         }

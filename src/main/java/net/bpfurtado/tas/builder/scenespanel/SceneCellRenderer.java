@@ -57,8 +57,7 @@ public class SceneCellRenderer extends JLabel implements ListCellRenderer
         setOpaque(true);
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-            boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         Scene scene = (Scene) value;
 

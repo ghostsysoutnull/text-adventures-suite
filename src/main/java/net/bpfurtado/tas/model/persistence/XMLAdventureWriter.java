@@ -92,18 +92,12 @@ public class XMLAdventureWriter
             if (idsOfFromScenes.length() > 0) {
                 idsOfFromScenes.deleteCharAt(idsOfFromScenes.length() - 1);
             }
-            Element sceneNode = scenes.addElement("scene").addAttribute("id", s.getId() + "")
-                    .addAttribute("isEnd", s.isEnd() + "").addAttribute("name", s.getName())
-                    .addAttribute("tags", s.getTags())
-                    .addAttribute("imageId", s.getImageId() == null ? "" : s.getImageId())
-                    .addAttribute("from", idsOfFromScenes.toString());
+            Element sceneNode = scenes.addElement("scene").addAttribute("id", s.getId() + "").addAttribute("isEnd", s.isEnd() + "").addAttribute("name", s.getName()).addAttribute("tags", s.getTags()).addAttribute("imageId", s.getImageId() == null ? "" : s.getImageId()).addAttribute("from", idsOfFromScenes.toString());
 
             if (s.getType().equals(SceneType.combat)) {
                 Element c = sceneNode.addElement("combat").addAttribute("type", s.getCombat().getType().toString());
                 for (Fighter f : s.getCombat().getEnemies()) {
-                    c.addElement("enemy").addAttribute("name", f.getName())
-                            .addAttribute("skill", f.getCombatSkillLevel() + "")
-                            .addAttribute("stamina", f.getStamina() + "").addAttribute("damage", f.getDamage() + "");
+                    c.addElement("enemy").addAttribute("name", f.getName()).addAttribute("skill", f.getCombatSkillLevel() + "").addAttribute("stamina", f.getStamina() + "").addAttribute("damage", f.getDamage() + "");
                 }
             } else if (s.getType().equals(SceneType.skillTest)) {
                 sceneNode.addElement("skill-test").addAttribute("name", s.getSkillToTest().getName());
@@ -116,8 +110,7 @@ public class XMLAdventureWriter
             code.addCDATA(s.getCode());
 
             for (IPath p : s.getPaths()) {
-                sceneNode.addElement("path").addAttribute("toScene", p.getTo() == null ? "" : p.getTo().getId() + "")
-                        .addAttribute("order", p.getOrder() + "").setText(p.getText());
+                sceneNode.addElement("path").addAttribute("toScene", p.getTo() == null ? "" : p.getTo().getId() + "").addAttribute("order", p.getOrder() + "").setText(p.getText());
             }
         }
     }

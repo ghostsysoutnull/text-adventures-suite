@@ -144,8 +144,7 @@ public class About2 extends JDialog
         appTitleLb.setText("Text Adventures Suite");
 
         appDescLb.setFont(FONT);
-        appDescLb.setText(
-                "<html>Text Adventures Suite Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.");
+        appDescLb.setText("<html>Text Adventures Suite Text Adventures Suite is a authoring and interpreter of Text Adventures largely inspired on Steve Jackson and Ian Livingstone Fighting Fantasy series of game books in the 80s.");
 
         versionLabel.setText("Product Version:");
         appVersionLabel.setText("0.9");
@@ -174,61 +173,17 @@ public class About2 extends JDialog
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(
-                                layout.createSequentialGroup().addContainerGap().addComponent(aboutImageLb)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                .addComponent(appTitleLb, GroupLayout.Alignment.LEADING)
-                                                .addComponent(appDescLb, GroupLayout.Alignment.LEADING,
-                                                        GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
-                                                .addGroup(GroupLayout.Alignment.LEADING,
-                                                        layout.createSequentialGroup()
-                                                                .addGroup(layout
-                                                                        .createParallelGroup(
-                                                                                GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(versionLabel)
-                                                                        .addComponent(authorLb).addComponent(projPageLb)
-                                                                        .addComponent(blogLb).addComponent(feedLb))
-                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addGroup(layout
-                                                                        .createParallelGroup(
-                                                                                GroupLayout.Alignment.LEADING)
-                                                                        .addComponent(appVersionLabel)
-                                                                        .addComponent(appVendorLabel)
-                                                                        .addComponent(appProjLb).addComponent(appBlogLb)
-                                                                        .addComponent(appFeedLb)
-                                                                        .addGroup(GroupLayout.Alignment.TRAILING,
-                                                                                layout.createSequentialGroup()
-                                                                                        .addComponent(envVarsBt)
-                                                                                        .addGap(18, 18, 18)
-                                                                                        .addComponent(closeBt)))))
-                                        .addContainerGap()));
-        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addContainerGap()
-                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(aboutImageLb)
-                                .addGroup(layout.createSequentialGroup().addComponent(appTitleLb)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(appDescLb)
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(versionLabel).addComponent(appVersionLabel))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(authorLb).addComponent(appVendorLabel))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(projPageLb).addComponent(appProjLb))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(blogLb).addComponent(appBlogLb))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(feedLb).addComponent(appFeedLb))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                .addComponent(closeBt).addComponent(envVarsBt))))
-                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup().addContainerGap().addComponent(aboutImageLb).addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING).addComponent(appTitleLb, GroupLayout.Alignment.LEADING)
+                                .addComponent(appDescLb, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE).addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup().addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(versionLabel).addComponent(authorLb).addComponent(projPageLb).addComponent(blogLb).addComponent(feedLb))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(appVersionLabel).addComponent(appVendorLabel).addComponent(appProjLb).addComponent(appBlogLb).addComponent(appFeedLb).addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addComponent(envVarsBt).addGap(18, 18, 18).addComponent(closeBt)))))
+                        .addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap()
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(aboutImageLb).addGroup(layout.createSequentialGroup().addComponent(appTitleLb).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addComponent(appDescLb).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(versionLabel).addComponent(appVersionLabel))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(authorLb).addComponent(appVendorLabel)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(projPageLb).addComponent(appProjLb)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(blogLb).addComponent(appBlogLb)).addPreferredGap(LayoutStyle.ComponentPlacement.RELATED).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(feedLb).addComponent(appFeedLb)).addGap(18, 18, 18).addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE).addComponent(closeBt).addComponent(envVarsBt))))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
     }
 

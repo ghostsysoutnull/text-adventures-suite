@@ -84,8 +84,7 @@ public class CodeExecutionAnalyser
 
         } catch (EvalError e) {
             Scene currentScene = game.getCurrentScene();
-            String sceneStr = "[Scene: id=" + currentScene.getId() + ", code=" + currentScene.getCode() + ", name="
-                    + currentScene.getName() + "]";
+            String sceneStr = "[Scene: id=" + currentScene.getId() + ", code=" + currentScene.getCode() + ", name=" + currentScene.getName() + "]";
             throw new BadSceneCodeException("Bad Scene " + sceneStr + " code, call the scene author :)", e);
         }
         return actions;

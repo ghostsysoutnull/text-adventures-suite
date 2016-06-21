@@ -123,8 +123,7 @@ public class Fighter
     {
         int old = combatSkillLevel;
         this.combatSkill.setLevel(combatSkillLevel);
-        fire(new PlayerEvent(combatSkill.getName(),
-                combatSkill.getName() + " was " + old + ", now is " + combatSkill.getLevel()));
+        fire(new PlayerEvent(combatSkill.getName(), combatSkill.getName() + " was " + old + ", now is " + combatSkill.getLevel()));
     }
 
     public void setStamina(Integer stamina)

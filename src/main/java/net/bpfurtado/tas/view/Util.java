@@ -69,9 +69,7 @@ public class Util
     public static int showSaveDialog(JFrame parent, String message)
     {
         Object[] saveDialogOptions = new Object[] { "Save", "Discard Changes", "Cancel" };
-        return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning",
-                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions,
-                saveDialogOptions[0]);
+        return JOptionPane.showOptionDialog(parent, "You have an unsaved adventure!\n" + message, "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, saveDialogOptions, saveDialogOptions[0]);
     }
 
     public static ImageIcon getImage(String imageName)
@@ -162,8 +160,7 @@ public class Util
         System.exit(0);
     }
 
-    public static JMenuItem menuItem(String text, char mnemonic, int key, String imageName, JMenu adventureMenu,
-            ActionListener action)
+    public static JMenuItem menuItem(String text, char mnemonic, int key, String imageName, JMenu adventureMenu, ActionListener action)
     {
         JMenuItem it = new JMenuItem(text, getImage(imageName));
         it.setAccelerator(KeyStroke.getKeyStroke(key, ActionEvent.CTRL_MASK));

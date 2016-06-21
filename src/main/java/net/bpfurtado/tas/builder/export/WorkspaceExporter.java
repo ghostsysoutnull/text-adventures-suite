@@ -116,8 +116,7 @@ public class WorkspaceExporter
                 exportedFolder.mkdirs();
             }
 
-            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(exportedFolder.getAbsolutePath()
-                    + File.separator + adventureOriginalName + "_Exported_" + timestamp + ADV_ZIP_EXTENSION));
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(exportedFolder.getAbsolutePath() + File.separator + adventureOriginalName + "_Exported_" + timestamp + ADV_ZIP_EXTENSION));
 
             File root = new File(Workspace.getWorkspacesHome() + File.separator + workspace.getId());
             logger.debug("Root " + root);
@@ -134,8 +133,7 @@ public class WorkspaceExporter
         }
     }
 
-    private static void addZipsFromFolder(ZipOutputStream out, File root, boolean createFolder)
-            throws IOException, FileNotFoundException
+    private static void addZipsFromFolder(ZipOutputStream out, File root, boolean createFolder) throws IOException, FileNotFoundException
     {
 
         for (File f : root.listFiles()) {

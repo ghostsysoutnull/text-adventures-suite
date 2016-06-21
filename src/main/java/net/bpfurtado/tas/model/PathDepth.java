@@ -95,14 +95,12 @@ public class PathDepth
         logger.debug(tabs + "Going out of depth " + pathDepth.depth);
         pathDepth.depth.remove(pathDepth);
 
-        logger.debug(
-                "&&& Trying [me:" + pathDepth.toString() + "]to go out of my scene " + pathDepth.getPath().getTo());
+        logger.debug("&&& Trying [me:" + pathDepth.toString() + "]to go out of my scene " + pathDepth.getPath().getTo());
         if (!pathDepth.getPath().getTo().equals(startScene)) {
             logger.debug("&&& YES me: " + pathDepth.toString() + "removing pd: " + pathDepth);
             pathDepth.getPath().getTo().remove(pathDepth); // 111
         } else {
-            logger.debug(
-                    "&&& NO me: " + pathDepth.toString() + " NOT BEING REMOVED from " + pathDepth.getPath().getTo());
+            logger.debug("&&& NO me: " + pathDepth.toString() + " NOT BEING REMOVED from " + pathDepth.getPath().getTo());
         }
 
         logger.debug(tabs + "REMOVING (recursive): " + pathDepth);

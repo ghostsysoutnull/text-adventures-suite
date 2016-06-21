@@ -178,13 +178,11 @@ class FilteredScenesListCellRenderer extends JLabel implements ListCellRenderer
         setOpaque(true);
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-            boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         SceneRank sceneRank = (SceneRank) value;
 
-        setText(" [" + sceneRank.getScene().getId() + "] " + sceneRank.getScene().getName() + " (" + sceneRank.getRank()
-                + ")");
+        setText(" [" + sceneRank.getScene().getId() + "] " + sceneRank.getScene().getName() + " (" + sceneRank.getRank() + ")");
 
         Color orphanSceneColor = new Color(133, 213, 157);
 

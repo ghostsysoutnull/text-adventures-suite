@@ -98,8 +98,7 @@ import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
 /**
  * @author Bruno Patini Furtado
  */
-public class Builder extends JFrame
-        implements EntityPersistedOnFileOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder, ImageReceiver
+public class Builder extends JFrame implements EntityPersistedOnFileOpenner, ScenesSource, AdventureNeedsSavingController, IBuilder, ImageReceiver
 {
     private static final Logger logger = Logger.getLogger(Builder.class);
     private static final long serialVersionUID = -3424967248011145801L;
@@ -593,8 +592,7 @@ public class Builder extends JFrame
         });
         popupMenu.add(addCodeToAddItemMnIt);
 
-        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt,
-                addCombatEnemiesMnIt, testYourSkillMnIt, addCodeToAddItemMnIt));
+        sceneTA.addMouseListener(new SceneTextAreaPopupListener(popupMenu, sceneTA, createPathMnIt, splitSceneMnIt, addCombatEnemiesMnIt, testYourSkillMnIt, addCodeToAddItemMnIt));
 
         panel.add(headerFieldsPanelWidgets());
 
@@ -624,8 +622,7 @@ public class Builder extends JFrame
 
     protected void addCodeToAddItemMnItSceneTextAreaContextMenuItemAction()
     {
-        currentScene.setCode(
-                currentScene.getCode() + "\n player.addAttribute(\"" + sceneTA.getSelectedText().trim() + "\");\n");
+        currentScene.setCode(currentScene.getCode() + "\n player.addAttribute(\"" + sceneTA.getSelectedText().trim() + "\");\n");
         codeTA.setText(currentScene.getCode());
     }
 
@@ -682,8 +679,7 @@ public class Builder extends JFrame
         });
         popupMenu.add(copyAndPasteMnIt);
 
-        helpDialog.getEditorPane().addMouseListener(new TextComponentForPasteMouseListener(popupMenu, copyAndPasteMnIt,
-                helpDialog.getEditorPane(), codeTA, codeHolder));
+        helpDialog.getEditorPane().addMouseListener(new TextComponentForPasteMouseListener(popupMenu, copyAndPasteMnIt, helpDialog.getEditorPane(), codeTA, codeHolder));
     }
 
     private JPanel headerFieldsPanelWidgets()
@@ -961,8 +957,7 @@ public class Builder extends JFrame
 
         IPath path;
 
-        public PathView(JLabel orderLb, JButton createBt, JButton deleteBt, JButton chooseSceneBt, JTextField textField,
-                IPath path)
+        public PathView(JLabel orderLb, JButton createBt, JButton deleteBt, JButton chooseSceneBt, JTextField textField, IPath path)
         {
             this.orderLb = orderLb;
             this.createSceneBt = createBt;
@@ -978,13 +973,12 @@ public class Builder extends JFrame
         JMenuBar menuBar = new JMenuBar();
         JMenu adventureMenu = Util.menu("Adventure", 'A', menuBar);
 
-        playMnIt = Util.menuItem("Create a new Adventure", 'n', KeyEvent.VK_N, "control_play_blue.png", adventureMenu,
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        createNewAdventure();
-                    }
-                });
+        playMnIt = Util.menuItem("Create a new Adventure", 'n', KeyEvent.VK_N, "control_play_blue.png", adventureMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                createNewAdventure();
+            }
+        });
 
         JMenu testMenu = Util.menu("Test", 't', menuBar);
 
@@ -996,13 +990,12 @@ public class Builder extends JFrame
         });
         playMnIt.setEnabled(false);
 
-        playFromCurrentMnIt = Util.menuItem("Play from current scene", 'r', KeyEvent.VK_R,
-                "control_fastforward_blue.png", testMenu, new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        playAdventureFromActualSceneMenuAction();
-                    }
-                });
+        playFromCurrentMnIt = Util.menuItem("Play from current scene", 'r', KeyEvent.VK_R, "control_fastforward_blue.png", testMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                playAdventureFromActualSceneMenuAction();
+            }
+        });
         playFromCurrentMnIt.setEnabled(false);
 
         adventureMenu.add(new JSeparator());
@@ -1014,29 +1007,26 @@ public class Builder extends JFrame
             }
         });
 
-        JMenuItem exportMnIt = Util.menuItem("Export", 'x', KeyEvent.VK_X, "export_wiz.gif", adventureMenu,
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        exportWorkspaceAction();
-                    }
-                });
+        JMenuItem exportMnIt = Util.menuItem("Export", 'x', KeyEvent.VK_X, "export_wiz.gif", adventureMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                exportWorkspaceAction();
+            }
+        });
 
-        JMenuItem importMnIt = Util.menuItem("Import", 'i', KeyEvent.VK_I, "import_wiz.gif", adventureMenu,
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        importWorkspaceAction();
-                    }
-                });
+        JMenuItem importMnIt = Util.menuItem("Import", 'i', KeyEvent.VK_I, "import_wiz.gif", adventureMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                importWorkspaceAction();
+            }
+        });
 
-        saveAsMnIt = Util.menuItem("Save As...", 'a', KeyEvent.VK_A, "textfield_rename.png", adventureMenu,
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        saveAdventureMenuAction(true);
-                    }
-                });
+        saveAsMnIt = Util.menuItem("Save As...", 'a', KeyEvent.VK_A, "textfield_rename.png", adventureMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                saveAdventureMenuAction(true);
+            }
+        });
 
         adventureMenu.add(new JSeparator());
 
@@ -1217,8 +1207,7 @@ public class Builder extends JFrame
     private void createNewAdventure()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Builder.this, "Close current adventure?", "Warning",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Builder.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.NO_OPTION)
                 return;
@@ -1319,16 +1308,13 @@ public class Builder extends JFrame
             String secMsg = null;
 
             if (type.exactPathsNumberPermited() == 0) {
-                msg = "A " + type + " Scene cannot have any paths.\n"
-                        + "If you confirm all current paths will be deleted\n" + "Are you sure?";
+                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths will be deleted\n" + "Are you sure?";
                 secMsg = "This action will delete this scene paths";
             } else {
-                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths but "
-                        + type.exactPathsNumberPermited() + " " + "will be deleted\n" + "Are you sure?";
+                msg = "A " + type + " Scene cannot have any paths.\n" + "If you confirm all current paths but " + type.exactPathsNumberPermited() + " " + "will be deleted\n" + "Are you sure?";
                 secMsg = "Only " + type.exactPathsNumberPermited() + " paths will remain!";
             }
-            int answer = JOptionPane.showConfirmDialog(Builder.this, msg, secMsg, JOptionPane.YES_NO_OPTION,
-                    JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Builder.this, msg, secMsg, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
             if (answer == JOptionPane.YES_OPTION) {
                 changeType = true;

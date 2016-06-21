@@ -117,8 +117,7 @@ public class BuilderCombatPanelManager
         l.setAlignmentX(Component.LEFT_ALIGNMENT);
         helpPn.add(l);
         helpPn.add(Box.createRigidArea(new Dimension(0, 3)));
-        JTextArea ta = new JTextArea("Combat scenes can have only one path. "
-                + "In case of victory that's the scene the player will be taken to.");
+        JTextArea ta = new JTextArea("Combat scenes can have only one path. " + "In case of victory that's the scene the player will be taken to.");
         ta.setLineWrap(true);
         ta.setWrapStyleWord(true);
         ta.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -451,13 +450,11 @@ class FighterCellRenderer extends JLabel implements ListCellRenderer
         setOpaque(true);
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-            boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         Fighter f = (Fighter) value;
 
-        setText(f.getName() + ", sk[" + f.getCombatSkillLevel() + "] st[" + f.getStamina() + "] dm[" + f.getDamage()
-                + "]");
+        setText(f.getName() + ", sk[" + f.getCombatSkillLevel() + "] st[" + f.getStamina() + "] dm[" + f.getDamage() + "]");
 
         setBackground(isSelected ? Util.oceanColor : Color.white);
         setForeground(Color.black);

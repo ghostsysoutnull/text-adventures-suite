@@ -70,8 +70,7 @@ public class SkillTestFrame extends JDialog
 
     private SkillTestListener endOfSkillTestListener;
 
-    public SkillTestFrame(SkillTestListener endOfSkillTestListener, Player player, Skill skillToTest,
-            JFrame invokerFrame)
+    public SkillTestFrame(SkillTestListener endOfSkillTestListener, Player player, Skill skillToTest, JFrame invokerFrame)
     {
         logger.debug("skillToTest.getName()=" + skillToTest.getName() + ":" + skillToTest.getLevel());
         this.invokerFrame = invokerFrame;

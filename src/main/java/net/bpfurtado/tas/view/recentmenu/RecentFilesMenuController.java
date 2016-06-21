@@ -128,8 +128,7 @@ public class RecentFilesMenuController implements EntityPersistedOnFileOpenActio
     {
         if (recentEntitiesPersisted.contains(entityPersisted)) {
             for (JMenuItem item : menuItems) {
-                if (item.getText().equals(entityPersisted.getMenuItemText())
-                        || item.getText().startsWith("<html>" + entityPersisted.getMenuItemText() + " <")) {
+                if (item.getText().equals(entityPersisted.getMenuItemText()) || item.getText().startsWith("<html>" + entityPersisted.getMenuItemText() + " <")) {
                     openRecentMenu.remove(item);
                     menuItems.remove(item);
                     recentEntitiesPersisted.remove(entityPersisted);

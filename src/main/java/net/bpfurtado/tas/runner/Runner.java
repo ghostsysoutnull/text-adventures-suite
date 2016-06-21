@@ -88,8 +88,7 @@ import net.bpfurtado.tas.view.recentmenu.RecentFilesMenuController;
 
 import org.apache.log4j.Logger;
 
-public class Runner extends JFrame
-        implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
+public class Runner extends JFrame implements GoToSceneListener, EndOfCombatListener, SkillTestListener, PlayerEventListener, SaveGameListener
 {
     private static final long serialVersionUID = -2215614593644954452L;
     private static final Logger logger = Logger.getLogger(Runner.class);
@@ -425,8 +424,7 @@ public class Runner extends JFrame
             combatBt.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e)
                 {
-                    Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(),
-                            game.getCurrentScene().getCombat(), Runner.this);
+                    Runner.this.combatFrame = new CombatFrame(Runner.this, game.getPlayer(), game.getCurrentScene().getCombat(), Runner.this);
                 }
             });
             pathsPn.add(combatBt);
@@ -441,8 +439,7 @@ public class Runner extends JFrame
                 {
                     Skill skill = game.getCurrentScene().getSkillToTest();
                     logger.debug("game.getCurrentScene().getSkillToTest()=" + skill.getName());
-                    Runner.this.skillToTestFrame = new SkillTestFrame(Runner.this, game.getPlayer(), skill,
-                            Runner.this);
+                    Runner.this.skillToTestFrame = new SkillTestFrame(Runner.this, game.getPlayer(), skill, Runner.this);
                 }
             });
             pathsPn.add(skillToTestBt);
@@ -590,13 +587,12 @@ public class Runner extends JFrame
         saveGameMenu.setMnemonic('G');
         menuBar.add(saveGameMenu);
 
-        this.saveGameMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu,
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent e)
-                    {
-                        Runner.this.saveGameManager.save();
-                    }
-                });
+        this.saveGameMnIt = Util.menuItem("Save Game", 'S', KeyEvent.VK_S, "disk.png", saveGameMenu, new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+                Runner.this.saveGameManager.save();
+            }
+        });
         saveGameMnIt.setEnabled(false);
 
         Util.menuItem("Open Saved Game", 'O', KeyEvent.VK_O, "folder_table.png", saveGameMenu, new ActionListener() {
@@ -622,8 +618,7 @@ public class Runner extends JFrame
         startAgainMnIt.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e)
             {
-                int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                int answer = JOptionPane.showConfirmDialog(Runner.this, "Start Adventure again?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
                     startAgain();
                 }
@@ -687,8 +682,7 @@ public class Runner extends JFrame
     private void openMenuAction()
     {
         if (adventure != null) {
-            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(Runner.this, "Close current adventure?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (answer == JOptionPane.NO_OPTION)
                 return;
         }

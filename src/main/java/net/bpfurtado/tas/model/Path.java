@@ -165,8 +165,7 @@ public class Path extends TextObject implements IPath
             return false;
         }
         Path other = (Path) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)).append(getId(), other.getId())
-                .append(from, other.from).isEquals();
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(getId(), other.getId()).append(from, other.from).isEquals();
     }
 
     @Override

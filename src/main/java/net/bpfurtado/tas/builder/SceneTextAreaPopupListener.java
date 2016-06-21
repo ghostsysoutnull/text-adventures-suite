@@ -46,8 +46,7 @@ class SceneTextAreaPopupListener extends MouseAdapter
 
     private JMenuItem[] m;
 
-    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt,
-            JMenuItem... menuItems)
+    SceneTextAreaPopupListener(JPopupMenu popupMenu, JTextArea sceneTA, JMenuItem createPathMnIt, JMenuItem... menuItems)
     {
         popup = popupMenu;
         this.sceneTA = sceneTA;

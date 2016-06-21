@@ -52,8 +52,7 @@ public class SoundUtil
         }
     }
 
-    public static void playClip(InputStream input)
-            throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException
+    public static void playClip(InputStream input) throws IOException, UnsupportedAudioFileException, LineUnavailableException, InterruptedException
     {
         class AudioListener implements LineListener
         {

@@ -49,8 +49,7 @@ public class OpenEntityPersistedOnFileAction implements ActionListener
      */
     private EntityPersistedOnFileOpenAction persistedOnFileOpenAction;
 
-    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner,
-            EntityPersistedOnFileOpenAction persistedOnFileOpenAction)
+    public OpenEntityPersistedOnFileAction(JFrame frame, EntityPersistedOnFileOpenner entityOpenner, EntityPersistedOnFileOpenAction persistedOnFileOpenAction)
     {
         this.frame = frame;
         this.entityOpenner = entityOpenner;

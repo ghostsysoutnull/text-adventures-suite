@@ -39,8 +39,7 @@ public class SceneDepthListCellRender extends JLabel implements ListCellRenderer
         setOpaque(true);
     }
 
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-            boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         setText(DepthScenesViewController.renderToList((Scene) value));
 

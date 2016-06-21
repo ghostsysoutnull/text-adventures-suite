@@ -44,8 +44,7 @@ public class TextComponentForPasteMouseListener extends MouseAdapter
 
     private SceneCodeToPasteHolder ho;
 
-    public TextComponentForPasteMouseListener(JPopupMenu popupMenu, JMenuItem menuItem, JTextComponent origin,
-            JTextComponent destiny, SceneCodeToPasteHolder ho)
+    public TextComponentForPasteMouseListener(JPopupMenu popupMenu, JMenuItem menuItem, JTextComponent origin, JTextComponent destiny, SceneCodeToPasteHolder ho)
     {
         this.popup = popupMenu;
         this.menuItem = menuItem;
