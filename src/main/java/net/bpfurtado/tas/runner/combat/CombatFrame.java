@@ -59,9 +59,10 @@ import net.bpfurtado.tas.view.Util;
 
 public class CombatFrame extends JDialog implements AttackResultListener
 {
+    private static final long serialVersionUID = 1L;
+
     private static final Logger logger = Logger.getLogger(CombatFrame.class);
 
-    private static final long serialVersionUID = -3354524968137077741L;
     private static final Font DEFAULT_FONT = new Font("Tahoma", 1, 14);
 
     private int round = 1;
@@ -203,7 +204,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void tilDeathButtonAction()
     {
-        Timer timer = new Timer(800, new ActionListener() {
+        Timer timer = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev)
             {
