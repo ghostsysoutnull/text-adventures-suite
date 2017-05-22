@@ -59,7 +59,7 @@ public class About2 extends JDialog
 
     private static final long serialVersionUID = 6274009586799124340L;
 
-    private static final String PROJECT_URL_STR = "http://code.google.com/p/text-adventures-suite";
+    private static final String PROJECT_URL_STR = "https://github.com/ghostsysoutnull/text-adventures-suite";
 
     private static final Font URL_SELECTED_FONT = new Font("Tahoma", Font.PLAIN, 11);
     private static final Font URL_REGULAR_FONT = new Font("Tahoma", Font.PLAIN, 11);
