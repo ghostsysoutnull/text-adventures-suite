@@ -55,6 +55,8 @@ import net.bpfurtado.tas.AdventureException;
 
 public class AboutFrame extends JDialog
 {
+    private static final String TITLE = "About - Text Adventures Suite v1.0";
+
     private static final long serialVersionUID = 2750603196471841891L;
 
     private static final Font TITLE_FONT = new Font("Tahoma", 1, 16);
@@ -68,7 +70,7 @@ public class AboutFrame extends JDialog
     {
         widgets();
 
-        setTitle("About - Text Adventures Suite");
+        setTitle(TITLE);
         Util.centerPosition(invokerFrame, this, 518, 359);
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -84,7 +86,7 @@ public class AboutFrame extends JDialog
 
         Util.addHeight(mainPn, 10);
 
-        JLabel title = new JLabel("Text Adventures Suite");
+        JLabel title = new JLabel(TITLE);
         title.setFont(TITLE_FONT);
         title.setAlignmentX(CENTER_ALIGNMENT);
         mainPn.add(title);
