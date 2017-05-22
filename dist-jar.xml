@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project text-adventures-suite">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="C:/Users/brunofurtado/devel/personal/tas/dev/workspaces/mars"/>
+    <property name="dir.jarfile" value="${dir.buildfile}/target"/>
+    <target name="create_run_jar">
+        <jar destfile="text-adventures-suite.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="net.bpfurtado.tas.builder.Builder"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.jarfile}/classes"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/brunofurtado/.p2/pool/plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/brunofurtado/.p2/pool/plugins/org.hamcrest.core_1.3.0.v201303031735.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/bsh-2.0b4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/commons-lang-2.4.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/commons-validator-1.3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/dom4j-1.6.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/jaxen-1.1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/jaxen-1.1-beta-9.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/log4j-1.2.15.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/bpfurtado-commons-0.0.1-SNAPSHOT.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/bpfurtado-bsh-indenter-0.0.1-SNAPSHOT.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/forms-1.1.0.jar"/>
+        </jar>
+    </target>
+</project>
