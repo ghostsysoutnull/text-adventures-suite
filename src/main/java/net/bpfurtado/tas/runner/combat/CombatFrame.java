@@ -204,7 +204,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
 
     private void tilDeathButtonAction()
     {
-        Timer timer = new Timer(400, new ActionListener() {
+        Timer timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev)
             {
@@ -306,7 +306,7 @@ public class CombatFrame extends JDialog implements AttackResultListener
                 currentEnemy = enemies.get(idx + 1);
             }
             currentEnemy.addAttackResultListener(this);
-            System.out.println("ROTATE --> " + currentEnemy);
+            logger.debug("ROTATE --> " + currentEnemy);
             return true;
         } else {
             logger.warn(currentEnemy.getName() + " not found!");
