@@ -760,21 +760,6 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         return game;
     }
 
-    public static void main(String[] args)
-    {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run()
-            {
-                Runner runner = null;
-                try {
-                    runner = new Runner();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(runner, e.getMessage());
-                }
-            }
-        });
-    }
-
     public String getApplicationName()
     {
         return "runner";
@@ -828,5 +813,20 @@ public class Runner extends JFrame implements GoToSceneListener, EndOfCombatList
         } catch (BadLocationException e) {
             throw new AdventureException(e);
         }
+    }
+    
+    public static void main(String[] args)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                Runner runner = null;
+                try {
+                    runner = new Runner();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(runner, e.getMessage());
+                }
+            }
+        });
     }
 }
