@@ -70,10 +70,21 @@ public class SceneCellRenderer extends JLabel implements ListCellRenderer
             setForeground(Color.black);
         } else if (scene.isOrphan()) {
             setBackground(isSelected ? Util.oceanColor : orphanSceneColor);
+        } else if (scene.getCombat() != null) {
+            setText(getText() + " [COMBAT]");
+            setBackground(isSelected ? Util.oceanColor : new Color(246, 169, 169));
+        } else if (scene.getSkillToTest() != null) {
+            setText(getText() + " [SKILL TEST]");
+            setBackground(isSelected ? Util.oceanColor : new Color(0, 208, 171));
+        } else if (scene.getCode() != null && scene.getCode().trim().length() > 0) {
+            setText(getText() + " [SCRIPTED]");
+            setBackground(isSelected ? Util.oceanColor : Color.white);
         } else {
             setBackground(isSelected ? Util.oceanColor : Color.white);
         }
         setForeground(Color.black);
+
+        setText(getText() + " ");
         return this;
     }
 }
