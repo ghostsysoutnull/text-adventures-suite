@@ -137,6 +137,10 @@ public class XMLAdventureReader
             s = adventure.createScene(id, Boolean.valueOf(n.valueOf("@isEnd")));
         }
         s.setImageId(n.valueOf("@imageId"));
+        if (s.getImageId() != null && s.getImageId().trim().length() == 0) {
+            s.setImageId(null);
+        }
+
         s.setName(n.valueOf("@name"));
         s.setTags(n.valueOf("@tags"));
         s.setText(n.selectSingleNode("./text").getText());
