@@ -236,9 +236,9 @@ public class Builder extends JFrame implements EntityPersistedOnFileOpenner, Sce
     {
         mainPanel = new JPanel(new BorderLayout());
 
-        ScenesListControllerResult factory = ScenesListControllerFactory.create(this, true);
-        scenesList = factory.getScenesList();
-        JPanel scenesListPanel = factory.getPanel();
+        ScenesListControllerResult scenesListController = ScenesListControllerFactory.create(this, true);
+        scenesList = scenesListController.getScenesList();
+        JPanel scenesListPanel = scenesListController.getPanel();
 
         JPanel scenePane = scenesPaneWidgets();
 
