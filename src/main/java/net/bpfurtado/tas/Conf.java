@@ -148,9 +148,9 @@ public class Conf
     {
         String value = p.getProperty(key);
         if (value == null) {
-            value = defaultValue + "";
+            return defaultValue;
         }
-        return new Integer(value);
+        return Integer.parseInt(value);
     }
 
     public void set(String key, String value)
