@@ -120,7 +120,7 @@ public class Scene extends TextObject implements Comparable<Scene>
         return isStart;
     }
 
-    // TODO Abaixo os métodos antigos, por rever o que fazem manutencao nos Depths...
+    // TODO Abaixo os metodos antigos, por rever o que fazem manutencao nos Depths...
 
     public void addFrom(Scene from)
     {
@@ -146,8 +146,8 @@ public class Scene extends TextObject implements Comparable<Scene>
                 pathDepth.removeItSelfFromDepth(pathToBeRemoved.getTo());
                 logger.debug("REMOVING %%%: " + pathDepth);
 
-                // TODO logica de se remover da scena feita na recursão
-                // Não dá: java.util.ConcurrentModificationException
+                // TODO logica de se remover da scena feita na recursao
+                // java.util.ConcurrentModificationException
 
                 logger.debug("&&& me: " + toString() + "removing pd: " + pathDepth);
                 ite.remove();
